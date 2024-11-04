@@ -1,0 +1,17 @@
+version: "3.8" # Versão do Compose
+
+services:
+  db:
+    image: postgres:latest # Imagem do PostgreSQL
+    restart: always # Reiniciar o container se ele falhar
+    environment:
+      POSTGRES_USER: apiSistemaFabrica # Defina seu nome de usuário
+      POSTGRES_PASSWORD: 123456 # Defina sua senha
+      POSTGRES_DB: SistemaFabrica # Nome do banco de dados a ser criado
+    ports:
+      - "5432:5432" # Mapeia a porta 5432 do container para a porta 5432 do host
+    volumes:
+      - pg_data:/var/lib/postgresql/data # Persistir dados
+
+volumes:
+  pg_data:
