@@ -27,7 +27,9 @@ export const update = async (
     );
     if (senhaVerify) {
       if (data.novaSenha) {
-        const newPasswordCrypt = bcryptPassword.passwordHashed(data.novaSenha);
+        const newPasswordCrypt = await bcryptPassword.passwordHashed(
+          data.novaSenha
+        );
 
         const updatedUserAndPassword = await prisma.usuario.update({
           where: { id },

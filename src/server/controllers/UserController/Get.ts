@@ -3,7 +3,7 @@ import { userProvider } from "../../database/providers/UserProvider";
 import { StatusCodes } from "http-status-codes";
 
 interface IFilter {
-  id: String;
+  id: string;
   nome: string;
 }
 export const get = async (

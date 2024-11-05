@@ -7,7 +7,7 @@ interface IBodyProps extends Omit<userModel, "id"> {
   novaSenha?: string;
 }
 interface IParams {
-  id: String;
+  id: string;
 }
 export const update = async (
   req: Request<IParams, {}, IBodyProps>,

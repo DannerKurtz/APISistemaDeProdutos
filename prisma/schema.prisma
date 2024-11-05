@@ -19,6 +19,7 @@ model Usuario {
   senha    String
   permissionId String?
   permission  Permission? @relation(fields: [permissionId], references: [id])
+  createAt DateTime @default(now())
 }
 
 model Permission {
@@ -27,6 +28,7 @@ model Permission {
   descricao   String?
   nivel       Int?
   usuarios    Usuario[]
+  createAt DateTime @default(now())
 }
 
 
@@ -44,4 +46,5 @@ model Clientes {
   telefone             String   
   celular              String   
   email                String
+  createAt DateTime @default(now())
 }

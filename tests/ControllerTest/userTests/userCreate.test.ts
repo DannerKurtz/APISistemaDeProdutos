@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { userController } from "../../../src/server/controllers/UserController";
 
 beforeEach(() => {
-  jest.clearAllMocks(); // Limpa os mocks e as contagens de chamadas
+  jest.clearAllMocks(); 
 });
 
 describe("Create User Test", () => {
