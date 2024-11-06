@@ -1,15 +1,13 @@
-import { prisma } from "../../prisma";
+import { crudService } from "../../../shared/services/CRUD";
 
 export const deleteClient = async (id: string): Promise<Error | Boolean> => {
   try {
-    const deleteClient = await prisma.clientes.delete({ where: { id } });
-
-    if (!deleteClient) {
-      return new Error("Erro ao deletar o cliente!");
-    }
-
-    return true;
+    return await crudService.deleteInDatabase(
+      id,
+      "clientes",
+      "Erro ao deletar o cliente"
+    );
   } catch (error) {
-    return new Error("Erro ao deletar o cliente!");
+    return new Error("Erro ao acessar o crudService para deletar o cliente!");
   }
 };

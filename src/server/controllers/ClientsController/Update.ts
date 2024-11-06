@@ -18,9 +18,7 @@ export const update = async (
   const updateClient = await clientsProvider.update(id, data);
 
   if (updateClient instanceof Error) {
-    return res.status(400).json({
-      updateClient,
-    });
+    return res.status(400).json(updateClient);
   }
 
   return res.status(200).json({

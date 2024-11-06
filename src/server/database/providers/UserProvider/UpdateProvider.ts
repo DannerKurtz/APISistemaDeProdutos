@@ -1,6 +1,5 @@
-import { bcryptPassword } from "../../../shared/services/bcrypt";
+import { crudService } from "../../../shared/services/CRUD";
 import { userModel } from "../../models/UserModel";
-import { prisma } from "../../prisma";
 
 interface IData {
   nome: string;
@@ -13,51 +12,13 @@ export const update = async (
   data: IData
 ): Promise<Error | IBodyProps> => {
   try {
-    const findUserId = await prisma.usuario.findUnique({
-      where: {
-        id,
-      },
-    });
-    if (!findUserId) {
-      return new Error("Usuário não encontrado!");
-    }
-    const senhaVerify = await bcryptPassword.passwordVerify(
-      data.senha,
-      findUserId.senha
+    return crudService.updateInDatabase(
+      id,
+      data,
+      "usuario",
+      "Erro ao atualizar o usuário"
     );
-    if (senhaVerify) {
-      if (data.novaSenha) {
-        const newPasswordCrypt = await bcryptPassword.passwordHashed(
-          data.novaSenha
-        );
-
-        const updatedUserAndPassword = await prisma.usuario.update({
-          where: { id },
-          data: {
-            nome: data.nome,
-            senha: String(newPasswordCrypt),
-          },
-          select: {
-            id: true,
-            nome: true,
-          },
-        });
-        return updatedUserAndPassword;
-      }
-      const updatedUser = await prisma.usuario.update({
-        where: { id },
-        data: {
-          nome: data.nome,
-        },
-        select: {
-          id: true,
-          nome: true,
-        },
-      });
-      return updatedUser;
-    }
-    return new Error("Erro ao atualizar usuário!");
   } catch (err) {
-    return new Error("Erro ao atualizar usuário!");
+    return new Error("Erro ao acessar o crudService para atualizar o usuário!");
   }
 };

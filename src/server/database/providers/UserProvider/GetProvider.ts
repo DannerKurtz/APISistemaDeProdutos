@@ -1,30 +1,17 @@
-import { prisma } from "../../prisma";
+import { crudService } from "../../../shared/services/CRUD";
 
 export const get = async (id: string | any, nome: string | any) => {
   try {
-    const whereClause: any = {};
-
-    if (id) {
-      whereClause.id = id;
-    }
-
-    if (nome) {
-      whereClause.nome = {
-        contains: nome,
-        mode: "insensitive",
-      };
-    }
-
-    const findUser = await prisma.usuario.findMany({
-      where: whereClause,
-      select: {
-        id: true,
-        nome: true,
-      },
-    });
-
-    return findUser;
+    const query = {
+      id,
+      nome,
+    };
+    return await crudService.getInDatabase(
+      query,
+      "usuario",
+      "Erro ao consultar os usuários"
+    );
   } catch (err) {
-    return new Error("Erro ao consultar os usuários!");
+    return new Error("Erro ao acessar o crudService para buscar usuários!");
   }
 };

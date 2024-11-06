@@ -12,7 +12,7 @@ export const create = async (
   const newClient = await clientsProvider.create(req.body);
 
   if (newClient instanceof Error) {
-    return res.status(StatusCodes.CONFLICT).json({ newClient });
+    return res.status(StatusCodes.CONFLICT).json(newClient);
   }
 
   return res.status(StatusCodes.CREATED).json({ newClient });

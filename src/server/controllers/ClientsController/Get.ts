@@ -13,7 +13,7 @@ export const get = async (req: Request, res: Response): Promise<any> => {
   const clients = await clientsProvider.get(id, nome);
 
   if (clients instanceof Error) {
-    return res.status(StatusCodes.NOT_FOUND).json({ clients });
+    return res.status(StatusCodes.NOT_FOUND).json(clients);
   }
 
   return res.status(StatusCodes.OK).json({ clients });

@@ -1,21 +1,21 @@
+import { crudService } from "../../../shared/services/CRUD";
 import { IClient } from "../../models/ClientModel";
 import { prisma } from "../../prisma";
 
-interface IData extends Omit<IClient, "id"> {}
+type IData = Omit<IClient, "id"> & { novaSenha?: string };
 
 export const update = async (
   id: string,
   data: IData
 ): Promise<Error | IClient> => {
   try {
-    const updateClient = await prisma.clientes.update({ where: { id }, data });
-
-    if (!updateClient) {
-      return new Error("Erro ao atualizar o cliente!");
-    }
-
-    return updateClient;
+    return crudService.updateInDatabase(
+      id,
+      data,
+      "clientes",
+      "Erro ao atualizar o cliente"
+    );
   } catch (error) {
-    return new Error("Erro ao atualizar o cliente!");
+    return new Error("Erro ao acessar o crudService para atualizar o cliente!");
   }
 };

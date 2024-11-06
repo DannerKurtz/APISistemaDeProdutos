@@ -13,7 +13,7 @@ export const deleteClient = async (
   const deleteClient = await clientsProvider.deleteClient(id);
 
   if (deleteClient instanceof Error) {
-    return res.status(StatusCodes.NOT_FOUND).json({ deleteClient });
+    return res.status(StatusCodes.NOT_FOUND).json(deleteClient);
   }
 
   return res.status(StatusCodes.OK).json({ deleteClient });
