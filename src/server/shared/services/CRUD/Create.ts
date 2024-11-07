@@ -1,4 +1,3 @@
-import e from "express";
 import { prisma } from "../../../database/prisma";
 import { bcryptPassword } from "../bcrypt";
 

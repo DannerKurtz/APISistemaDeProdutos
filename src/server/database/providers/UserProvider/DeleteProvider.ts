@@ -1,5 +1,4 @@
 import { crudService } from "../../../shared/services/CRUD";
-import { prisma } from "../../prisma";
 
 export const deleteUser = async (id: string): Promise<Error | Boolean> => {
   try {

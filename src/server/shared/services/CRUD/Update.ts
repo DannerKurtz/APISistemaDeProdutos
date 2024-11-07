@@ -16,7 +16,7 @@ export const updateInDatabase = async <
       where: { id: params },
     });
     if (!dataExist) {
-      return new Error("Usuário nao encontrado!");
+      return new Error("ID nao encontrado!");
     }
     if (data.senha) {
       const passwordVerify = await bcryptPassword.passwordVerify(

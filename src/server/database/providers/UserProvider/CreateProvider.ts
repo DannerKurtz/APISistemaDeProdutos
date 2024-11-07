@@ -1,8 +1,5 @@
-import { bcryptPassword } from "../../../shared/services/bcrypt";
 import { crudService } from "../../../shared/services/CRUD";
 import { userModel } from "../../models/UserModel";
-import { prisma } from "../../prisma";
-import { randomUUID } from "node:crypto";
 
 type IUserWithoutId = Omit<userModel, "id">;
 export const create = async (

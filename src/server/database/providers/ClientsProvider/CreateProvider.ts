@@ -1,6 +1,5 @@
 import { crudService } from "../../../shared/services/CRUD";
 import { IClient } from "../../models/ClientModel";
-import { prisma } from "../../prisma";
 
 interface IBodyProps extends Omit<IClient, "id"> {}
 
