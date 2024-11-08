@@ -8,7 +8,7 @@ export const create = async (
   try {
     return crudService.createInDatabase(
       data,
-      "usuario",
+      "usuarios",
       "Erro ao criar um novo usuário"
     );
   } catch (err) {

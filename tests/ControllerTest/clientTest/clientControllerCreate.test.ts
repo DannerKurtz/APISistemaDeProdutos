@@ -1,5 +1,16 @@
 import { Request, Response } from "express";
 import { clientsController } from "../../../src/server/controllers/ClientsController";
+import { clientsProvider } from "../../../src/server/database/providers/ClientsProvider";
+
+jest.mock("../../../src/server/database/providers/ClientsProvider", () => ({
+  clientsProvider: {
+    create: jest.fn(),
+  },
+}));
+
+beforeEach(() => {
+  jest.clearAllMocks();
+});
 
 const dataExemple = {
   nome: "Example Name",
@@ -18,11 +29,7 @@ const dataExemple = {
 
 describe("Create Cliente Controller", () => {
   test("Test 1 -> successful", async () => {
-    jest
-      .spyOn(clientsController, "create")
-      .mockImplementation(async (req: Request, res: Response) => {
-        return res.status(201).json(dataExemple);
-      });
+    (clientsProvider.create as jest.Mock).mockReturnValue(dataExemple);
 
     const req = { body: dataExemple } as Request;
     const res = {
@@ -32,16 +39,15 @@ describe("Create Cliente Controller", () => {
 
     await clientsController.create(req, res);
 
+    expect(clientsProvider.create).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(201);
-    expect(res.json).toHaveBeenCalledWith(dataExemple);
+    expect(res.json).toHaveBeenCalledWith({ newClient: dataExemple });
   });
 
   test("Test 2 -> failed", async () => {
-    jest
-      .spyOn(clientsController, "create")
-      .mockImplementation(async (req: Request, res: Response) => {
-        return res.status(409).json("Cliente ja existe!");
-      });
+    (clientsProvider.create as jest.Mock).mockReturnValue(
+      Error("Cliente ja existe!")
+    );
 
     const req = { body: dataExemple } as Request;
     const res = {
@@ -51,7 +57,8 @@ describe("Create Cliente Controller", () => {
 
     await clientsController.create(req, res);
 
+    expect(clientsProvider.create).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(409);
-    expect(res.json).toHaveBeenCalledWith("Cliente ja existe!");
+    expect(res.json).toHaveBeenCalledWith(Error("Cliente ja existe!"));
   });
 });

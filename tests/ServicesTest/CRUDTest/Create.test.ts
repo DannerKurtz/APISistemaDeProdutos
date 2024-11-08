@@ -5,7 +5,7 @@ import { crudService } from "../../../src/server/shared/services/CRUD";
 
 jest.mock("../../../src/server/database/prisma", () => ({
   prisma: {
-    usuario: {
+    usuarios: {
       findFirst: jest.fn(),
       create: jest.fn(),
     },
@@ -33,23 +33,23 @@ describe("Create Service Test", () => {
       senha: "123456",
     };
 
-    (prisma.usuario.findFirst as jest.Mock).mockResolvedValue(null);
+    (prisma.usuarios.findFirst as jest.Mock).mockResolvedValue(null);
 
-    (prisma.usuario.create as jest.Mock).mockResolvedValue({
+    (prisma.usuarios.create as jest.Mock).mockResolvedValue({
       id: "123-abc",
       nome: "Teste",
       senha: "hashed_password",
     });
 
-    const result = await crudService.createInDatabase(data, "usuario", "Erro");
+    const result = await crudService.createInDatabase(data, "usuarios", "Erro");
 
     expect(result).toEqual({
       id: "123-abc",
       nome: "Teste",
       senha: "hashed_password",
     });
-    expect(prisma.usuario.findFirst).toHaveBeenCalledTimes(1);
-    expect(prisma.usuario.create).toHaveBeenCalledTimes(1);
+    expect(prisma.usuarios.findFirst).toHaveBeenCalledTimes(1);
+    expect(prisma.usuarios.create).toHaveBeenCalledTimes(1);
   });
   test("Test 2 -> failed with name exist", async () => {
     const data: TWithoutId<userModel> = {
@@ -57,15 +57,15 @@ describe("Create Service Test", () => {
       senha: "123456",
     };
 
-    (prisma.usuario.findFirst as jest.Mock).mockReturnValue(
+    (prisma.usuarios.findFirst as jest.Mock).mockReturnValue(
       Error("Este nome está em uso!")
     );
 
-    const result = await crudService.createInDatabase(data, "usuario", "Erro");
+    const result = await crudService.createInDatabase(data, "usuarios", "Erro");
 
     expect(result).toEqual(Error("Este nome está em uso!"));
-    expect(prisma.usuario.findFirst).toHaveBeenCalledTimes(1);
-    expect(prisma.usuario.create).toHaveBeenCalledTimes(0);
+    expect(prisma.usuarios.findFirst).toHaveBeenCalledTimes(1);
+    expect(prisma.usuarios.create).toHaveBeenCalledTimes(0);
   });
   test("Test 3 -> failed", async () => {
     const data: TWithoutId<userModel> = {
@@ -75,13 +75,17 @@ describe("Create Service Test", () => {
 
     const message = "Error";
 
-    (prisma.usuario.findFirst as jest.Mock).mockReturnValue(null);
-    (prisma.usuario.create as jest.Mock).mockReturnValue(message);
+    (prisma.usuarios.findFirst as jest.Mock).mockReturnValue(null);
+    (prisma.usuarios.create as jest.Mock).mockReturnValue(message);
 
-    const result = await crudService.createInDatabase(data, "usuario", message);
+    const result = await crudService.createInDatabase(
+      data,
+      "usuarios",
+      message
+    );
 
     expect(result).toEqual(message);
-    expect(prisma.usuario.findFirst).toHaveBeenCalledTimes(1);
-    expect(prisma.usuario.create).toHaveBeenCalledTimes(1);
+    expect(prisma.usuarios.findFirst).toHaveBeenCalledTimes(1);
+    expect(prisma.usuarios.create).toHaveBeenCalledTimes(1);
   });
 });

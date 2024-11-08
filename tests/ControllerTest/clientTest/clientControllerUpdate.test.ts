@@ -1,6 +1,13 @@
 import { Request, Response } from "express";
 import { clientsController } from "../../../src/server/controllers/ClientsController";
 import { IClient } from "../../../src/server/database/models/ClientModel";
+import { clientsProvider } from "../../../src/server/database/providers/ClientsProvider";
+
+jest.mock("../../../src/server/database/providers/ClientsProvider", () => ({
+  clientsProvider: {
+    update: jest.fn(),
+  },
+}));
 
 interface IParams {
   id: string;
@@ -29,13 +36,7 @@ beforeEach(() => {
 
 describe("Get Client Test", () => {
   test("Test 1 -> successful", async () => {
-    jest
-      .spyOn(clientsController, "update")
-      .mockImplementation(
-        async (req: Request<IParams, {}, IBodyProps>, res: Response) => {
-          return res.status(200).json(dataExemple);
-        }
-      );
+    (clientsProvider.update as jest.Mock).mockReturnValue(dataExemple);
     const req = {
       params: {
         id: "123",
@@ -49,18 +50,14 @@ describe("Get Client Test", () => {
 
     await clientsController.update(req, res);
 
-    expect(clientsController.update).toHaveBeenCalledTimes(1);
+    expect(clientsProvider.update).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith(dataExemple);
+    expect(res.json).toHaveBeenCalledWith({ updateClient: dataExemple });
   });
   test("Test 2 -> failed", async () => {
-    jest
-      .spyOn(clientsController, "update")
-      .mockImplementation(
-        async (req: Request<IParams, {}, IBodyProps>, res: Response) => {
-          return res.status(400).json("Erro ao atualizar o cliente");
-        }
-      );
+    (clientsProvider.update as jest.Mock).mockReturnValue(
+      Error("Erro ao acessar o crudService para atualizar o cliente!")
+    );
     const req = {
       params: {
         id: "123",
@@ -75,7 +72,10 @@ describe("Get Client Test", () => {
 
     await clientsController.update(req, res);
 
-    expect(clientsController.update).toHaveBeenCalledTimes(1);
+    expect(clientsProvider.update).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith(
+      Error("Erro ao acessar o crudService para atualizar o cliente!")
+    );
   });
 });

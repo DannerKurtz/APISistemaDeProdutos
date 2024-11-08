@@ -1,5 +1,12 @@
-import { Request, Response } from "express";
+import { query, Request, Response } from "express";
 import { clientsController } from "../../../src/server/controllers/ClientsController";
+import { clientsProvider } from "../../../src/server/database/providers/ClientsProvider";
+
+jest.mock("../../../src/server/database/providers/ClientsProvider", () => ({
+  clientsProvider: {
+    get: jest.fn(),
+  },
+}));
 
 const dataExemple = {
   nome: "Example Name",
@@ -22,13 +29,14 @@ beforeEach(() => {
 
 describe("Get Client Test", () => {
   test("Test 1 -> successful", async () => {
-    jest
-      .spyOn(clientsController, "get")
-      .mockImplementation(async (req: Request, res: Response) => {
-        return res.status(200).json(dataExemple);
-      });
+    (clientsProvider.get as jest.Mock).mockReturnValue(dataExemple);
 
-    const req = {} as unknown as Request;
+    const req = {
+      query: {
+        id: "123",
+        nome: null,
+      },
+    } as unknown as Request;
     const res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
@@ -36,20 +44,22 @@ describe("Get Client Test", () => {
 
     await clientsController.get(req, res);
 
-    expect(clientsController.get).toHaveBeenCalledTimes(1);
+    expect(clientsProvider.get).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith(dataExemple);
+    expect(res.json).toHaveBeenCalledWith({ clients: dataExemple });
   });
 
   test("Test 2 -> failed", async () => {
-    jest
-      .spyOn(clientsController, "get")
-      .mockImplementation(async (req: Request, res: Response) => {
-        return res.status(404).json({
-          clientGet: "Cliente nao encontrado!",
-        });
-      });
-    const req = {} as unknown as Request;
+    (clientsProvider.get as jest.Mock).mockReturnValue(
+      Error("Erro ao acessar o crudService para buscar o cliente!")
+    );
+
+    const req = {
+      query: {
+        id: "123",
+        nome: null,
+      },
+    } as unknown as Request;
     const res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
@@ -57,7 +67,10 @@ describe("Get Client Test", () => {
 
     await clientsController.get(req, res);
 
-    expect(clientsController.get).toHaveBeenCalledTimes(1);
+    expect(clientsProvider.get).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.json).toHaveBeenCalledWith(
+      Error("Erro ao acessar o crudService para buscar o cliente!")
+    );
   });
 });

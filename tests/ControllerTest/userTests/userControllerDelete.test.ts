@@ -1,5 +1,12 @@
 import { Request, Response } from "express";
 import { userController } from "../../../src/server/controllers/UserController";
+import { userProvider } from "../../../src/server/database/providers/UserProvider";
+
+jest.mock("../../../src/server/database/providers/UserProvider", () => ({
+  userProvider: {
+    deleteUser: jest.fn(),
+  },
+}));
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -9,20 +16,13 @@ interface IParams {
 }
 describe("Delete User Test", () => {
   test("Test 1 -> successful", async () => {
-    jest
-      .spyOn(userController, "deleteUser")
-      .mockImplementation(async (req: Request<IParams>, res: Response) => {
-        return res.status(200).json({
-          deleted: true,
-        });
-      });
+    (userProvider.deleteUser as jest.Mock).mockReturnValue(true);
 
     const req = {
       params: {
         id: "123",
       },
-    } as Request<IParams>; // Define params como { id: string }
-
+    } as Request<IParams>;
     const res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
@@ -30,20 +30,16 @@ describe("Delete User Test", () => {
 
     await userController.deleteUser(req, res);
 
-    expect(userController.deleteUser).toHaveBeenCalledTimes(1);
+    expect(userProvider.deleteUser).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({
       deleted: true,
     });
   });
   test("Test 2 -> failed", async () => {
-    jest
-      .spyOn(userController, "deleteUser")
-      .mockImplementation(async (req: Request<IParams>, res: Response) => {
-        return res.status(404).json({
-          userDelete: "Usuário nao encontrado!",
-        });
-      });
+    (userProvider.deleteUser as jest.Mock).mockReturnValue(
+      Error("Usuário nao encontrado!")
+    );
 
     const req = {
       params: {
@@ -58,10 +54,10 @@ describe("Delete User Test", () => {
 
     await userController.deleteUser(req, res);
 
-    expect(userController.deleteUser).toHaveBeenCalledTimes(1);
+    expect(userProvider.deleteUser).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(404);
     expect(res.json).toHaveBeenCalledWith({
-      userDelete: "Usuário nao encontrado!",
+      userDelete: Error("Usuário nao encontrado!"),
     });
   });
 });

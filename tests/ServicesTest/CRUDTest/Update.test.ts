@@ -4,7 +4,7 @@ import { crudService } from "../../../src/server/shared/services/CRUD";
 
 jest.mock("../../../src/server/database/prisma", () => ({
   prisma: {
-    usuario: {
+    usuarios: {
       findFirst: jest.fn(),
       update: jest.fn(),
     },
@@ -29,19 +29,19 @@ describe("Get Test Service", () => {
       nome: "Teste",
       senha: "123",
     };
-    (prisma.usuario.findFirst as jest.Mock).mockReturnValue(true);
-    (prisma.usuario.update as jest.Mock).mockReturnValue(data);
+    (prisma.usuarios.findFirst as jest.Mock).mockReturnValue(true);
+    (prisma.usuarios.update as jest.Mock).mockReturnValue(data);
     (bcryptPassword.passwordVerify as jest.Mock).mockReturnValue(true);
     const result = await crudService.updateInDatabase(
       params,
       data,
-      "usuario",
+      "usuarios",
       "Error"
     );
 
     expect(result).toEqual(data);
-    expect(prisma.usuario.findFirst).toHaveBeenCalledTimes(1);
-    expect(prisma.usuario.update).toHaveBeenCalledTimes(1);
+    expect(prisma.usuarios.findFirst).toHaveBeenCalledTimes(1);
+    expect(prisma.usuarios.update).toHaveBeenCalledTimes(1);
     expect(bcryptPassword.passwordVerify).toHaveBeenCalledTimes(1);
     expect(bcryptPassword.passwordHashed).toHaveBeenCalledTimes(0);
   });
@@ -55,24 +55,22 @@ describe("Get Test Service", () => {
     };
     const { novaSenha, ...dateWithoutNewPassword } = data;
     dateWithoutNewPassword.senha = "password_hashed";
-    (prisma.usuario.findFirst as jest.Mock).mockReturnValue(true);
-    (prisma.usuario.update as jest.Mock).mockReturnValue(
+    (prisma.usuarios.findFirst as jest.Mock).mockReturnValue(true);
+    (prisma.usuarios.update as jest.Mock).mockReturnValue(
       dateWithoutNewPassword
     );
     (bcryptPassword.passwordVerify as jest.Mock).mockReturnValue(true);
     const result = await crudService.updateInDatabase(
       params,
       data,
-      "usuario",
+      "usuarios",
       "Error"
     );
 
-    console.log("novo:", dateWithoutNewPassword, "resultado", result);
     expect(result).toEqual(dateWithoutNewPassword);
-    expect(prisma.usuario.findFirst).toHaveBeenCalledTimes(1);
-    expect(prisma.usuario.update).toHaveBeenCalledTimes(1);
+    expect(prisma.usuarios.findFirst).toHaveBeenCalledTimes(1);
+    expect(prisma.usuarios.update).toHaveBeenCalledTimes(1);
     expect(bcryptPassword.passwordVerify).toHaveBeenCalledTimes(1);
     expect(bcryptPassword.passwordHashed).toHaveBeenCalledTimes(1);
   });
-  
 });

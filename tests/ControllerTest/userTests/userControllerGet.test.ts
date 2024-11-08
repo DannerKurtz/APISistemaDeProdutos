@@ -1,5 +1,12 @@
 import { Request, Response } from "express";
 import { userController } from "../../../src/server/controllers/UserController";
+import { userProvider } from "../../../src/server/database/providers/UserProvider";
+
+jest.mock("../../../src/server/database/providers/UserProvider", () => ({
+  userProvider: {
+    get: jest.fn(),
+  },
+}));
 
 interface IFilter {
   id: string;
@@ -12,16 +19,10 @@ beforeEach(() => {
 
 describe("Get User Test", () => {
   test("Test 1 -> get with id users successful", async () => {
-    jest
-      .spyOn(userController, "get")
-      .mockImplementation(
-        async (req: Request<{}, {}, {}, IFilter>, res: Response) => {
-          return res.status(200).json({
-            id: "123",
-            nome: "Teste",
-          });
-        }
-      );
+    (userProvider.get as jest.Mock).mockReturnValue({
+      id: "123",
+      nome: "Teste",
+    });
 
     const req = {
       query: {
@@ -36,24 +37,20 @@ describe("Get User Test", () => {
 
     await userController.get(req, res);
 
-    expect(userController.get).toHaveBeenCalledTimes(1);
+    expect(userProvider.get).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({
-      id: "123",
-      nome: "Teste",
+      users: {
+        id: "123",
+        nome: "Teste",
+      },
     });
   });
   test("Test 2 -> get with name users successful", async () => {
-    jest
-      .spyOn(userController, "get")
-      .mockImplementation(
-        async (req: Request<{}, {}, {}, IFilter>, res: Response) => {
-          return res.status(200).json({
-            id: "123",
-            nome: "Teste",
-          });
-        }
-      );
+    (userProvider.get as jest.Mock).mockReturnValue({
+      id: "123",
+      nome: "Teste",
+    });
 
     const req = {
       query: {
@@ -68,11 +65,13 @@ describe("Get User Test", () => {
 
     await userController.get(req, res);
 
-    expect(userController.get).toHaveBeenCalledTimes(1);
+    expect(userProvider.get).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({
-      id: "123",
-      nome: "Teste",
+      users: {
+        id: "123",
+        nome: "Teste",
+      },
     });
   });
 });

@@ -3,7 +3,7 @@ import { crudService } from "../../../src/server/shared/services/CRUD";
 
 jest.mock("../../../src/server/database/prisma", () => ({
   prisma: {
-    usuario: {
+    usuarios: {
       findFirst: jest.fn(),
       findMany: jest.fn(),
     },
@@ -29,13 +29,13 @@ describe("Get Test Service ", () => {
       id: "123",
       nome: "Teste",
     };
-    (prisma.usuario.findFirst as jest.Mock).mockReturnValue(data);
+    (prisma.usuarios.findFirst as jest.Mock).mockReturnValue(data);
 
-    const result = await crudService.getInDatabase(query, "usuario", "Erro");
+    const result = await crudService.getInDatabase(query, "usuarios", "Erro");
 
     expect(result).toEqual(data);
-    expect(prisma.usuario.findFirst).toHaveBeenCalledTimes(1);
-    expect(prisma.usuario.findMany).toHaveBeenCalledTimes(0);
+    expect(prisma.usuarios.findFirst).toHaveBeenCalledTimes(1);
+    expect(prisma.usuarios.findMany).toHaveBeenCalledTimes(0);
   });
   test("Test 02 -> successful with name", async () => {
     const query: Query = {
@@ -47,13 +47,13 @@ describe("Get Test Service ", () => {
       nome: "Teste",
     };
 
-    (prisma.usuario.findMany as jest.Mock).mockReturnValue(data);
+    (prisma.usuarios.findMany as jest.Mock).mockReturnValue(data);
 
-    const result = await crudService.getInDatabase(query, "usuario", "Erro");
+    const result = await crudService.getInDatabase(query, "usuarios", "Erro");
 
     expect(result).toEqual(data);
-    expect(prisma.usuario.findFirst).toHaveBeenCalledTimes(0);
-    expect(prisma.usuario.findMany).toHaveBeenCalledTimes(1);
+    expect(prisma.usuarios.findFirst).toHaveBeenCalledTimes(0);
+    expect(prisma.usuarios.findMany).toHaveBeenCalledTimes(1);
   });
   test("Test 03 -> failed", async () => {
     const query: Query = {
@@ -61,12 +61,12 @@ describe("Get Test Service ", () => {
       nome: "Test",
     };
 
-    (prisma.usuario.findMany as jest.Mock).mockReturnValue("Error");
+    (prisma.usuarios.findMany as jest.Mock).mockReturnValue("Error");
 
-    const result = await crudService.getInDatabase(query, "usuario", "Error");
+    const result = await crudService.getInDatabase(query, "usuarios", "Error");
 
     expect(result).toEqual("Error");
-    expect(prisma.usuario.findFirst).toHaveBeenCalledTimes(0);
-    expect(prisma.usuario.findMany).toHaveBeenCalledTimes(1);
+    expect(prisma.usuarios.findFirst).toHaveBeenCalledTimes(0);
+    expect(prisma.usuarios.findMany).toHaveBeenCalledTimes(1);
   });
 });

@@ -1,5 +1,13 @@
 import { Request, Response } from "express";
 import { clientsController } from "../../../src/server/controllers/ClientsController";
+import { clientsProvider } from "../../../src/server/database/providers/ClientsProvider";
+import { deleteClient } from "../../../src/server/controllers/ClientsController/Delete";
+
+jest.mock("../../../src/server/database/providers/ClientsProvider", () => ({
+  clientsProvider: {
+    deleteClient: jest.fn(),
+  },
+}));
 
 interface IParams {
   id: string;
@@ -11,13 +19,7 @@ beforeEach(() => {
 
 describe("Delete Client Test", () => {
   test("Test 1 -> successful", async () => {
-    jest
-      .spyOn(clientsController, "deleteClient")
-      .mockImplementation(async (req: Request<IParams>, res: Response) => {
-        return res.status(200).json({
-          deleted: true,
-        });
-      });
+    (clientsProvider.deleteClient as jest.Mock).mockReturnValue(true);
 
     const req = {
       params: {
@@ -32,21 +34,17 @@ describe("Delete Client Test", () => {
 
     await clientsController.deleteClient(req, res);
 
-    expect(clientsController.deleteClient).toHaveBeenCalledTimes(1);
+    expect(clientsProvider.deleteClient).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({
-      deleted: true,
+      deleteClient: true,
     });
   });
 
   test("Test 2 -> failed", async () => {
-    jest
-      .spyOn(clientsController, "deleteClient")
-      .mockImplementation(async (req: Request<IParams>, res: Response) => {
-        return res.status(404).json({
-          clientDelete: "Cliente não encontrado!",
-        });
-      });
+    (clientsProvider.deleteClient as jest.Mock).mockReturnValue(
+      Error("Cliente não encontrado!")
+    );
 
     const req = {
       params: {
@@ -61,10 +59,8 @@ describe("Delete Client Test", () => {
 
     await clientsController.deleteClient(req, res);
 
-    expect(clientsController.deleteClient).toHaveBeenCalledTimes(1);
+    expect(clientsProvider.deleteClient).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(404);
-    expect(res.json).toHaveBeenCalledWith({
-      clientDelete: "Cliente não encontrado!",
-    });
+    expect(res.json).toHaveBeenCalledWith(Error("Cliente não encontrado!"));
   });
 });

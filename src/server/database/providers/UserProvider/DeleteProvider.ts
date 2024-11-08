@@ -4,7 +4,7 @@ export const deleteUser = async (id: string): Promise<Error | Boolean> => {
   try {
     return await crudService.deleteInDatabase(
       id,
-      "usuario",
+      "usuarios",
       "Erro ao deletar o usuário"
     );
   } catch (error) {

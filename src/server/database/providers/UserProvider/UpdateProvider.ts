@@ -15,7 +15,7 @@ export const update = async (
     return crudService.updateInDatabase(
       id,
       data,
-      "usuario",
+      "usuarios",
       "Erro ao atualizar o usuário"
     );
   } catch (err) {

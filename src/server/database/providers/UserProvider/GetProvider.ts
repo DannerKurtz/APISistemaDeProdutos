@@ -8,7 +8,7 @@ export const get = async (id: string | any, nome: string | any) => {
     };
     return await crudService.getInDatabase(
       query,
-      "usuario",
+      "usuarios",
       "Erro ao consultar os usuários"
     );
   } catch (err) {
