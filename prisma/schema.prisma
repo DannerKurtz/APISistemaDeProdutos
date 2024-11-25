@@ -68,9 +68,9 @@ model Produtos{
 
 model RelacaoMateriaPrimaEProdutos {
   id                 String @id @default(uuid())
-  produtoID          String
-  produtos           Produtos @relation(fields: [produtoID], references: [id])
-  materiaPrimaID     String
-  materiaPrima       MateriasPrimas @relation(fields: [materiaPrimaID], references: [id])
-  quantidadeMateriaPrima String
+  produtoId          String
+  produtos           Produtos @relation(fields: [produtoId], references: [id])
+  materiaPrimaId     String
+  materiaPrima       MateriasPrimas @relation(fields: [materiaPrimaId], references: [id])
+  quantidadeMateriaPrima Float
 }
