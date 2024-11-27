@@ -1,6 +1,5 @@
 import { crudService } from '../../../shared/services/CRUD';
 import { ProductModel } from '../../models/ProductModel';
-import { prisma } from '../../prisma';
 import { joinItems } from '../../../shared/services/joinItems';
 
 type IQuery = {
@@ -34,4 +33,3 @@ export const get = async (query: IQuery) => {
     return new Error('Erro ao consultar a base de dados de produtos e');
   }
 };
-
