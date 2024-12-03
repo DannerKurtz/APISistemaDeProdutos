@@ -1,35 +1,36 @@
 import { crudService } from '../../../shared/services/CRUD';
+import { relation } from '../../../shared/services/CRUD/createRelation';
 import { ProductModel } from '../../models/ProductModel';
 import { RawMaterialAndProductsRelationModel } from '../../models/RawMaterialAndProductsRelationModel';
+import { prisma } from '../../prisma';
 
 type BodyWithoutId = Omit<ProductModel, 'id'> & {
-  materiaPrima: [RawMaterialAndProductsRelationModel & { senha: undefined }];
+  materiaPrima: [{ id: string; quantidade: number }];
   senha: undefined;
   novaSenha: undefined;
 };
 
 export const update = async (id: string, body: BodyWithoutId) => {
   const { materiaPrima, ...data } = body;
-  const newRelation: [] = [];
   const product: ProductModel = await crudService.updateInDatabase(
     id,
     data,
     'Produtos',
     'Erro ao atualizar o produto'
   );
-  const length = materiaPrima.length;
-  for (let index = 0; index < length; index++) {
-    const { id, ...dataRelation } = materiaPrima[index];
 
-    newRelation.push = await crudService.updateInDatabase(
-      id,
-      dataRelation,
-      'RelacaoMateriaPrimaEProdutos',
-      'Erro ao alterar a Relação'
-    );
-  }
+  const deleteRelation = await prisma.relacaoMateriaPrimaEProdutos.deleteMany({
+    where: { produtoId: id },
+  });
 
-  const newData = { ...product, ...newRelation };
+  if (!deleteRelation) return new Error('não foi possível deletar');
+
+  const newRelation = await relation(materiaPrima, id);
+
+  if (newRelation instanceof Error)
+    return new Error('Erro ao atualizar a nova relação');
+
+  const newData = { ...product, materiaPrima };
 
   return newData;
 };

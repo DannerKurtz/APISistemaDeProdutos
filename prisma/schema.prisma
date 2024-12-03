@@ -14,63 +14,62 @@ datasource db {
 }
 
 model Usuarios {
-  id          String      @id @default(uuid())
-  nome        String
-  senha    String
+  id           String       @id @default(uuid())
+  nome         String
+  senha        String
   permissionId String?
   permissions  Permissions? @relation(fields: [permissionId], references: [id])
-  createAt DateTime @default(now())
+  createAt     DateTime     @default(now())
 }
 
 model Permissions {
-  id          String      @id @default(uuid())
-  nome        String      @unique
-  descricao   String?
-  nivel       Int?
-  usuarios    Usuarios[]
-  createAt DateTime @default(now())
+  id        String     @id @default(uuid())
+  nome      String     @unique
+  descricao String?
+  nivel     Int?
+  usuarios  Usuarios[]
+  createAt  DateTime   @default(now())
 }
 
-
 model Clientes {
-  id                   String   @id @default(uuid())
-  nome                 String
-  cep                  String   
-  cidade               String
-  cpf_cnpj             String   
-  inscricao_estadual   String   
-  endereco             String
-  bairro               String
-  numero               String   
-  nome_do_contato      String
-  telefone             String   
-  celular              String   
-  email                String
-  createAt DateTime @default(now())
+  id                 String   @id @default(uuid())
+  nome               String
+  cep                String
+  cidade             String
+  cpf_cnpj           String
+  inscricao_estadual String
+  endereco           String
+  bairro             String
+  numero             String
+  nome_do_contato    String
+  telefone           String
+  celular            String
+  email              String
+  createAt           DateTime @default(now())
 }
 
 model MateriasPrimas {
-  id                  String @id @default(uuid())
-  nome                String
-  preco               Float
-  quantidade          Float
+  id                           String                         @id @default(uuid())
+  nome                         String
+  preco                        Float
+  quantidade                   Float
   relacaoMateriaPrimaEProdutos RelacaoMateriaPrimaEProdutos[]
 }
 
-model Produtos{
-  id                  String @id @default(uuid())
-  nome                String
-  porcentagem         Float
-  valor               Float?
-  quantidade          Int
+model Produtos {
+  id                           String                         @id @default(uuid())
+  nome                         String
+  porcentagem                  Float
+  valor                        Float?
+  quantidade                   Int
   relacaoMateriaPrimaEProdutos RelacaoMateriaPrimaEProdutos[]
 }
 
 model RelacaoMateriaPrimaEProdutos {
-  id                 String @id @default(uuid())
-  produtoId          String
-  produtos           Produtos @relation(fields: [produtoId], references: [id])
-  materiaPrimaId     String
-  materiaPrima       MateriasPrimas @relation(fields: [materiaPrimaId], references: [id])
+  id                     String         @id @default(uuid())
+  produtoId              String
+  produtos               Produtos       @relation(fields: [produtoId], references: [id])
+  materiaPrimaId         String
+  materiaPrima           MateriasPrimas @relation(fields: [materiaPrimaId], references: [id])
   quantidadeMateriaPrima Float
 }

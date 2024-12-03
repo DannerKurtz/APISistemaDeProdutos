@@ -1,4 +1,5 @@
 import { crudService } from '../../../shared/services/CRUD';
+import { relation } from '../../../shared/services/CRUD/createRelation';
 import { ProductModel } from '../../models/ProductModel';
 import { RawMaterialAndProductsRelationModel } from '../../models/RawMaterialAndProductsRelationModel';
 
@@ -27,33 +28,3 @@ export const create = async (
     return new Error('Erro ao criar novo produto no banco de dados');
   }
 };
-
-async function relation(
-  rawMaterial: [{ id: string; quantidade: number }],
-  productId: string
-) {
-  const rawMaterialLength = rawMaterial.length;
-
-  for (let index = 0; index < rawMaterialLength; index++) {
-    const { id: rawMaterialId, quantidade: rawMaterialQuantity } =
-      rawMaterial[index];
-    const rawMaterialAndProductsRelation: RawMaterialAndProductsRelationWithoutID =
-      {
-        produtoId: productId,
-        materiaPrimaId: rawMaterialId,
-        quantidadeMateriaPrima: rawMaterialQuantity,
-      };
-    // console.log(rawMaterialAndProductsRelation);
-
-    const newRawMaterialAndProductsRelation =
-      await crudService.createInDatabase(
-        rawMaterialAndProductsRelation,
-        'RelacaoMateriaPrimaEProdutos',
-        `Erro ao criar uma nova relação com ${rawMaterialId} index ${index}`
-      );
-
-    console.log(newRawMaterialAndProductsRelation);
-    if (newRawMaterialAndProductsRelation instanceof Error)
-      return newRawMaterialAndProductsRelation;
-  }
-}

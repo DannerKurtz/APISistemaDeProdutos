@@ -5,7 +5,7 @@ import { RawMaterialAndProductsRelationModel } from '../../database/models/RawMa
 import { StatusCodes } from 'http-status-codes';
 
 type BodyWithoutId = Omit<ProductModel, 'id'> & {
-  materiaPrima: [RawMaterialAndProductsRelationModel & { senha: undefined }];
+  materiaPrima: [{ id: string; quantidade: number }];
   senha: undefined;
   novaSenha: undefined;
 };
