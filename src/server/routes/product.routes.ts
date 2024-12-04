@@ -5,4 +5,5 @@ export const productRoutes = (router: Router) => {
   router.post('/api/product', productController.create);
   router.get('/api/product', productController.get);
   router.put('/api/product/:id', productController.update);
+  router.delete('/api/product/:id', productController.deleteProduct);
 };

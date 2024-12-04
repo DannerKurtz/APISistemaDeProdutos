@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { ProductModel } from '../../database/models/ProductModel';
 import { productProvider } from '../../database/providers/ProductProvier';
-import { RawMaterialAndProductsRelationModel } from '../../database/models/RawMaterialAndProductsRelationModel';
 import { StatusCodes } from 'http-status-codes';
 
 type BodyWithoutId = Omit<ProductModel, 'id'> & {
@@ -18,5 +17,8 @@ export const update = async (
 
   const updateProduct = await productProvider.update(id, body);
 
-  res.status(StatusCodes.OK).json(updateProduct);
+  if (updateProduct instanceof Error)
+    return res.status(StatusCodes.BAD_REQUEST).json(updateProduct);
+
+  return res.status(StatusCodes.OK).json(updateProduct);
 };

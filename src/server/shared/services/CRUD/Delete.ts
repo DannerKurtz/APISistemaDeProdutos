@@ -1,4 +1,4 @@
-import { prisma } from "../../../database/prisma";
+import { prisma } from '../../../database/prisma';
 
 export const deleteInDatabase = async (
   id: string,
