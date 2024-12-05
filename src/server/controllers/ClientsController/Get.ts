@@ -1,11 +1,6 @@
-import { Request, Response } from "express";
-import { clientsProvider } from "../../database/providers/ClientsProvider";
-import { StatusCodes } from "http-status-codes";
-
-interface IQuery {
-  id: string;
-  nome: string;
-}
+import { Request, Response } from 'express';
+import { clientsProvider } from '../../database/providers/ClientsProvider';
+import { StatusCodes } from 'http-status-codes';
 
 export const get = async (req: Request, res: Response): Promise<any> => {
   const { id, nome } = req.query;

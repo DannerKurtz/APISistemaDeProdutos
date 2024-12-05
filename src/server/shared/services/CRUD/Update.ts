@@ -1,11 +1,10 @@
-import { prisma } from "../../../database/prisma";
-import { bcryptPassword } from "../bcrypt";
+import { prisma } from '../../../database/prisma';
+import { bcryptPassword } from '../bcrypt';
 
-type withoutId<T> = Omit<T, "id">;
+type withoutId<T> = Omit<T, 'id'> &
+  Partial<{ nome?: string; senha?: string; novaSenha?: string }>;
 
-export const updateInDatabase = async <
-  T extends { senha?: string; novaSenha?: string }
->(
+export const updateInDatabase = async <T>(
   params: string,
   data: withoutId<T>,
   modelName: string,
@@ -16,7 +15,7 @@ export const updateInDatabase = async <
       where: { id: params },
     });
     if (!dataExist) {
-      return new Error("ID nao encontrado!");
+      return new Error('ID nao encontrado!');
     }
     if (data.senha) {
       const passwordVerify = await bcryptPassword.passwordVerify(
@@ -24,7 +23,7 @@ export const updateInDatabase = async <
         dataExist.senha
       );
       if (!passwordVerify) {
-        return new Error("Senha invalida!");
+        return new Error('Senha invalida!');
       }
 
       if (data.novaSenha) {

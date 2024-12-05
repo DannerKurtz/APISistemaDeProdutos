@@ -1,11 +1,9 @@
 import { prisma } from '../../../database/prisma';
 import { bcryptPassword } from '../bcrypt';
 
-type TWithoutId<T> = Omit<T, 'id'>;
+type TWithoutId<T> = Omit<T, 'id'> & Partial<{ nome?: string; senha?: string }>;
 
-export const createInDatabase = async <
-  T extends { nome?: string; senha?: string }
->(
+export const createInDatabase = async <T>(
   data: TWithoutId<T>,
   modelName: string,
   message: string

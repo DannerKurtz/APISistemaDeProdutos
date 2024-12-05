@@ -1,7 +1,7 @@
-import { crudService } from "../../../shared/services/CRUD";
-import { IClient } from "../../models/ClientModel";
+import { crudService } from '../../../shared/services/CRUD';
+import { IClient } from '../../models/ClientModel';
 
-type IData = Omit<IClient, "id"> & { novaSenha?: string };
+type IData = Omit<IClient, 'id'>;
 
 export const update = async (
   id: string,
@@ -11,10 +11,10 @@ export const update = async (
     return crudService.updateInDatabase(
       id,
       data,
-      "clientes",
-      "Erro ao atualizar o cliente"
+      'clientes',
+      'Erro ao atualizar o cliente'
     );
   } catch (error) {
-    return new Error("Erro ao acessar o crudService para atualizar o cliente!");
+    return new Error('Erro ao acessar o crudService para atualizar o cliente!');
   }
 };

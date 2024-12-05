@@ -1,7 +1,7 @@
 import { crudService } from '../../../shared/services/CRUD';
 import { ProductModel } from '../../models/ProductModel';
 
-type BodyWithoutId = Omit<ProductModel, 'id'> & { senha: undefined };
+type BodyWithoutId = Omit<ProductModel, 'id'>;
 export const update = async (
   id: string,
   body: BodyWithoutId
