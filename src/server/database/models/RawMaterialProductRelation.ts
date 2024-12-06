@@ -1,4 +1,4 @@
-export interface RawMaterialAndProductsRelationModel {
+export interface RawMaterialProductRelationModel {
   id: string;
   produtoId: string;
   materiaPrimaId: string;
