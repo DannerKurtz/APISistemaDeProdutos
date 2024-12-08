@@ -6,9 +6,13 @@ type RawMaterialProductRelationWithoutId = Omit<
   'id'
 >;
 
-export const create = async (data: RawMaterialProductRelationWithoutId) => {
+export const create = async (
+  data: RawMaterialProductRelationWithoutId
+): Promise<Error | RawMaterialProductRelationModel> => {
   try {
-    const newRawMaterialProductRelation = await crudService.createInDatabase(
+    const newRawMaterialProductRelation:
+      | Error
+      | RawMaterialProductRelationModel = await crudService.createInDatabase(
       data,
       'RelacaoMateriaPrimaEProdutos',
       'Erro ao criar nova relação de materia prima e produto'
