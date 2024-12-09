@@ -18,6 +18,6 @@ export const get = async (query: IQuery): Promise<ProductModel | Error> => {
 
     return getProduct;
   } catch (error) {
-    return new Error('Erro ao consultar a base de dados de produtos e');
+    return new Error('Erro ao consultar a base de dados de produtos');
   }
 };

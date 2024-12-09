@@ -3,11 +3,7 @@ import { ProductModel } from '../../database/models/ProductModel';
 import { productProvider } from '../../database/providers/ProductProvier';
 import { StatusCodes } from 'http-status-codes';
 
-type BodyWithoutId = Omit<ProductModel, 'id'> & {
-  materiaPrima: [{ id: string; quantidade: number }];
-  senha: undefined;
-  novaSenha: undefined;
-};
+type BodyWithoutId = Omit<ProductModel, 'id'>;
 export const update = async (
   req: Request<{ id: string }, {}, BodyWithoutId>,
   res: Response
