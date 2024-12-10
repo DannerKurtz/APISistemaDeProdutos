@@ -2,7 +2,6 @@ import { crudService } from '../../../shared/services/CRUD';
 
 export const deleteProduct = async (id: string): Promise<true | Error> => {
   try {
-    console.log(id);
     const deleteProduct = await crudService.deleteInDatabase(
       id,
       'Produtos',
