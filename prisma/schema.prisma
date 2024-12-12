@@ -20,6 +20,7 @@ model Usuarios {
   permissionId String?
   permissions  Permissions? @relation(fields: [permissionId], references: [id])
   createAt     DateTime     @default(now())
+  Vendas       Vendas[]
 }
 
 model Permissions {
@@ -46,6 +47,7 @@ model Clientes {
   celular            String
   email              String
   createAt           DateTime @default(now())
+  Vendas             Vendas[]
 }
 
 model MateriasPrimas {
@@ -63,6 +65,7 @@ model Produtos {
   valor                        Float?
   quantidade                   Int
   relacaoMateriaPrimaEProdutos RelacaoMateriaPrimaEProdutos[]
+  RelacaoProdutoVenda          RelacaoProdutoVenda[]
 }
 
 model RelacaoMateriaPrimaEProdutos {
@@ -72,4 +75,25 @@ model RelacaoMateriaPrimaEProdutos {
   materiaPrimaId         String
   materiaPrima           MateriasPrimas @relation(fields: [materiaPrimaId], references: [id])
   quantidadeMateriaPrima Float
+}
+
+model Vendas {
+  id                  String                @id @default(uuid())
+  numeroDaVenda       String                @unique
+  desconto            Float
+  precoTotal          Float
+  usuarioId           String
+  usuarios            Usuarios              @relation(fields: [usuarioId], references: [id])
+  clienteId           String
+  clientes            Clientes              @relation(fields: [clienteId], references: [id])
+  RelacaoProdutoVenda RelacaoProdutoVenda[]
+}
+
+model RelacaoProdutoVenda {
+  id         String   @id @default(uuid())
+  vendaId    String
+  vendas     Vendas   @relation(fields: [vendaId], references: [id])
+  produtoId  String
+  produtos   Produtos @relation(fields: [produtoId], references: [id])
+  quantidade Float
 }

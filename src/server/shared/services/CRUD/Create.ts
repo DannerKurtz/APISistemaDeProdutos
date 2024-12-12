@@ -2,7 +2,6 @@ import { prisma } from '../../../database/prisma';
 import { bcryptPassword } from '../bcrypt';
 
 type TWithoutId<T> = Omit<T, 'id'> & Partial<{ nome?: string; senha?: string }>;
-
 export const createInDatabase = async <T>(
   data: TWithoutId<T>,
   modelName: string,
@@ -24,7 +23,6 @@ export const createInDatabase = async <T>(
     const createNewData = await (prisma as any)[modelName].create({
       data,
     });
-    console.log(createNewData);
     return createNewData;
   } catch (error) {
     console.log(error);
