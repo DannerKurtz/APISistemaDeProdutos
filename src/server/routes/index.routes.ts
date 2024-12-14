@@ -5,6 +5,7 @@ import { rawMaterialRouter } from './rawMaterial.routes';
 import { productRoutes } from './product.routes';
 import { rawMaterialProductRelation } from './rawMaterialProductRelation.routes';
 import { saleRouter } from './sales.routes';
+import { productSaleRelationRouter } from './productSaleRelation.routes';
 
 export const router = Router();
 
@@ -17,3 +18,4 @@ rawMaterialRouter(router);
 productRoutes(router);
 rawMaterialProductRelation(router);
 saleRouter(router);
+productSaleRelationRouter(router);
