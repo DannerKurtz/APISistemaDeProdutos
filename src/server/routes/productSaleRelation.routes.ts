@@ -8,4 +8,8 @@ export const productSaleRelationRouter = (router: Router) => {
     '/api/productSaleRelation/:id',
     productSaleRelationController.deleteProductSaleRelation
   );
+  router.put(
+    '/api/productSaleRelation/:id',
+    productSaleRelationController.update
+  );
 };
