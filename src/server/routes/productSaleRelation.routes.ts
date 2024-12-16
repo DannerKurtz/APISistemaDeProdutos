@@ -3,4 +3,5 @@ import { productSaleRelationController } from '../controllers/ProductSaleRelatio
 
 export const productSaleRelationRouter = (router: Router) => {
   router.post('/api/productSaleRelation', productSaleRelationController.create);
+  router.get('/api/productSaleRelation', productSaleRelationController.get);
 };
