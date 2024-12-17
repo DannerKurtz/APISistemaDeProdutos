@@ -1,15 +1,19 @@
-export interface IClient {
+export interface CustomersModel {
   id?: string;
-  nome: string;
-  cep: string;
-  cidade: string;
-  cpf_cnpj: string;
-  inscricao_estadual: string;
-  endereco: string;
-  bairro: string;
-  numero: string;
-  nome_do_contato: string;
-  telefone: string;
-  celular: string;
+  name: string;
+  postalCode: string;
+  city: string;
+  taxId: string;
+  stateRegistration: string;
+  address: string;
+  neighborhood: string;
+  addressNumber: string;
+  contactName: string;
+  phone: string;
+  mobile: string;
   email: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
+
+export interface CustomersModelWithoutId extends Omit<CustomersModel, 'id'> {}
