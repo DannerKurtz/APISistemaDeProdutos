@@ -1,21 +1,22 @@
 import { crudService } from '../../../shared/services/CRUD';
+import {
+  errorsCrudService,
+  errorsProvider,
+} from '../../../shared/services/messageErrors';
 
 export const deleteProductSaleRelation = async (
   id: string
 ): Promise<Boolean | Error> => {
   try {
-    const productSaleRelationDeleted: boolean | Error =
+    const productSaleRelationDeleted: Boolean | Error =
       await crudService.deleteInDatabase(
         id,
-        'RelacaoProdutoVenda',
-        'Erro ao deletar productSaleRelation'
+        'ProductSaleRelations',
+        errorsCrudService.deleteMessage('ProductSaleRelations')
       );
-
-    if (productSaleRelationDeleted instanceof Error)
-      return new Error(productSaleRelationDeleted.message);
 
     return productSaleRelationDeleted;
   } catch (error) {
-    return new Error('Erro ao tentar deletar na base de dados');
+    return new Error(errorsProvider.deleteMessage('ProductSaleRelations'));
   }
 };

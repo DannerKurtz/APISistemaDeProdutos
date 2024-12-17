@@ -10,9 +10,9 @@ export const deleteProductSaleRelation = async (
   req: Request<IParams>,
   res: Response
 ): Promise<any> => {
-  const id = req.params.id;
+  const id: string = req.params.id;
 
-  const productSaleRelationDeleted =
+  const productSaleRelationDeleted: Boolean | Error =
     await productSaleRelationProvider.deleteProductSaleRelation(id);
 
   if (productSaleRelationDeleted instanceof Error)

@@ -1,23 +1,23 @@
 import { Request, Response } from 'express';
-import { ProductSaleRelationModel } from '../../database/models/ProductSaleRelationsInterface';
+import {
+  IProductSaleRelations,
+  IProductSaleRelationsWithoutId,
+} from '../../database/models/ProductSaleRelationsInterface';
 import { productSaleRelationProvider } from '../../database/providers/ProductSaleRelationProvider';
 import { StatusCodes } from 'http-status-codes';
 
-type RelationWithoutId = Omit<ProductSaleRelationModel, 'id'>;
 type IParams = {
   id: string;
 };
 export const update = async (
-  req: Request<IParams, {}, RelationWithoutId>,
+  req: Request<IParams, {}, IProductSaleRelationsWithoutId>,
   res: Response
 ): Promise<any> => {
-  const body = req.body;
-  const id = req.params.id;
+  const body: IProductSaleRelationsWithoutId = req.body;
+  const id: string = req.params.id;
 
-  const updatedProductSaleRelation = await productSaleRelationProvider.update(
-    id,
-    body
-  );
+  const updatedProductSaleRelation: IProductSaleRelations | Error =
+    await productSaleRelationProvider.update(id, body);
 
   if (updatedProductSaleRelation instanceof Error)
     return res.status(StatusCodes.BAD_REQUEST).json(updatedProductSaleRelation);

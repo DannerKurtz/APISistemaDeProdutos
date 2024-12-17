@@ -1,22 +1,23 @@
 import { crudService } from '../../../shared/services/CRUD';
-import { ProductSaleRelationModel } from '../../models/ProductSaleRelationsInterface';
+import {
+  errorsCrudService,
+  errorsProvider,
+} from '../../../shared/services/messageErrors';
+import { IProductSaleRelations } from '../../models/ProductSaleRelationsInterface';
 
 export const get = async (
   id: string
-): Promise<ProductSaleRelationModel | Error> => {
+): Promise<IProductSaleRelations | Error> => {
   try {
-    const getProductSaleRelation: ProductSaleRelationModel | Error =
+    const getProductSaleRelation: IProductSaleRelations | Error =
       await crudService.getInDatabase(
         { id },
-        'RelacaoProdutoVenda',
-        'Erro ao buscar no banco de dados'
+        'ProductSaleRelations',
+        errorsCrudService.getMessage('ProductSaleRelations')
       );
-
-    if (getProductSaleRelation instanceof Error)
-      return new Error(getProductSaleRelation.message);
 
     return getProductSaleRelation;
   } catch (error) {
-    return new Error('Erro ao consultar o crudService');
+    return new Error(errorsProvider.getMessage('ProductSaleRelations'));
   }
 };

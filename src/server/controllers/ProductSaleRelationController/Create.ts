@@ -1,17 +1,19 @@
 import { Request, Response } from 'express';
-import { ProductSaleRelationModel } from '../../database/models/ProductSaleRelationsInterface';
+import {
+  IProductSaleRelations,
+  IProductSaleRelationsWithoutId,
+} from '../../database/models/ProductSaleRelationsInterface';
 import { productSaleRelationProvider } from '../../database/providers/ProductSaleRelationProvider';
 import { StatusCodes } from 'http-status-codes';
 
-type RelationWithoutId = Omit<ProductSaleRelationModel, 'id'>;
-
 export const create = async (
-  req: Request<{}, {}, RelationWithoutId>,
+  req: Request<{}, {}, IProductSaleRelationsWithoutId>,
   res: Response
 ): Promise<any> => {
-  const body = req.body;
+  const body: IProductSaleRelationsWithoutId = req.body;
 
-  const newProductSaleRelation = await productSaleRelationProvider.create(body);
+  const newProductSaleRelation: IProductSaleRelations | Error =
+    await productSaleRelationProvider.create(body);
 
   if (newProductSaleRelation instanceof Error)
     return res.status(StatusCodes.BAD_REQUEST).json(newProductSaleRelation);

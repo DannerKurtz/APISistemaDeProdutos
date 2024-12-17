@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { productSaleRelationProvider } from '../../database/providers/ProductSaleRelationProvider';
 import { StatusCodes } from 'http-status-codes';
+import { IProductSaleRelations } from '../../database/models/ProductSaleRelationsInterface';
 
 type IQuery = {
   id: string;
@@ -10,9 +11,10 @@ export const get = async (
   req: Request<{}, {}, {}, IQuery>,
   res: Response
 ): Promise<any> => {
-  const id = req.query.id;
+  const id: string = req.query.id;
 
-  const getProductSaleRelation = await productSaleRelationProvider.get(id);
+  const getProductSaleRelation: IProductSaleRelations | Error =
+    await productSaleRelationProvider.get(id);
 
   if (getProductSaleRelation instanceof Error)
     return res.status(StatusCodes.BAD_REQUEST).json(getProductSaleRelation);
