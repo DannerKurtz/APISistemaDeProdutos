@@ -1,4 +1,4 @@
-import { ProductModel } from '../../../src/server/database/models/ProductModel';
+import { ProductModel } from '../../../src/server/database/models/ProductsInterface';
 import { productProvider } from '../../../src/server/database/providers/ProductProvier';
 import { crudService } from '../../../src/server/shared/services/CRUD';
 

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { RawMaterialProductRelationModel } from '../../../src/server/database/models/RawMaterialProductRelation';
+import { RawMaterialProductRelationModel } from '../../../src/server/database/models/RawMaterialProductRelationsInterface';
 import { rawMaterialProductRelationProvider } from '../../../src/server/database/providers/RawMaterialProductRelation';
 import { rawMaterialProductRelationController } from '../../../src/server/controllers/RawMaterialProductRelationController';
 

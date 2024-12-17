@@ -1,12 +1,12 @@
-import { crudService } from "../../../shared/services/CRUD";
-import { userModel } from "../../models/UserModel";
+import { crudService } from '../../../shared/services/CRUD';
+import { userModel } from '../../models/UsersInterface';
 
 interface IData {
   nome: string;
   senha: string;
   novaSenha?: string;
 }
-interface IBodyProps extends Omit<userModel, "senha"> {}
+interface IBodyProps extends Omit<userModel, 'senha'> {}
 export const update = async (
   id: string,
   data: IData
@@ -15,10 +15,10 @@ export const update = async (
     return crudService.updateInDatabase(
       id,
       data,
-      "usuarios",
-      "Erro ao atualizar o usuário"
+      'usuarios',
+      'Erro ao atualizar o usuário'
     );
   } catch (err) {
-    return new Error("Erro ao acessar o crudService para atualizar o usuário!");
+    return new Error('Erro ao acessar o crudService para atualizar o usuário!');
   }
 };

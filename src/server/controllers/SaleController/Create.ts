@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { SaleModel } from '../../database/models/SaleModel';
+import { SaleModel } from '../../database/models/SalesInterface';
 import { saleProvider } from '../../database/providers/SaleProvider';
 import { StatusCodes } from 'http-status-codes';
 

@@ -1,5 +1,5 @@
 import { crudService } from '../../../shared/services/CRUD';
-import { RawMaterialProductRelationModel } from '../../models/RawMaterialProductRelation';
+import { RawMaterialProductRelationModel } from '../../models/RawMaterialProductRelationsInterface';
 
 type RawMaterialProductRelationWithoutId = Omit<
   RawMaterialProductRelationModel,

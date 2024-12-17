@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { ProductSaleRelationModel } from '../../database/models/ProductSaleRelationModel';
+import { ProductSaleRelationModel } from '../../database/models/ProductSaleRelationsInterface';
 import { productSaleRelationProvider } from '../../database/providers/ProductSaleRelationProvider';
 import { StatusCodes } from 'http-status-codes';
 

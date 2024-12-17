@@ -1,5 +1,5 @@
 import { crudService } from '../../../shared/services/CRUD';
-import { SaleModel } from '../../models/SaleModel';
+import { SaleModel } from '../../models/SalesInterface';
 
 type saleWithoutID = Omit<SaleModel, 'id'>;
 

@@ -1,4 +1,4 @@
-import { SaleModel } from '../../models/SaleModel';
+import { SaleModel } from '../../models/SalesInterface';
 import { prisma } from '../../prisma';
 
 type IQuery = {

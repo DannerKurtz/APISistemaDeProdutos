@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { SaleModel } from '../../database/models/SaleModel';
+import { SaleModel } from '../../database/models/SalesInterface';
 import { StatusCodes } from 'http-status-codes';
 import { saleProvider } from '../../database/providers/SaleProvider';
 
@@ -21,5 +21,5 @@ export const update = async (
   if (updateSale instanceof Error)
     return res.status(StatusCodes.BAD_REQUEST).json(updateSale.message);
 
-  return res.status(StatusCodes.OK).json(updateSale)
+  return res.status(StatusCodes.OK).json(updateSale);
 };

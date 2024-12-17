@@ -1,5 +1,5 @@
 import { crudService } from '../../../shared/services/CRUD';
-import { RawMaterialModel } from '../../models/RawMaterialModel';
+import { RawMaterialModel } from '../../models/RawMaterialsInterface';
 
 type TWithoutID = Omit<RawMaterialModel, 'id'>;
 

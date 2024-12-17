@@ -1,5 +1,5 @@
 import { crudService } from '../../../shared/services/CRUD';
-import { ProductSaleRelationModel } from '../../models/ProductSaleRelationModel';
+import { ProductSaleRelationModel } from '../../models/ProductSaleRelationsInterface';
 
 type RelationWithoutId = Omit<ProductSaleRelationModel, 'id'>;
 

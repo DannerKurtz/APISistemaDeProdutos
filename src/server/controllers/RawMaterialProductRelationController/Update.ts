@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { rawMaterialProductRelationProvider } from '../../database/providers/RawMaterialProductRelation';
-import { RawMaterialProductRelationModel } from '../../database/models/RawMaterialProductRelation';
+import { RawMaterialProductRelationModel } from '../../database/models/RawMaterialProductRelationsInterface';
 import { StatusCodes } from 'http-status-codes';
 
 type IParams = {

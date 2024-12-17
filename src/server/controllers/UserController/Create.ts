@@ -1,9 +1,9 @@
-import { Request, Response } from "express";
-import { userModel } from "../../database/models/UserModel";
-import { userProvider } from "../../database/providers/UserProvider";
-import { StatusCodes } from "http-status-codes";
+import { Request, Response } from 'express';
+import { userModel } from '../../database/models/UsersInterface';
+import { userProvider } from '../../database/providers/UserProvider';
+import { StatusCodes } from 'http-status-codes';
 
-interface IBodyProps extends Omit<userModel, "id"> {}
+interface IBodyProps extends Omit<userModel, 'id'> {}
 
 export const create = async (
   req: Request<{}, {}, IBodyProps>,

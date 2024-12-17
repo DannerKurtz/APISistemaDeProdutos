@@ -1,7 +1,7 @@
 import { query, Request, Response } from 'express';
 import { productProvider } from '../../../src/server/database/providers/ProductProvier';
 import { productController } from '../../../src/server/controllers/ProductController';
-import { ProductModel } from '../../../src/server/database/models/ProductModel';
+import { ProductModel } from '../../../src/server/database/models/ProductsInterface';
 
 jest.mock('../../../src/server/database/providers/ProductProvier', () => ({
   productProvider: {

@@ -1,4 +1,4 @@
-export interface CustomersModel {
+export interface ICustomers {
   id?: string;
   name: string;
   postalCode: string;
@@ -12,8 +12,8 @@ export interface CustomersModel {
   phone: string;
   mobile: string;
   email: string;
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
-export interface CustomersModelWithoutId extends Omit<CustomersModel, 'id'> {}
+export interface ICustomersWithoutId extends Omit<ICustomers, 'id'> {}

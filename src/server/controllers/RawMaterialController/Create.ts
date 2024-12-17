@@ -1,9 +1,9 @@
-import { Request, Response } from "express";
-import { RawMaterialModel } from "../../database/models/RawMaterialModel";
-import { rawMaterialProvider } from "../../database/providers/RawMaterialProvider";
-import { StatusCodes } from "http-status-codes";
+import { Request, Response } from 'express';
+import { RawMaterialModel } from '../../database/models/RawMaterialsInterface';
+import { rawMaterialProvider } from '../../database/providers/RawMaterialProvider';
+import { StatusCodes } from 'http-status-codes';
 
-type TWithoutID = Omit<RawMaterialModel, "id">;
+type TWithoutID = Omit<RawMaterialModel, 'id'>;
 
 export const create = async (
   req: Request<{}, {}, TWithoutID>,

@@ -1,8 +1,8 @@
-import { RawMaterialModel } from "../../../src/server/database/models/RawMaterialModel";
-import { rawMaterialProvider } from "../../../src/server/database/providers/RawMaterialProvider";
-import { crudService } from "../../../src/server/shared/services/CRUD";
+import { RawMaterialModel } from '../../../src/server/database/models/RawMaterialsInterface';
+import { rawMaterialProvider } from '../../../src/server/database/providers/RawMaterialProvider';
+import { crudService } from '../../../src/server/shared/services/CRUD';
 
-jest.mock("../../../src/server/shared/services/CRUD", () => ({
+jest.mock('../../../src/server/shared/services/CRUD', () => ({
   crudService: {
     updateInDatabase: jest.fn(),
   },
@@ -13,26 +13,26 @@ beforeEach(() => {
 });
 
 const data = {
-  nome: "Teste",
+  nome: 'Teste',
   preco: 10,
   quantidade: 10,
 };
 
-describe("Update RawMaterial Provider", () => {
-  test("Test 01 -> successful", async () => {
+describe('Update RawMaterial Provider', () => {
+  test('Test 01 -> successful', async () => {
     (crudService.updateInDatabase as jest.Mock).mockReturnValue(data);
 
-    const result = await rawMaterialProvider.update("123", data);
+    const result = await rawMaterialProvider.update('123', data);
 
     expect(result).toEqual(data);
     expect(crudService.updateInDatabase).toHaveBeenCalledTimes(1);
   });
-  test("Test 02 -> failed", async () => {
-    (crudService.updateInDatabase as jest.Mock).mockReturnValue(Error("Error"));
+  test('Test 02 -> failed', async () => {
+    (crudService.updateInDatabase as jest.Mock).mockReturnValue(Error('Error'));
 
-    const result = await rawMaterialProvider.update("123", data);
+    const result = await rawMaterialProvider.update('123', data);
 
-    expect(result).toEqual(Error("Error"));
+    expect(result).toEqual(Error('Error'));
     expect(crudService.updateInDatabase).toHaveBeenCalledTimes(1);
   });
 });

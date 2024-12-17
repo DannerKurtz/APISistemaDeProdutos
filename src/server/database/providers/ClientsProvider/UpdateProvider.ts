@@ -1,5 +1,5 @@
 import { crudService } from '../../../shared/services/CRUD';
-import { IClient } from '../../models/ClientModel';
+import { IClient } from '../../models/CustomersInterface';
 
 type IData = Omit<IClient, 'id'>;
 

@@ -1,5 +1,5 @@
 import { crudService } from '../../../shared/services/CRUD';
-import { ProductModel } from '../../models/ProductModel';
+import { ProductModel } from '../../models/ProductsInterface';
 
 type BodyWithoutId = Omit<ProductModel, 'id'>;
 export const update = async (

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { RawMaterialProductRelationModel } from '../../database/models/RawMaterialProductRelation';
+import { RawMaterialProductRelationModel } from '../../database/models/RawMaterialProductRelationsInterface';
 import { rawMaterialProductRelationProvider } from '../../database/providers/RawMaterialProductRelation';
 
 type RawMaterialProductRelationWithoutId = Omit<
