@@ -1,16 +1,25 @@
 import { crudService } from '../../../shared/services/CRUD';
-import { IClient } from '../../models/CustomersInterface';
+import {
+  errorsCrudService,
+  errorsProvider,
+} from '../../../shared/services/messageErrors';
+import {
+  ICustomers,
+  ICustomersWithoutId,
+} from '../../models/CustomersInterface';
 
-interface IBodyProps extends Omit<IClient, 'id'> {}
-
-export const create = async (data: IBodyProps): Promise<Error | IClient> => {
+export const create = async (
+  data: ICustomersWithoutId
+): Promise<ICustomers | Error> => {
   try {
-    return await crudService.createInDatabase(
+    const newClient: ICustomers | Error = await crudService.createInDatabase(
       data,
-      'clientes',
-      'Erro ao criar um novo cliente'
+      'Customers',
+      errorsCrudService.createMessage('Customers')
     );
+
+    return newClient;
   } catch (error) {
-    return new Error('Erro ao acessar o crudService para criar novo cliente!');
+    return new Error(errorsProvider.createMessage('Customers'));
   }
 };

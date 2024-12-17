@@ -1,17 +1,18 @@
 import { Request, Response } from 'express';
-import { ProductModel } from '../../database/models/ProductsInterface';
 import { productProvider } from '../../database/providers/ProductProvier';
 import { StatusCodes } from 'http-status-codes';
-
-type productWithoutID = Omit<ProductModel, 'id'>;
+import {
+  IProducts,
+  IProductsWithoutId,
+} from '../../database/models/ProductsInterface';
 
 export const create = async (
-  req: Request<{}, {}, productWithoutID>,
+  req: Request<{}, {}, IProductsWithoutId>,
   res: Response
 ): Promise<any> => {
   const data = req.body;
 
-  const newProduct = await productProvider.create(data);
+  const newProduct: IProducts | Error = await productProvider.create(data);
 
   if (newProduct instanceof Error) {
     return res.status(StatusCodes.BAD_REQUEST).json(newProduct.message);

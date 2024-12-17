@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { clientsController } from '../../../src/server/controllers/ClientsController';
+import { clientsController } from '../../../src/server/controllers/CustomerController';
 import { IClient } from '../../../src/server/database/models/CustomersInterface';
 import { clientsProvider } from '../../../src/server/database/providers/ClientsProvider';
 

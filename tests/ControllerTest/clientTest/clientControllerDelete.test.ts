@@ -1,9 +1,9 @@
-import { Request, Response } from "express";
-import { clientsController } from "../../../src/server/controllers/ClientsController";
-import { clientsProvider } from "../../../src/server/database/providers/ClientsProvider";
-import { deleteClient } from "../../../src/server/controllers/ClientsController/Delete";
+import { Request, Response } from 'express';
+import { clientsController } from '../../../src/server/controllers/CustomerController';
+import { clientsProvider } from '../../../src/server/database/providers/ClientsProvider';
+import { deleteClient } from '../../../src/server/controllers/CustomerController/Delete';
 
-jest.mock("../../../src/server/database/providers/ClientsProvider", () => ({
+jest.mock('../../../src/server/database/providers/ClientsProvider', () => ({
   clientsProvider: {
     deleteClient: jest.fn(),
   },
@@ -17,13 +17,13 @@ beforeEach(() => {
   jest.clearAllMocks();
 });
 
-describe("Delete Client Test", () => {
-  test("Test 1 -> successful", async () => {
+describe('Delete Client Test', () => {
+  test('Test 1 -> successful', async () => {
     (clientsProvider.deleteClient as jest.Mock).mockReturnValue(true);
 
     const req = {
       params: {
-        id: "123",
+        id: '123',
       },
     } as unknown as Request<IParams>;
 
@@ -41,14 +41,14 @@ describe("Delete Client Test", () => {
     });
   });
 
-  test("Test 2 -> failed", async () => {
+  test('Test 2 -> failed', async () => {
     (clientsProvider.deleteClient as jest.Mock).mockReturnValue(
-      Error("Cliente não encontrado!")
+      Error('Cliente não encontrado!')
     );
 
     const req = {
       params: {
-        id: "123",
+        id: '123',
       },
     } as unknown as Request<IParams>;
 
@@ -61,6 +61,6 @@ describe("Delete Client Test", () => {
 
     expect(clientsProvider.deleteClient).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(404);
-    expect(res.json).toHaveBeenCalledWith(Error("Cliente não encontrado!"));
+    expect(res.json).toHaveBeenCalledWith(Error('Cliente não encontrado!'));
   });
 });

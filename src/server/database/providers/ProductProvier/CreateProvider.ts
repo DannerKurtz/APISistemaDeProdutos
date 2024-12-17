@@ -1,11 +1,11 @@
 import { crudService } from '../../../shared/services/CRUD';
-import { ProductModel } from '../../models/ProductsInterface';
+import { IProducts, IProductsWithoutId } from '../../models/ProductsInterface';
 
-type productWithoutID = Omit<ProductModel, 'id'>;
-
-export const create = async (data: productWithoutID): Promise<{} | Error> => {
+export const create = async (
+  data: IProductsWithoutId
+): Promise<IProducts | Error> => {
   try {
-    const newProduct: ProductModel | Error = await crudService.createInDatabase(
+    const newProduct: IProducts | Error = await crudService.createInDatabase(
       data,
       'Produtos',
       'Erro ao criar novo produto'

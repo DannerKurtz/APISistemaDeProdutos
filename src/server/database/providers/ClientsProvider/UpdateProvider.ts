@@ -1,20 +1,28 @@
 import { crudService } from '../../../shared/services/CRUD';
-import { IClient } from '../../models/CustomersInterface';
-
-type IData = Omit<IClient, 'id'>;
+import {
+  errorsCrudService,
+  errorsProvider,
+} from '../../../shared/services/messageErrors';
+import {
+  ICustomers,
+  ICustomersWithoutId,
+} from '../../models/CustomersInterface';
 
 export const update = async (
   id: string,
-  data: IData
-): Promise<Error | IClient> => {
+  data: ICustomersWithoutId
+): Promise<ICustomers | Error> => {
   try {
-    return crudService.updateInDatabase(
-      id,
-      data,
-      'clientes',
-      'Erro ao atualizar o cliente'
-    );
+    const updateCustomers: ICustomers | Error =
+      await crudService.updateInDatabase(
+        id,
+        data,
+        'Customers',
+        errorsCrudService.updateMessage('Customers')
+      );
+
+    return updateCustomers;
   } catch (error) {
-    return new Error('Erro ao acessar o crudService para atualizar o cliente!');
+    return new Error(errorsProvider.updateMessage('Customers'));
   }
 };

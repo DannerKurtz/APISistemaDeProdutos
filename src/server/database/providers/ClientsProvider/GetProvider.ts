@@ -1,14 +1,25 @@
-import { crudService } from "../../../shared/services/CRUD";
+import { crudService } from '../../../shared/services/CRUD';
+import {
+  errorsCrudService,
+  errorsProvider,
+} from '../../../shared/services/messageErrors';
+import { ICustomers } from '../../models/CustomersInterface';
 
-export const get = async (id: string | any, nome: string | any) => {
+interface IQuery {
+  id?: string;
+  nome?: string;
+}
+
+export const get = async (query: IQuery): Promise<ICustomers | Error> => {
   try {
-    const query = { id, nome };
-    return await crudService.getInDatabase(
+    const getCustomers: ICustomers | Error = await crudService.getInDatabase(
       query,
-      "clientes",
-      "Erro ao consultar os clientes"
+      'Customers',
+      errorsCrudService.getMessage('Customers')
     );
+
+    return getCustomers;
   } catch (error) {
-    return new Error("Erro ao acessar o crudService para buscar o cliente!");
+    return new Error(errorsProvider.getMessage('Customers'));
   }
 };
