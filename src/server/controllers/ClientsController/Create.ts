@@ -1,12 +1,10 @@
 import { Request, Response } from 'express';
-import { IClient } from '../../database/models/CustomersInterface';
 import { clientsProvider } from '../../database/providers/ClientsProvider';
 import { StatusCodes } from 'http-status-codes';
-
-interface IBodyProps extends Omit<IClient, 'id'> {}
+import { ICustomersWithoutId } from '../../database/models/CustomersInterface';
 
 export const create = async (
-  req: Request<{}, {}, IBodyProps>,
+  req: Request<{}, {}, ICustomersWithoutId>,
   res: Response
 ): Promise<any> => {
   const newClient = await clientsProvider.create(req.body);
