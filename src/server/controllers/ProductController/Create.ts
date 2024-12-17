@@ -10,7 +10,7 @@ export const create = async (
   req: Request<{}, {}, IProductsWithoutId>,
   res: Response
 ): Promise<any> => {
-  const data = req.body;
+  const data:IProductsWithoutId = req.body;
 
   const newProduct: IProducts | Error = await productProvider.create(data);
 

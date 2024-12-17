@@ -6,9 +6,11 @@ export const deleteProduct = async (
   req: Request<{ id: string }>,
   res: Response
 ): Promise<any> => {
-  const id = req.params.id;
+  const id: string = req.params.id;
 
-  const productDelete = await productProvider.deleteProduct(id);
+  const productDelete: Boolean | Error = await productProvider.deleteProduct(
+    id
+  );
 
   if (productDelete instanceof Error)
     return res.status(StatusCodes.BAD_REQUEST).json(productDelete.message);

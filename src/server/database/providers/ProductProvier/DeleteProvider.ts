@@ -1,17 +1,19 @@
 import { crudService } from '../../../shared/services/CRUD';
+import {
+  errorsCrudService,
+  errorsProvider,
+} from '../../../shared/services/messageErrors';
 
-export const deleteProduct = async (id: string): Promise<true | Error> => {
+export const deleteProduct = async (id: string): Promise<Boolean | Error> => {
   try {
-    const deleteProduct = await crudService.deleteInDatabase(
+    const deleteProduct: Boolean | Error = await crudService.deleteInDatabase(
       id,
-      'Produtos',
-      'erro ao deletar produto, verifique se não há relação com a materia prima'
+      'Products',
+      errorsCrudService.deleteMessage('Products')
     );
 
-    if (deleteProduct instanceof Error) return new Error(deleteProduct.message);
-
-    return true;
+    return deleteProduct;
   } catch (error) {
-    return new Error('Erro ao acessar a base de dados para deletar o produto');
+    return new Error(errorsProvider.deleteMessage('Products'));
   }
 };

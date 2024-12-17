@@ -1,26 +1,25 @@
 import { crudService } from '../../../shared/services/CRUD';
-import { ProductModel } from '../../models/ProductsInterface';
+import {
+  errorsCrudService,
+  errorsProvider,
+} from '../../../shared/services/messageErrors';
+import { IProducts, IProductsWithoutId } from '../../models/ProductsInterface';
 
-type BodyWithoutId = Omit<ProductModel, 'id'>;
 export const update = async (
   id: string,
-  body: BodyWithoutId
-): Promise<ProductModel | Error> => {
+  body: IProductsWithoutId
+): Promise<IProducts | Error> => {
   try {
-    const data = body;
-    const productUpdate = await crudService.updateInDatabase(
+    const data: IProductsWithoutId = body;
+    const productUpdate: IProducts | Error = await crudService.updateInDatabase(
       id,
       data,
-      'Produtos',
-      'Erro ao atualizar o produto'
+      'Products',
+      errorsCrudService.updateMessage('Products')
     );
-
-    if (productUpdate instanceof Error) return new Error(productUpdate.message);
 
     return productUpdate;
   } catch (error) {
-    return new Error(
-      'Error ao tentar fazer as alterações na base de dados do Produto'
-    );
+    return new Error(errorsProvider.updateMessage('Products'));
   }
 };

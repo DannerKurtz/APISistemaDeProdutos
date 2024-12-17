@@ -1,20 +1,19 @@
 import { crudService } from '../../../shared/services/CRUD';
-import { ProductModel } from '../../models/ProductsInterface';
+import { errorsCrudService } from '../../../shared/services/messageErrors';
+import { IProducts } from '../../models/ProductsInterface';
 
 type IQuery = {
   id?: string;
   nome?: string | object;
 };
 
-export const get = async (query: IQuery): Promise<ProductModel | Error> => {
+export const get = async (query: IQuery): Promise<IProducts | Error> => {
   try {
-    const getProduct: ProductModel | Error = await crudService.getInDatabase(
+    const getProduct: IProducts | Error = await crudService.getInDatabase(
       query,
-      'Produtos',
-      'Erro ao buscar produtos no banco de dados!'
+      'Products',
+      errorsCrudService.getMessage('Products')
     );
-
-    if (getProduct instanceof Error) return new Error(getProduct.message);
 
     return getProduct;
   } catch (error) {
