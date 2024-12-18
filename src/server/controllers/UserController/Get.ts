@@ -1,16 +1,19 @@
-import { Request, Response } from "express";
-import { userProvider } from "../../database/providers/UserProvider";
-import { StatusCodes } from "http-status-codes";
+import { Request, Response } from 'express';
+import { userProvider } from '../../database/providers/UserProvider';
+import { StatusCodes } from 'http-status-codes';
+import { IUsers } from '../../database/models/UsersInterface';
 
-interface IFilter {
+interface IQuery {
   id: string;
   nome: string;
 }
 export const get = async (
-  req: Request<{}, {}, {}, IFilter>,
+  req: Request<{}, {}, {}, IQuery>,
   res: Response
 ): Promise<any> => {
-  const users = await userProvider.get(req.query.id, req.query.nome);
+  const query: IQuery = req.query;
+
+  const users: IUsers | Error = await userProvider.get(query);
 
   if (users instanceof Error) {
     return res.status(StatusCodes.NOT_FOUND).json({ users });

@@ -1,18 +1,20 @@
 import { crudService } from '../../../shared/services/CRUD';
-import { userModel } from '../../models/UsersInterface';
+import { errorsCrudService, errorsProvider } from '../../../shared/services/messageErrors';
+import { IUsers, IUsersWithoutId } from '../../models/UsersInterface';
 
-type IUserWithoutId = Omit<userModel, 'id'>;
 export const create = async (
-  data: IUserWithoutId
-): Promise<Error | userModel> => {
+  data: IUsersWithoutId
+): Promise<IUsers | Error> => {
   try {
-    return crudService.createInDatabase(
+    const newUser: IUsers | Error = await crudService.createInDatabase(
       data,
-      'usuarios',
-      'Erro ao criar um novo usuário'
+      'Users',
+      errorsCrudService.createMessage('Users')
     );
+
+    return newUser;
   } catch (err) {
     console.log(err);
-    return new Error('Erro ao acessar o crudService para criar novo usuário!');
+    return new Error(errorsProvider.createMessage('Users'));
   }
 };

@@ -1,13 +1,19 @@
-import { crudService } from "../../../shared/services/CRUD";
+import { crudService } from '../../../shared/services/CRUD';
+import {
+  errorsCrudService,
+  errorsProvider,
+} from '../../../shared/services/messageErrors';
 
-export const deleteUser = async (id: string): Promise<Error | Boolean> => {
+export const deleteUser = async (id: string): Promise<Boolean | Error> => {
   try {
-    return await crudService.deleteInDatabase(
+    const deletedUser: Boolean | Error = await crudService.deleteInDatabase(
       id,
-      "usuarios",
-      "Erro ao deletar o usuário"
+      'Users',
+      errorsCrudService.deleteMessage('Users')
     );
+
+    return deletedUser;
   } catch (error) {
-    return new Error("Erro ao acessar o crudService para deletar o usuário!");
+    return new Error(errorsProvider.deleteMessage('Users'));
   }
 };
