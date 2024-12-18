@@ -20,7 +20,9 @@ export const update = async (
     await productSaleRelationProvider.update(id, body);
 
   if (updatedProductSaleRelation instanceof Error)
-    return res.status(StatusCodes.BAD_REQUEST).json(updatedProductSaleRelation);
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({error: updatedProductSaleRelation.message});
 
-  return res.status(StatusCodes.OK).json(updatedProductSaleRelation);
+  return res.status(StatusCodes.OK).json({productSaleRelationUpdated: updatedProductSaleRelation});
 };

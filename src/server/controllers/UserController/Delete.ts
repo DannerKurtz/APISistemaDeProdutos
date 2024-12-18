@@ -15,8 +15,10 @@ export const deleteUser = async (
   );
 
   if (userDelete instanceof Error) {
-    return res.status(StatusCodes.NOT_FOUND).json({ userDelete });
+    return res
+      .status(StatusCodes.NOT_FOUND)
+      .json({ error: userDelete.message });
   }
 
-  return res.status(StatusCodes.OK).json({ deleted: userDelete });
+  return res.status(StatusCodes.OK).json({ userDeleted: userDelete });
 };

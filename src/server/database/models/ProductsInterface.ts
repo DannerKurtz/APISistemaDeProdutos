@@ -1,5 +1,6 @@
 import { IProductSaleRelations } from './ProductSaleRelationsInterface';
 import { IRawMaterialProductRelations } from './RawMaterialProductRelationsInterface';
+import { IRawMaterials } from './RawMaterialsInterface';
 
 export interface IProducts {
   id: string;
@@ -7,8 +8,7 @@ export interface IProducts {
   percentage: number;
   price: number;
   quantity: number;
-  RawMaterialProductRelations?: IRawMaterialProductRelations[];
-  ProductSaleRelations?: IProductSaleRelations[];
+  rawMaterials?: IRawMaterials[];
   createdAt?: Date;
   updatedAt?: Date;
 }

@@ -17,7 +17,9 @@ export const update = async (
   const updateSale = await saleProvider.update(id, body);
 
   if (updateSale instanceof Error)
-    return res.status(StatusCodes.BAD_REQUEST).json(updateSale.message);
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ error: updateSale.message });
 
-  return res.status(StatusCodes.OK).json(updateSale);
+  return res.status(StatusCodes.OK).json({ saleUpdated: updateSale });
 };

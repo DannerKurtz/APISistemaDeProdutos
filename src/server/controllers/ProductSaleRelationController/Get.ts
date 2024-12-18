@@ -17,7 +17,11 @@ export const get = async (
     await productSaleRelationProvider.get(id);
 
   if (getProductSaleRelation instanceof Error)
-    return res.status(StatusCodes.BAD_REQUEST).json(getProductSaleRelation);
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ error: getProductSaleRelation.message });
 
-  return res.status(StatusCodes.OK).json(getProductSaleRelation);
+  return res
+    .status(StatusCodes.OK)
+    .json({ productSaleRelationListed: getProductSaleRelation });
 };

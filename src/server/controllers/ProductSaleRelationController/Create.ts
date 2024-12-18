@@ -16,7 +16,7 @@ export const create = async (
     await productSaleRelationProvider.create(body);
 
   if (newProductSaleRelation instanceof Error)
-    return res.status(StatusCodes.BAD_REQUEST).json(newProductSaleRelation);
+    return res.status(StatusCodes.BAD_REQUEST).json({error: newProductSaleRelation.message});
 
-  return res.status(StatusCodes.CREATED).json(newProductSaleRelation);
+  return res.status(StatusCodes.CREATED).json({productSaleRelationCreated: newProductSaleRelation});
 };

@@ -1,5 +1,8 @@
 import { Request, Response } from 'express';
-import { IRawMaterials, IRawMaterialsWithoutId } from '../../database/models/RawMaterialsInterface';
+import {
+  IRawMaterials,
+  IRawMaterialsWithoutId,
+} from '../../database/models/RawMaterialsInterface';
 import { rawMaterialProvider } from '../../database/providers/RawMaterialProvider';
 import { StatusCodes } from 'http-status-codes';
 
@@ -14,8 +17,10 @@ export const create = async (
   );
 
   if (createNewData instanceof Error) {
-    return res.status(StatusCodes.BAD_REQUEST).json(createNewData);
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ error: createNewData.message });
   }
 
-  return res.status(StatusCodes.CREATED).json(createNewData);
+  return res.status(StatusCodes.CREATED).json({ rawMaterialCreated: createNewData });
 };

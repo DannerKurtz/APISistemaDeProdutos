@@ -20,7 +20,9 @@ export const update = async (
     await rawMaterialProvider.update(id, data);
 
   if (updateRawMaterial instanceof Error) {
-    return res.status(StatusCodes.BAD_REQUEST).json(updateRawMaterial);
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ error: updateRawMaterial.message });
   }
-  return res.status(StatusCodes.OK).json(updateRawMaterial);
+  return res.status(StatusCodes.OK).json({ rawMaterialUpdated: updateRawMaterial });
 };

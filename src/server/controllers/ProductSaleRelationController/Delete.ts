@@ -16,7 +16,11 @@ export const deleteProductSaleRelation = async (
     await productSaleRelationProvider.deleteProductSaleRelation(id);
 
   if (productSaleRelationDeleted instanceof Error)
-    return res.status(StatusCodes.BAD_REQUEST).json(productSaleRelationDeleted);
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ error: productSaleRelationDeleted.message });
 
-  return res.status(StatusCodes.OK).json(productSaleRelationDeleted);
+  return res
+    .status(StatusCodes.OK)
+    .json({ productSaleRelationDeleted: productSaleRelationDeleted });
 };

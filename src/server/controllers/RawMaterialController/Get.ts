@@ -14,11 +14,15 @@ export const get = async (
 ): Promise<any> => {
   const query: IQuery = req.query;
 
-  const getRawMaterial: IRawMaterials | Error = await rawMaterialProvider.get(query);
+  const getRawMaterial: IRawMaterials | Error = await rawMaterialProvider.get(
+    query
+  );
 
   if (getRawMaterial instanceof Error) {
-    return res.status(StatusCodes.BAD_REQUEST).json({ getRawMaterial });
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ error: getRawMaterial.message });
   }
 
-  return res.status(StatusCodes.OK).json(getRawMaterial);
+  return res.status(StatusCodes.OK).json({ rawMaterialListed: getRawMaterial });
 };

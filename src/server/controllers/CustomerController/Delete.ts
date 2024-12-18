@@ -15,8 +15,10 @@ export const deleteCustomer = async (
   );
 
   if (deletedCustomer instanceof Error) {
-    return res.status(StatusCodes.NOT_FOUND).json(deletedCustomer);
+    return res
+      .status(StatusCodes.NOT_FOUND)
+      .json({ error: deletedCustomer.message });
   }
 
-  return res.status(StatusCodes.OK).json(deletedCustomer);
+  return res.status(StatusCodes.OK).json({ customerDeleted: deletedCustomer });
 };

@@ -21,7 +21,9 @@ export const update = async (
   );
 
   if (userUpdate instanceof Error) {
-    return res.status(StatusCodes.NOT_FOUND).json({ userUpdate });
+    return res
+      .status(StatusCodes.NOT_FOUND)
+      .json({ error: userUpdate.message });
   }
-  return res.status(StatusCodes.OK).json({ userUpdate });
+  return res.status(StatusCodes.OK).json({ userUpdated: userUpdate });
 };

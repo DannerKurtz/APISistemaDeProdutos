@@ -15,8 +15,10 @@ export const create = async (
   );
 
   if (newCustomer instanceof Error) {
-    return res.status(StatusCodes.CONFLICT).json(newCustomer);
+    return res
+      .status(StatusCodes.CONFLICT)
+      .json({ error: newCustomer.message });
   }
 
-  return res.status(StatusCodes.CREATED).json(newCustomer);
+  return res.status(StatusCodes.CREATED).json({ customerCreated: newCustomer });
 };
