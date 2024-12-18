@@ -10,9 +10,9 @@ export const deleteSale = async (
   req: Request<IParams>,
   res: Response
 ): Promise<any> => {
-  const idSale = req.params.id;
+  const idSale: string = req.params.id;
 
-  const deleteSale = await saleProvider.deleteSale(idSale);
+  const deleteSale: Boolean | Error = await saleProvider.deleteSale(idSale);
 
   if (deleteSale instanceof Error)
     return res.status(StatusCodes.BAD_REQUEST).json(deleteSale.message);

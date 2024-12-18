@@ -1,17 +1,15 @@
 import { Request, Response } from 'express';
-import { SaleModel } from '../../database/models/SalesInterface';
+import { ISales, ISalesWithoutId } from '../../database/models/SalesInterface';
 import { saleProvider } from '../../database/providers/SaleProvider';
 import { StatusCodes } from 'http-status-codes';
 
-type saleWithoutID = Omit<SaleModel, 'id'>;
-
 export const create = async (
-  req: Request<{}, {}, saleWithoutID>,
+  req: Request<{}, {}, ISalesWithoutId>,
   res: Response
 ): Promise<any> => {
-  const data = req.body;
+  const data: ISalesWithoutId = req.body;
 
-  const newSale = await saleProvider.create(data);
+  const newSale: ISales | Error = await saleProvider.create(data);
 
   if (newSale instanceof Error)
     return res.status(StatusCodes.BAD_REQUEST).json(newSale.message);

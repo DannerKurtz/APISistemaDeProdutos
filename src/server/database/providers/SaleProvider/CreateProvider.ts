@@ -1,39 +1,39 @@
 import { crudService } from '../../../shared/services/CRUD';
-import { SaleModel } from '../../models/SalesInterface';
+import {
+  errorsCrudService,
+  errorsProvider,
+} from '../../../shared/services/messageErrors';
+import { ISalesWithoutId, ISales } from '../../models/SalesInterface';
 
-type saleWithoutID = Omit<SaleModel, 'id'>;
-
-export const create = async (data: saleWithoutID) => {
+export const create = async (
+  data: ISalesWithoutId
+): Promise<ISales | Error> => {
   try {
-    const { usuarioId, clienteId } = data;
+    const { userId, customerId } = data;
 
     const validateUserIdExists = await crudService.getInDatabase(
-      { id: usuarioId, nome: undefined },
-      'Usuarios',
-      'Usuário não encontrado'
+      { id: userId, nome: undefined },
+      'Users',
+      errorsCrudService.getMessage('Users')
     );
     const validateClientIdExists = await crudService.getInDatabase(
-      { id: clienteId, nome: undefined },
-      'Clientes',
-      'Cliente não encontrado'
+      { id: customerId, nome: undefined },
+      'Customers',
+      errorsCrudService.getMessage('Customers')
     );
-    console.log(
-      `validateUserIdExists: ${validateUserIdExists}, validateClientIdExists: ${validateClientIdExists}`
-    );
-    if (validateUserIdExists === null)
-      return new Error('Usuário não encontrado');
-    if (validateClientIdExists === null)
-      return new Error('Cliente não encontrado');
 
-    const newSale: SaleModel | Error = await crudService.createInDatabase(
+    if (validateUserIdExists === null) return new Error('User not exists');
+    if (validateClientIdExists === null)
+      return new Error('Customer not exists');
+
+    const newSale: ISales | Error = await crudService.createInDatabase(
       data,
-      'Vendas',
-      'Erro ao criar nova venda'
+      'Sales',
+      errorsCrudService.createMessage('Sales')
     );
-    if (newSale instanceof Error) return new Error(newSale.message);
 
     return newSale;
   } catch (error) {
-    return new Error('Erro ao criar nova venda no banco de dados');
+    return new Error(errorsProvider.createMessage('Sales'));
   }
 };

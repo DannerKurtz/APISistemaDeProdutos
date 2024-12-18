@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { SaleModel } from '../../database/models/SalesInterface';
+import { ISalesWithoutId } from '../../database/models/SalesInterface';
 import { StatusCodes } from 'http-status-codes';
 import { saleProvider } from '../../database/providers/SaleProvider';
 
@@ -7,14 +7,12 @@ type IParams = {
   id: string;
 };
 
-type saleWithoutID = Omit<SaleModel, 'id'>;
-
 export const update = async (
-  req: Request<IParams, {}, saleWithoutID>,
+  req: Request<IParams, {}, ISalesWithoutId>,
   res: Response
 ): Promise<any> => {
-  const id = req.params.id;
-  const body = req.body;
+  const id: string = req.params.id;
+  const body: ISalesWithoutId = req.body;
 
   const updateSale = await saleProvider.update(id, body);
 

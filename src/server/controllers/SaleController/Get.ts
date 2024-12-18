@@ -1,11 +1,12 @@
 import { Request, Response } from 'express';
 import { saleProvider } from '../../database/providers/SaleProvider';
 import { StatusCodes } from 'http-status-codes';
+import { ISales } from '../../database/models/SalesInterface';
 
 type IQuery = {
   id: string;
-  numeroDaVenda: string;
-  nomeDoCliente: string;
+  saleNumber: string;
+  customerName: string;
 };
 
 export const get = async (
@@ -14,7 +15,7 @@ export const get = async (
 ): Promise<any> => {
   const query = req.query;
 
-  const sales = await saleProvider.get(query);
+  const sales: (ISales | ISales[]) | Error = await saleProvider.get(query);
 
   if (sales instanceof Error) {
     return res.status(StatusCodes.NOT_FOUND).json(sales.message);

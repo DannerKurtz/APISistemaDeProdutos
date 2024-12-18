@@ -1,65 +1,69 @@
-import { SaleModel } from '../../models/SalesInterface';
+import {
+  errorsCrudService,
+  errorsProvider,
+} from '../../../shared/services/messageErrors';
+import { ISales } from '../../models/SalesInterface';
 import { prisma } from '../../prisma';
 
 type IQuery = {
   id: string;
-  numeroDaVenda: string;
-  nomeDoCliente: string;
+  saleNumber: string;
+  customerName: string;
 };
 
 export const get = async (
   query: IQuery
-): Promise<(SaleModel[] | SaleModel) | Error> => {
+): Promise<(ISales | ISales[]) | Error> => {
   try {
     if (query.id) {
-      const getSaleWithId = await prisma.vendas.findFirst({
+      const getSaleWithId = await prisma.sales.findFirst({
         where: { id: query.id },
-        include: { clientes: true },
+        include: { customer: true },
       });
       if (getSaleWithId instanceof Error || getSaleWithId === null)
-        return new Error('Erro ao consultar venda');
+        return new Error(errorsCrudService.getMessage('Sales'));
       return getSaleWithId;
     }
-    if (query.numeroDaVenda) {
-      const getSaleWithNumberOfSale = await prisma.vendas.findMany({
+    if (query.saleNumber) {
+      const getSaleWithNumberOfSale = await prisma.sales.findMany({
         where: {
-          numeroDaVenda: { contains: query.numeroDaVenda, mode: 'insensitive' },
+          saleNumber: { contains: query.saleNumber, mode: 'insensitive' },
         },
-        include: { clientes: true },
+        include: { customer: true },
       });
       if (
         getSaleWithNumberOfSale instanceof Error ||
         getSaleWithNumberOfSale === null
       )
-        return new Error('Erro ao consultar venda');
+        return new Error(errorsCrudService.getMessage('Sales'));
       return getSaleWithNumberOfSale;
     }
 
-    if (query.nomeDoCliente) {
-      const getSaleWithClientName = await prisma.vendas.findMany({
+    if (query.customerName) {
+      const getSaleWithClientName = await prisma.sales.findMany({
         where: {
-          clientes: {
-            nome: {
-              contains: query.nomeDoCliente.trim(),
+          customer: {
+            name: {
+              contains: query.customerName.trim(),
               mode: 'insensitive',
             },
           },
         },
-        include: { clientes: true },
+        include: { customer: true },
       });
       if (
         getSaleWithClientName instanceof Error ||
         getSaleWithClientName === null
       )
-        return new Error('Erro ao consultar venda');
+        return new Error(errorsCrudService.getMessage('Sales'));
 
       return getSaleWithClientName;
     }
 
-    return await prisma.vendas.findMany({
-      include: { clientes: true },
+    return await prisma.sales.findMany({
+      include: { customer: true },
     });
   } catch (error) {
-    return new Error('Erro ao consultar a base de dados de vendas');
+    return new Error(errorsProvider.getMessage('Sales'));
   }
 };

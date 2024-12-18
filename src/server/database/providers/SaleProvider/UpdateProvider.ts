@@ -1,22 +1,21 @@
 import { crudService } from '../../../shared/services/CRUD';
-import { SaleModel } from '../../models/SalesInterface';
+import {
+  errorsCrudService,
+  errorsProvider,
+} from '../../../shared/services/messageErrors';
+import { ISalesWithoutId } from '../../models/SalesInterface';
 
-type saleWithoutID = Omit<SaleModel, 'id'>;
-
-export const update = async (id: string, body: saleWithoutID) => {
+export const update = async (id: string, body: ISalesWithoutId) => {
   try {
     const updateDateSale = await crudService.updateInDatabase(
       id,
       body,
-      'Vendas',
-      'Erro ao atualizar a venda'
+      'Sales',
+      errorsCrudService.updateMessage('Sales')
     );
-
-    if (updateDateSale instanceof Error)
-      return new Error(updateDateSale.message);
 
     return updateDateSale;
   } catch (error) {
-    return new Error('Erro ao atualizar a venda no banco de dados');
+    return new Error(errorsProvider.updateMessage('Sales'));
   }
 };
