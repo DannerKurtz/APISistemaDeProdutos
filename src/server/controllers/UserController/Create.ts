@@ -9,10 +9,10 @@ export const create = async (
 ): Promise<any> => {
   const newUser: IUsers | Error = await userProvider.create(req.body);
   if (newUser instanceof Error) {
-    return res.status(StatusCodes.CONFLICT).json(newUser.message);
+    return res.status(StatusCodes.CONFLICT).json({ error: newUser.message });
   }
 
   return res
     .status(StatusCodes.CREATED)
-    .json({ id: newUser.id, nome: newUser.name });
+    .json({ userCreated: { id: newUser.id, name: newUser.name } });
 };

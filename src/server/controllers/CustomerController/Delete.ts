@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { clientsProvider } from '../../database/providers/ClientsProvider';
+import { clientsProvider } from '../../database/providers/CustomerProvider';
 import { StatusCodes } from 'http-status-codes';
 
 interface IParams {
@@ -15,8 +15,10 @@ export const deleteCustomer = async (
   );
 
   if (deletedCustomer instanceof Error) {
-    return res.status(StatusCodes.NOT_FOUND).json(deletedCustomer);
+    return res
+      .status(StatusCodes.NOT_FOUND)
+      .json({ error: deletedCustomer.message });
   }
 
-  return res.status(StatusCodes.OK).json(deletedCustomer);
+  return res.status(StatusCodes.OK).json({ customerDeleted: deletedCustomer });
 };

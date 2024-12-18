@@ -16,8 +16,12 @@ export const deleteRawMaterial = async (
     await rawMaterialProvider.deleteRawMaterial(id);
 
   if (deleteRawMaterialResult instanceof Error) {
-    return res.status(StatusCodes.BAD_REQUEST).json(deleteRawMaterialResult);
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ error: deleteRawMaterialResult.message });
   }
 
-  return res.status(StatusCodes.OK).json(deleteRawMaterialResult);
+  return res
+    .status(StatusCodes.OK)
+    .json({ rawMaterialDeleted: deleteRawMaterialResult });
 };

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { clientsProvider } from '../../database/providers/ClientsProvider';
+import { clientsProvider } from '../../database/providers/CustomerProvider';
 import { StatusCodes } from 'http-status-codes';
 import { ICustomers } from '../../database/models/CustomersInterface';
 
@@ -17,8 +17,8 @@ export const get = async (
   const getCostumers: ICustomers | Error = await clientsProvider.get(query);
 
   if (getCostumers instanceof Error) {
-    return res.status(StatusCodes.NOT_FOUND).json(getCostumers);
+    return res.status(StatusCodes.NOT_FOUND).json({error: getCostumers.message});
   }
 
-  return res.status(StatusCodes.OK).json(getCostumers);
+  return res.status(StatusCodes.OK).json({customerListed: getCostumers});
 };

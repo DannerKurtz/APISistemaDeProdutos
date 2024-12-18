@@ -15,7 +15,9 @@ export const deleteSale = async (
   const deleteSale: Boolean | Error = await saleProvider.deleteSale(idSale);
 
   if (deleteSale instanceof Error)
-    return res.status(StatusCodes.BAD_REQUEST).json(deleteSale.message);
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ error: deleteSale.message });
 
-  return res.status(StatusCodes.OK).json(deleteSale);
+  return res.status(StatusCodes.OK).json({ saleDeleted: deleteSale });
 };

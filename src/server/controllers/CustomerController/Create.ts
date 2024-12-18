@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { clientsProvider } from '../../database/providers/ClientsProvider';
+import { clientsProvider } from '../../database/providers/CustomerProvider';
 import { StatusCodes } from 'http-status-codes';
 import {
   ICustomers,
@@ -15,8 +15,10 @@ export const create = async (
   );
 
   if (newCustomer instanceof Error) {
-    return res.status(StatusCodes.CONFLICT).json(newCustomer);
+    return res
+      .status(StatusCodes.CONFLICT)
+      .json({ error: newCustomer.message });
   }
 
-  return res.status(StatusCodes.CREATED).json(newCustomer);
+  return res.status(StatusCodes.CREATED).json({ customerCreated: newCustomer });
 };

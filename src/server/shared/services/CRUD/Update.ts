@@ -15,7 +15,7 @@ export const updateInDatabase = async <T>(
       where: { id: params },
     });
     if (!dataExist) {
-      return new Error('ID nao encontrado!');
+      return new Error('ID not exists');
     }
     if (data.password) {
       const passwordVerify = await bcryptPassword.passwordVerify(
@@ -23,7 +23,7 @@ export const updateInDatabase = async <T>(
         dataExist.password
       );
       if (!passwordVerify) {
-        return new Error('Senha invalida!');
+        return new Error('Password or Name User incorrect ');
       }
 
       if (data.newPassword) {

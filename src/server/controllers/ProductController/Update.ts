@@ -19,7 +19,9 @@ export const update = async (
   );
 
   if (updateProduct instanceof Error)
-    return res.status(StatusCodes.BAD_REQUEST).json(updateProduct);
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ error: updateProduct.message });
 
-  return res.status(StatusCodes.OK).json(updateProduct);
+  return res.status(StatusCodes.OK).json({ productUpdated: updateProduct });
 };

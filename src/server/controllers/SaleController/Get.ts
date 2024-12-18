@@ -18,8 +18,8 @@ export const get = async (
   const sales: (ISales | ISales[]) | Error = await saleProvider.get(query);
 
   if (sales instanceof Error) {
-    return res.status(StatusCodes.NOT_FOUND).json(sales.message);
+    return res.status(StatusCodes.NOT_FOUND).json({ error: sales.message });
   }
 
-  return res.status(StatusCodes.OK).json(sales);
+  return res.status(StatusCodes.OK).json({ saleListed: sales });
 };

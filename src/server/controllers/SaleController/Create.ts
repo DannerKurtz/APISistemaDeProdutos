@@ -12,7 +12,7 @@ export const create = async (
   const newSale: ISales | Error = await saleProvider.create(data);
 
   if (newSale instanceof Error)
-    return res.status(StatusCodes.BAD_REQUEST).json(newSale.message);
+    return res.status(StatusCodes.BAD_REQUEST).json({ error: newSale.message });
 
-  return res.status(StatusCodes.CREATED).json(newSale);
+  return res.status(StatusCodes.CREATED).json({ saleCreated: newSale });
 };

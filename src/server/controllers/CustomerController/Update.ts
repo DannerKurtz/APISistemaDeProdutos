@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { clientsProvider } from '../../database/providers/ClientsProvider';
+import { clientsProvider } from '../../database/providers/CustomerProvider';
 import { StatusCodes } from 'http-status-codes';
 import {
   ICustomers,
@@ -23,10 +23,12 @@ export const update = async (
   );
 
   if (updatedCustomer instanceof Error) {
-    return res.status(StatusCodes.BAD_REQUEST).json(updatedCustomer);
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ error: updatedCustomer.message });
   }
 
   return res.status(StatusCodes.OK).json({
-    updatedCustomer,
+    customerUpdated: updatedCustomer,
   });
 };

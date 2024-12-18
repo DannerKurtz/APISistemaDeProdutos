@@ -16,8 +16,8 @@ export const get = async (
   const users: IUsers | Error = await userProvider.get(query);
 
   if (users instanceof Error) {
-    return res.status(StatusCodes.NOT_FOUND).json({ users });
+    return res.status(StatusCodes.NOT_FOUND).json({ error: users.message });
   }
 
-  return res.status(StatusCodes.OK).json({ users });
+  return res.status(StatusCodes.OK).json({ userListed: users });
 };

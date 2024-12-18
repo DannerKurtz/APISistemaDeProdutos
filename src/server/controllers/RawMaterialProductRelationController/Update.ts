@@ -1,6 +1,9 @@
 import { Request, Response } from 'express';
 import { rawMaterialProductRelationProvider } from '../../database/providers/RawMaterialProductRelationProvider';
-import { IRawMaterialProductRelations, IRawMaterialProductRelationsWithoutId } from '../../database/models/RawMaterialProductRelationsInterface';
+import {
+  IRawMaterialProductRelations,
+  IRawMaterialProductRelationsWithoutId,
+} from '../../database/models/RawMaterialProductRelationsInterface';
 import { StatusCodes } from 'http-status-codes';
 
 type IParams = {
@@ -20,7 +23,9 @@ export const update = async (
   if (updateRawMaterialProductRelation instanceof Error) {
     return res
       .status(StatusCodes.BAD_REQUEST)
-      .json(updateRawMaterialProductRelation);
+      .json({ error: updateRawMaterialProductRelation.message });
   }
-  return res.status(StatusCodes.OK).json(updateRawMaterialProductRelation);
+  return res
+    .status(StatusCodes.OK)
+    .json({ rawMaterialProductRelationUpdated: updateRawMaterialProductRelation });
 };

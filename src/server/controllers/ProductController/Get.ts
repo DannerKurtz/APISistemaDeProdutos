@@ -16,7 +16,7 @@ export const get = async (
   const product: IProducts | Error = await productProvider.get(query);
 
   if (product instanceof Error)
-    return res.status(StatusCodes.BAD_REQUEST).json(product);
+    return res.status(StatusCodes.BAD_REQUEST).json({ error: product.message });
 
-  return res.status(StatusCodes.OK).json(product);
+  return res.status(StatusCodes.OK).json({ productListed: product });
 };

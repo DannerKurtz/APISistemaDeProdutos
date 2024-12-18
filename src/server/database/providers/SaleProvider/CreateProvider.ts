@@ -12,12 +12,12 @@ export const create = async (
     const { userId, customerId } = data;
 
     const validateUserIdExists = await crudService.getInDatabase(
-      { id: userId, nome: undefined },
+      { id: userId, name: undefined },
       'Users',
       errorsCrudService.getMessage('Users')
     );
     const validateClientIdExists = await crudService.getInDatabase(
-      { id: customerId, nome: undefined },
+      { id: customerId, name: undefined },
       'Customers',
       errorsCrudService.getMessage('Customers')
     );

@@ -17,8 +17,12 @@ export const get = async (
     await rawMaterialProductRelationProvider.get(id);
 
   if (rawMaterialProductRelation instanceof Error) {
-    return res.status(StatusCodes.NOT_FOUND).json(rawMaterialProductRelation);
+    return res
+      .status(StatusCodes.NOT_FOUND)
+      .json({ error: rawMaterialProductRelation.message });
   }
 
-  return res.status(StatusCodes.OK).json(rawMaterialProductRelation);
+  return res
+    .status(StatusCodes.OK)
+    .json({ rawMaterialProductRelationListed: rawMaterialProductRelation });
 };

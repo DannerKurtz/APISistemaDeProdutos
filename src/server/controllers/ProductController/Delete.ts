@@ -13,7 +13,9 @@ export const deleteProduct = async (
   );
 
   if (productDelete instanceof Error)
-    return res.status(StatusCodes.BAD_REQUEST).json(productDelete.message);
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ error: productDelete.message });
 
-  return res.status(StatusCodes.OK).json(productDelete);
+  return res.status(StatusCodes.OK).json({ productDeleted: productDelete });
 };

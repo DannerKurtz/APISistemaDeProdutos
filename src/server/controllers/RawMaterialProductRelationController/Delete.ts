@@ -20,7 +20,9 @@ export const deleteRawMaterialProductRelation = async (
   if (deleteRawMaterialProductRelation instanceof Error)
     return res
       .status(StatusCodes.BAD_REQUEST)
-      .json(deleteRawMaterialProductRelation);
+      .json({ error: deleteRawMaterialProductRelation.message });
 
-  return res.status(StatusCodes.OK).json(deleteRawMaterialProductRelation);
+  return res
+    .status(StatusCodes.OK)
+    .json({ rawMaterialProductRelationDeleted: deleteRawMaterialProductRelation });
 };
