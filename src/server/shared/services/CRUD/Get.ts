@@ -1,8 +1,8 @@
-import { prisma } from "../../../database/prisma";
+import { prisma } from '../../../database/prisma';
 
 type Query = {
   id?: string;
-  nome?: string | object;
+  name?: string | object;
 };
 
 export const getInDatabase = async <T>(
@@ -20,10 +20,10 @@ export const getInDatabase = async <T>(
       });
     }
 
-    if (query.nome) {
-      whereClause.nome = {
-        contains: String(query.nome),
-        mode: "insensitive",
+    if (query.name) {
+      whereClause.name = {
+        contains: String(query.name),
+        mode: 'insensitive',
       };
     }
     return await (prisma as any)[modelName].findMany({
