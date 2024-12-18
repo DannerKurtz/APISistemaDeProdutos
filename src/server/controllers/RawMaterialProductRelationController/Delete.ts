@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { rawMaterialProductRelationProvider } from '../../database/providers/RawMaterialProductRelation';
+import { rawMaterialProductRelationProvider } from '../../database/providers/RawMaterialProductRelationProvider';
 
 type IParams = {
   id: string;
@@ -12,7 +12,7 @@ export const deleteRawMaterialProductRelation = async (
 ): Promise<any> => {
   const id = req.params.id;
 
-  const deleteRawMaterialProductRelation =
+  const deleteRawMaterialProductRelation: Boolean | Error =
     await rawMaterialProductRelationProvider.deleteRawMaterialProductRelation(
       id
     );

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { rawMaterialProductRelationController } from '../../../src/server/controllers/RawMaterialProductRelationController';
-import { rawMaterialProductRelationProvider } from '../../../src/server/database/providers/RawMaterialProductRelation';
+import { rawMaterialProductRelationProvider } from '../../../src/server/database/providers/RawMaterialProductRelationProvider';
 import { RawMaterialProductRelationModel } from '../../../src/server/database/models/RawMaterialProductRelationsInterface';
 
 type RawMaterialProductRelationWithoutId = Omit<

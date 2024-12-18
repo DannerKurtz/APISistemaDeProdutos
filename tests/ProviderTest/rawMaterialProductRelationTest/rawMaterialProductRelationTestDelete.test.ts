@@ -1,4 +1,4 @@
-import { rawMaterialProductRelationProvider } from '../../../src/server/database/providers/RawMaterialProductRelation';
+import { rawMaterialProductRelationProvider } from '../../../src/server/database/providers/RawMaterialProductRelationProvider';
 import { crudService } from '../../../src/server/shared/services/CRUD';
 
 jest.mock('../../../src/server/shared/services/CRUD', () => ({

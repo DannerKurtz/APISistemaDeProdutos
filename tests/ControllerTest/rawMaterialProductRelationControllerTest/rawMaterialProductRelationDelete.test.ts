@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { rawMaterialProductRelationProvider } from '../../../src/server/database/providers/RawMaterialProductRelation';
+import { rawMaterialProductRelationProvider } from '../../../src/server/database/providers/RawMaterialProductRelationProvider';
 import { rawMaterialProductRelationController } from '../../../src/server/controllers/RawMaterialProductRelationController';
 
 jest.mock(
