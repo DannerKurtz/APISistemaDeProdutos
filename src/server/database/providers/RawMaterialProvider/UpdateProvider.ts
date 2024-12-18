@@ -1,19 +1,28 @@
 import { crudService } from '../../../shared/services/CRUD';
-import { RawMaterialModel } from '../../models/RawMaterialsInterface';
+import {
+  errorsCrudService,
+  errorsProvider,
+} from '../../../shared/services/messageErrors';
+import {
+  IRawMaterials,
+  IRawMaterialsWithoutId,
+} from '../../models/RawMaterialsInterface';
 
-type TWithoutID = Omit<RawMaterialModel, 'id'>;
-
-export const update = async (id: string, data: TWithoutID) => {
+export const update = async (
+  id: string,
+  data: IRawMaterialsWithoutId
+): Promise<IRawMaterials | Error> => {
   try {
-    return await crudService.updateInDatabase(
-      id,
-      data,
-      'MateriasPrimas',
-      'Erro ao atualizar a materia prima'
-    );
+    const updateRawMaterial: IRawMaterials | Error =
+      await crudService.updateInDatabase(
+        id,
+        data,
+        'RawMaterials',
+        errorsCrudService.updateMessage('RawMaterials')
+      );
+
+    return updateRawMaterial;
   } catch (error) {
-    return new Error(
-      'Erro ao acessar o crudService para atualizar a materia prima!'
-    );
+    return new Error(errorsProvider.updateMessage('RawMaterials'));
   }
 };

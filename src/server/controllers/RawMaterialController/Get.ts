@@ -1,6 +1,7 @@
-import { Request, Response } from "express";
-import { rawMaterialProvider } from "../../database/providers/RawMaterialProvider";
-import { StatusCodes } from "http-status-codes";
+import { Request, Response } from 'express';
+import { rawMaterialProvider } from '../../database/providers/RawMaterialProvider';
+import { StatusCodes } from 'http-status-codes';
+import { IRawMaterials } from '../../database/models/RawMaterialsInterface';
 
 type IQuery = {
   id?: string;
@@ -11,9 +12,9 @@ export const get = async (
   req: Request<{}, {}, {}, IQuery>,
   res: Response
 ): Promise<any> => {
-  const { id, nome } = req.query;
+  const query: IQuery = req.query;
 
-  const getRawMaterial = await rawMaterialProvider.get(id, nome);
+  const getRawMaterial: IRawMaterials | Error = await rawMaterialProvider.get(query);
 
   if (getRawMaterial instanceof Error) {
     return res.status(StatusCodes.BAD_REQUEST).json({ getRawMaterial });

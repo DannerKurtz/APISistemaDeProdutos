@@ -1,15 +1,22 @@
-import { crudService } from "../../../shared/services/CRUD";
+import { crudService } from '../../../shared/services/CRUD';
+import {
+  errorsCrudService,
+  errorsProvider,
+} from '../../../shared/services/messageErrors';
 
-export const deleteRawMaterial = async (params: string) => {
+export const deleteRawMaterial = async (
+  id: string
+): Promise<Boolean | Error> => {
   try {
-    return crudService.deleteInDatabase(
-      params,
-      "MateriasPrimas",
-      "Erro ao deletar materia prima"
-    );
+    const deletedRawMaterial: Boolean | Error =
+      await crudService.deleteInDatabase(
+        id,
+        'RawMaterials',
+        errorsCrudService.deleteMessage('RawMaterials')
+      );
+
+    return deletedRawMaterial;
   } catch (error) {
-    return new Error(
-      "Erro ao acessar o crudService para deletar a materia prima!"
-    );
+    return new Error(errorsProvider.deleteMessage('RawMaterials'));
   }
 };

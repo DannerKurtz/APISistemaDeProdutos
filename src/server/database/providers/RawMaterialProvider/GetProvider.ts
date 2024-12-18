@@ -1,19 +1,26 @@
-import { crudService } from "../../../shared/services/CRUD";
+import { crudService } from '../../../shared/services/CRUD';
+import {
+  errorsCrudService,
+  errorsProvider,
+} from '../../../shared/services/messageErrors';
+import { IRawMaterials } from '../../models/RawMaterialsInterface';
 
-export const get = async (id: string | any, nome: string | any) => {
+type IQuery = {
+  id?: string;
+  nome?: string | object;
+};
+
+export const get = async (query: IQuery): Promise<IRawMaterials | Error> => {
   try {
-    const query = {
-      id,
-      nome,
-    };
-    return await crudService.getInDatabase(
-      query,
-      "MateriasPrimas",
-      "Erro ao buscar a materia prima!"
-    );
+    const getRawMaterials: IRawMaterials | Error =
+      await crudService.getInDatabase(
+        query,
+        'RawMaterials',
+        errorsCrudService.getMessage('RawMaterials')
+      );
+
+    return getRawMaterials;
   } catch (error) {
-    return new Error(
-      "Erro ao acessar o crudService para buscar a materia prima!"
-    );
+    return new Error(errorsProvider.getMessage('RawMaterials'));
   }
 };
