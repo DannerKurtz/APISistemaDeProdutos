@@ -4,7 +4,7 @@ import { errorsCrudService, errorsProvider } from '../messageErrors';
 type TWithoutID<T> = Omit<T, 'id'>;
 
 export const relationCreator = async <T>(
-  item: T,
+  itens: T,
   relations: T[],
   objectRelation: TWithoutID<T>,
   itemId: string,
