@@ -1,46 +1,50 @@
-import { crudService } from '../CRUD';
-import { errorsCrudService, errorsProvider } from '../messageErrors';
+// no complete
 
-type TWithoutID<T> = Omit<T, 'id'>;
 
-export const relationCreator = async <T>(
-  itens: T,
-  relations: T[],
-  objectRelation: TWithoutID<T>,
-  itemId: string,
-  relationItemId: string,
-  relationQuantity: number,
-  relationDatabaseName: string,
-  itemSecondaryDatabaseName: string
-) => {
+// import { crudService } from '../CRUD';
+// import { errorsCrudService, errorsProvider } from '../messageErrors';
 
-  const createAllRelations: string[];
+// type TWithoutID<T> = Omit<T, 'id'>;
 
-  for (let i = 0; i < relations.length; i++) {
-    const createRelationInDatabase: T | Error =
-      await crudService.createInDatabase(
-        objectRelation,
-        relationDatabaseName,
-        errorsCrudService.createMessage(relationDatabaseName)
-      );
+// export const relationCreator = async <T>(
+//   itens: T,
+//   secondItemId: string,
+//   relations: T[],
+//   objectRelation: TWithoutID<T>,
+//   itemId: string,
+//   relationItemId: string,
+//   relationQuantity: number,
+//   relationDatabaseName: string,
+//   itemSecondaryDatabaseName: string
+// ) => {
 
-    if (createRelationInDatabase instanceof Error)
-      return new Error(createRelationInDatabase.message);
+//   const createAllRelations: string[];
 
-    const getItemSecondary = await crudService.getInDatabase(
-      {id: relations[i].[]}, 
-      itemSecondaryDatabaseName, 
-      errorsCrudService.getMessage(itemSecondaryDatabaseName)
-    )
+//   for (let i = 0; i < relations.length; i++) {
+//     const createRelationInDatabase: T | Error =
+//       await crudService.createInDatabase(
+//         objectRelation,
+//         relationDatabaseName,
+//         errorsCrudService.createMessage(relationDatabaseName)
+//       );
 
-    getItemSecondary.quantity -= relations[i].quantity;
+//     if (createRelationInDatabase instanceof Error)
+//       return new Error(createRelationInDatabase.message);
 
-    const {id, ...data} = getItemSecondary;
+//     const getItemSecondary = await crudService.getInDatabase(
+//       {id: relations[i][secondItemId]}, 
+//       itemSecondaryDatabaseName, 
+//       errorsCrudService.getMessage(itemSecondaryDatabaseName)
+//     )
 
-    const updateQuantitySecondaryItem = await crudService.updateInDatabase(id, data, itemSecondaryDatabaseName, errorsCrudService.updateMessage(itemSecondaryDatabaseName))
+//     getItemSecondary.quantity -= relations[i].quantity;
 
-    if(updateQuantitySecondaryItem instanceof Error) return new Error(updateQuantitySecondaryItem.message)
+//     const {id, ...data} = getItemSecondary;
 
-      createAllRelations.push(createRelationInDatabase.id)
-  }
-};
+//     const updateQuantitySecondaryItem = await crudService.updateInDatabase(id, data, itemSecondaryDatabaseName, errorsCrudService.updateMessage(itemSecondaryDatabaseName))
+
+//     if(updateQuantitySecondaryItem instanceof Error) return new Error(updateQuantitySecondaryItem.message)
+
+//       createAllRelations.push(createRelationInDatabase.id)
+//   }
+// };
