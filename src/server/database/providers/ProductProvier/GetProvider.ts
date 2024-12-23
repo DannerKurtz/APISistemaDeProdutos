@@ -4,16 +4,22 @@ import { errorsCrudService } from '../../../shared/services/messageErrors';
 import { IProducts } from '../../models/ProductsInterface';
 import { IRawMaterialProductRelations } from '../../models/RawMaterialProductRelationsInterface';
 import { IRawMaterials } from '../../models/RawMaterialsInterface';
+import { prisma } from '../../prisma';
 
 type IQuery = {
   id?: string;
   nome?: string | object;
 };
 
-export const get = async (query: IQuery): Promise<IProducts | Error> => {
+interface IRawMaterialProductRelationsIncludeRawMaterial
+  extends IRawMaterialProductRelations {
+  rawMaterial: IRawMaterials;
+}
+
+export const get = async (query: IQuery): Promise<IProducts[] | Error> => {
   try {
-    const rawMaterialList: IRawMaterials[] = [];
-    const getProduct: IProducts | Error = await crudService.getInDatabase(
+    const getRawMaterialProductRelations = [];
+    const getProduct: IProducts[] | Error = await crudService.getInDatabase(
       query,
       'Products',
       errorsCrudService.getMessage('Products')
@@ -23,34 +29,30 @@ export const get = async (query: IQuery): Promise<IProducts | Error> => {
       return new Error(getProduct.message);
     }
 
-    const getRawMaterialsRelations: IRawMaterialProductRelations[] | Error =
-      await crudService.getInDatabase(
-        {
-          id: getProduct.id,
-        },
-        'RawMaterialProductRelations',
-        errorsCrudService.getMessage('RawMaterialProductRelations')
-      );
-    if (getRawMaterialsRelations instanceof Error) {
-      return new Error(getRawMaterialsRelations.message);
-    }
-    for (let i = 0; i < getRawMaterialsRelations.length; i++) {
-      const getRawMaterial: RawMaterials | Error =
-        await crudService.getInDatabase(
-          { id: getRawMaterialsRelations[i].rawMaterialId },
-          'RawMaterials',
-          errorsCrudService.getMessage('RawMaterials')
+    for (let i = 0; i < getProduct.length; i++) {
+      const rawMaterialProductRelationsIncludeRawMaterial: IRawMaterialProductRelationsIncludeRawMaterial[] =
+        await prisma.rawMaterialProductRelations.findMany({
+          where: { productId: getProduct[i].id },
+          include: { rawMaterial: true },
+        });
+      const arrayRawMaterials: IRawMaterials[] = [];
+
+      for (
+        let i = 0;
+        i < rawMaterialProductRelationsIncludeRawMaterial.length;
+        i++
+      ) {
+        arrayRawMaterials.push(
+          rawMaterialProductRelationsIncludeRawMaterial[i].rawMaterial
         );
-      if (getRawMaterial instanceof Error) {
-        return new Error(getRawMaterial.message);
       }
 
-      rawMaterialList.push(getRawMaterial);
+      getProduct[i].rawMaterials = arrayRawMaterials;
     }
-    console.log(rawMaterialList);
-    getProduct.rawMaterials = rawMaterialList;
+
     return getProduct;
   } catch (error) {
+    console.error(error);
     return new Error('Erro ao consultar a base de dados de produtos');
   }
 };
