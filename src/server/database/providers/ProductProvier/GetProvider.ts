@@ -5,6 +5,7 @@ import { IProducts } from '../../models/ProductsInterface';
 import { IRawMaterialProductRelations } from '../../models/RawMaterialProductRelationsInterface';
 import { IRawMaterials } from '../../models/RawMaterialsInterface';
 import { prisma } from '../../prisma';
+import { relationsGet } from '../../../shared/services/relationsManager/RelationsGet';
 
 type IQuery = {
   id?: string;
@@ -30,24 +31,30 @@ export const get = async (query: IQuery): Promise<IProducts[] | Error> => {
     }
 
     for (let i = 0; i < getProduct.length; i++) {
-      const rawMaterialProductRelationsIncludeRawMaterial: IRawMaterialProductRelationsIncludeRawMaterial[] =
-        await prisma.rawMaterialProductRelations.findMany({
+      // const rawMaterialProductRelationsIncludeRawMaterial: IRawMaterialProductRelationsIncludeRawMaterial[] =
+      //   await prisma.rawMaterialProductRelations.findMany({
+      //     where: { productId: getProduct[i].id },
+      //     include: { rawMaterial: true },
+      //   });
+      // const arrayRawMaterials: IRawMaterials[] = [];
+
+      // for (
+      //   let i = 0;
+      //   i < rawMaterialProductRelationsIncludeRawMaterial.length;
+      //   i++
+      // ) {
+      //   arrayRawMaterials.push(
+      //     rawMaterialProductRelationsIncludeRawMaterial[i].rawMaterial
+      //   );
+      // }
+
+      getProduct[i].rawMaterials = await relationsGet(
+        'rawMaterialProductRelations',
+        {
           where: { productId: getProduct[i].id },
           include: { rawMaterial: true },
-        });
-      const arrayRawMaterials: IRawMaterials[] = [];
-
-      for (
-        let i = 0;
-        i < rawMaterialProductRelationsIncludeRawMaterial.length;
-        i++
-      ) {
-        arrayRawMaterials.push(
-          rawMaterialProductRelationsIncludeRawMaterial[i].rawMaterial
-        );
-      }
-
-      getProduct[i].rawMaterials = arrayRawMaterials;
+        }
+      );
     }
 
     return getProduct;

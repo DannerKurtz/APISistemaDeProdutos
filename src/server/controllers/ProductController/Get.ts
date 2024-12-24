@@ -13,7 +13,7 @@ export const get = async (
   res: Response
 ): Promise<any> => {
   const query: IQuery = req.query;
-  const product: IProducts | Error = await productProvider.get(query);
+  const product: IProducts[] | Error = await productProvider.get(query);
 
   if (product instanceof Error)
     return res.status(StatusCodes.BAD_REQUEST).json({ error: product.message });
