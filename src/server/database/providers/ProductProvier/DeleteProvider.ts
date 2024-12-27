@@ -3,6 +3,7 @@ import {
   errorsCrudService,
   errorsProvider,
 } from '../../../shared/services/messageErrors';
+import { relationDelete } from '../../../shared/services/relationsManager/RelationDelete';
 import { prisma } from '../../prisma';
 
 export const deleteProduct = async (id: string): Promise<Boolean | Error> => {
@@ -13,10 +14,9 @@ export const deleteProduct = async (id: string): Promise<Boolean | Error> => {
       });
 
     for (let i = 0; i < getRawMaterialProductRelations.length; i++) {
-      const deletedRawMaterialRelations = await crudService.deleteInDatabase(
+      const deletedRawMaterialRelations = await relationDelete(
         getRawMaterialProductRelations[i].id,
-        'rawMaterialProductRelations',
-        errorsCrudService.deleteMessage('rawMaterialProductRelations')
+        'rawMaterialProductRelations'
       );
       if (deletedRawMaterialRelations instanceof Error) {
         return new Error(deletedRawMaterialRelations.message);
