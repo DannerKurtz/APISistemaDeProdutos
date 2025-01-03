@@ -1,4 +1,5 @@
 import { ICustomers } from './CustomersInterface';
+import { IProductSaleRelations } from './ProductSaleRelationsInterface';
 import { IProducts } from './ProductsInterface';
 import { IUsers } from './UsersInterface';
 
@@ -11,6 +12,7 @@ export interface ISales {
   user?: IUsers;
   customerId: string;
   customer?: ICustomers;
+  productSaleRelations?: IProductSaleRelations[];
   products?: IProducts[];
   createdAt?: Date;
   updatedAt?: Date;

@@ -5,12 +5,14 @@ import { error } from 'console';
 
 type TWithoutID<T> = Omit<T, 'id'> & {
   productId?: string;
+  saleId?: string;
   rawMaterialId?: string;
 };
 type Relations<T> = Partial<{
   rawMaterialQuantity?: number;
   quantity?: number;
   productId?: string;
+  saleId?: string;
   rawMaterialId?: string;
 }>;
 
