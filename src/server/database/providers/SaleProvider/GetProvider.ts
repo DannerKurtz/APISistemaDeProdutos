@@ -2,6 +2,7 @@ import {
   errorsCrudService,
   errorsProvider,
 } from '../../../shared/services/messageErrors';
+import { relationsGet } from '../../../shared/services/relationsManager/RelationsGet';
 import { ISales } from '../../models/SalesInterface';
 import { prisma } from '../../prisma';
 
@@ -15,31 +16,47 @@ export const get = async (
   query: IQuery
 ): Promise<(ISales | ISales[]) | Error> => {
   try {
+    let sales: ISales | ISales[] | Error;
+
+    // Verificando se a consulta possui 'id'
     if (query.id) {
-      const getSaleWithId = await prisma.sales.findFirst({
+      console.log(`Buscando venda com ID: ${query.id}`);
+      const getSaleWithId = await prisma.sales.findUnique({
         where: { id: query.id },
-        include: { customer: true },
+        include: {
+          customer: true,
+          ProductSaleRelations: {
+            include: { product: true },
+          },
+        },
       });
-      if (getSaleWithId instanceof Error || getSaleWithId === null)
+
+      if (!getSaleWithId) {
+        console.log('Nenhuma venda encontrada com esse ID');
         return new Error(errorsCrudService.getMessage('Sales'));
-      return getSaleWithId;
-    }
-    if (query.saleNumber) {
+      }
+      sales = getSaleWithId;
+    } else if (query.saleNumber) {
+      console.log(`Buscando venda com número: ${query.saleNumber}`);
       const getSaleWithNumberOfSale = await prisma.sales.findMany({
         where: {
           saleNumber: { contains: query.saleNumber, mode: 'insensitive' },
         },
-        include: { customer: true },
+        include: {
+          customer: true,
+          ProductSaleRelations: {
+            include: { product: true },
+          },
+        },
       });
-      if (
-        getSaleWithNumberOfSale instanceof Error ||
-        getSaleWithNumberOfSale === null
-      )
-        return new Error(errorsCrudService.getMessage('Sales'));
-      return getSaleWithNumberOfSale;
-    }
 
-    if (query.customerName) {
+      if (!getSaleWithNumberOfSale || getSaleWithNumberOfSale.length === 0) {
+        console.log('Nenhuma venda encontrada com esse número');
+        return new Error(errorsCrudService.getMessage('Sales'));
+      }
+      sales = getSaleWithNumberOfSale;
+    } else if (query.customerName) {
+      console.log(`Buscando venda com nome do cliente: ${query.customerName}`);
       const getSaleWithClientName = await prisma.sales.findMany({
         where: {
           customer: {
@@ -49,21 +66,80 @@ export const get = async (
             },
           },
         },
-        include: { customer: true },
+        include: {
+          customer: true,
+          ProductSaleRelations: {
+            include: { product: true },
+          },
+        },
       });
-      if (
-        getSaleWithClientName instanceof Error ||
-        getSaleWithClientName === null
-      )
-        return new Error(errorsCrudService.getMessage('Sales'));
 
-      return getSaleWithClientName;
+      if (!getSaleWithClientName || getSaleWithClientName.length === 0) {
+        console.log('Nenhuma venda encontrada com esse nome de cliente');
+        return new Error(errorsCrudService.getMessage('Sales'));
+      }
+      sales = getSaleWithClientName;
+    } else {
+      console.log('Buscando todas as vendas');
+      sales = await prisma.sales.findMany({
+        include: {
+          customer: true,
+          ProductSaleRelations: {
+            include: { product: true },
+          },
+        },
+      });
     }
 
-    return await prisma.sales.findMany({
-      include: { customer: true },
-    });
+    // Verificando se retornou alguma venda
+    if (!sales || (Array.isArray(sales) && sales.length === 0)) {
+      console.log('Nenhuma venda encontrada');
+      return new Error(errorsCrudService.getMessage('Sales'));
+    }
+
+    // Verificando se há produto relacionado à venda
+    if (Array.isArray(sales)) {
+      for (let i = 0; i < sales.length; i++) {
+        console.log(`Buscando produtos para a venda de ID: ${sales[i].id}`);
+
+        // Verificando as relações de produto para cada venda
+        const productSaleRelations = await relationsGet(
+          'ProductSaleRelations',
+          {
+            where: { saleId: sales[i].id },
+            include: { product: true },
+          }
+        );
+
+        // Substituindo a propriedade productSaleRelations corretamente
+        sales[i].productSaleRelations = productSaleRelations;
+
+        console.log(
+          `Resultado de productSaleRelations para venda ID: ${sales[i].id}`,
+          sales[i].productSaleRelations
+        );
+      }
+    } else {
+      const singleSale = sales as ISales;
+      console.log(`Buscando produtos para a venda de ID: ${singleSale.id}`);
+      singleSale.productSaleRelations = await relationsGet(
+        'ProductSaleRelations',
+        {
+          where: { saleId: singleSale.id },
+          include: { product: true },
+        }
+      );
+
+      console.log(
+        `Resultado de productSaleRelations para venda ID: ${singleSale.id}`,
+        singleSale.productSaleRelations
+      );
+    }
+
+    console.log('Retorno final:', sales);
+    return sales;
   } catch (error) {
+    console.error('Erro:', error);
     return new Error(errorsProvider.getMessage('Sales'));
   }
 };

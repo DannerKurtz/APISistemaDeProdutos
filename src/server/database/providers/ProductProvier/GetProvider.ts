@@ -19,7 +19,6 @@ interface IRawMaterialProductRelationsIncludeRawMaterial
 
 export const get = async (query: IQuery): Promise<IProducts[] | Error> => {
   try {
-    const getRawMaterialProductRelations = [];
     const getProduct: IProducts[] | Error = await crudService.getInDatabase(
       query,
       'Products',
