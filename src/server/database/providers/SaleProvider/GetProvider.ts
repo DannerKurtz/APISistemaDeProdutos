@@ -18,7 +18,6 @@ export const get = async (
   try {
     let sales: ISales | ISales[] | Error;
 
-    // Verificando se a consulta possui 'id'
     if (query.id) {
       console.log(`Buscando venda com ID: ${query.id}`);
       const getSaleWithId = await prisma.sales.findUnique({
@@ -91,18 +90,15 @@ export const get = async (
       });
     }
 
-    // Verificando se retornou alguma venda
     if (!sales || (Array.isArray(sales) && sales.length === 0)) {
       console.log('Nenhuma venda encontrada');
       return new Error(errorsCrudService.getMessage('Sales'));
     }
 
-    // Verificando se há produto relacionado à venda
     if (Array.isArray(sales)) {
       for (let i = 0; i < sales.length; i++) {
         console.log(`Buscando produtos para a venda de ID: ${sales[i].id}`);
 
-        // Verificando as relações de produto para cada venda
         const productSaleRelations = await relationsGet(
           'ProductSaleRelations',
           {
@@ -111,7 +107,6 @@ export const get = async (
           }
         );
 
-        // Substituindo a propriedade productSaleRelations corretamente
         sales[i].productSaleRelations = productSaleRelations;
 
         console.log(
