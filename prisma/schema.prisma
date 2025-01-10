@@ -66,9 +66,10 @@ model RawMaterials {
 model Products {
   id                          String                        @id @default(uuid())
   name                        String
-  percentage                  Float
+  percentage                  Float?
   price                       Float?
   quantity                    Int
+  weight                      Float?
   RawMaterialProductRelations RawMaterialProductRelations[]
   ProductSaleRelations        ProductSaleRelations[]
   createdAt                   DateTime                      @default(now())

@@ -4,20 +4,29 @@ import { calculateProductPrice } from './CalculateProductPrice';
 export const FinalProductPriceCalculator = async (
   rawMaterialProductRelation: IRawMaterialProductRelations[],
   profitMargin?: number
-) => {
-  const sumAllRawMaterialValue = await calculateProductPrice(
+): Promise<{ finalPrice: number; finalWeight: number } | Error> => {
+  const sumRawMaterialMetrics = await calculateProductPrice(
     rawMaterialProductRelation
   );
 
-  if (sumAllRawMaterialValue instanceof Error)
-    return new Error(sumAllRawMaterialValue.message);
+  if (sumRawMaterialMetrics instanceof Error)
+    return new Error(sumRawMaterialMetrics.message);
 
   if (profitMargin === undefined) {
-    const finalPrice = sumAllRawMaterialValue * 1.7;
-    return finalPrice;
+    const finalPrice = sumRawMaterialMetrics.sumRawMaterialsValue * 1.7;
+    const result = {
+      finalPrice,
+      finalWeight: sumRawMaterialMetrics.finalWeight,
+    };
+    return result;
   }
 
-  const finalPrice = sumAllRawMaterialValue * (1 + profitMargin / 100);
+  const finalPrice =
+    sumRawMaterialMetrics.sumRawMaterialsValue * (1 + profitMargin / 100);
 
-  return finalPrice;
+  const result = {
+    finalPrice,
+    finalWeight: sumRawMaterialMetrics.finalWeight,
+  };
+  return result;
 };
