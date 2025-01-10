@@ -1,23 +1,30 @@
+// Necessary imports
 import { Request, Response } from 'express';
 import { saleProvider } from '../../database/providers/SaleProvider';
 import { StatusCodes } from 'http-status-codes';
 
-type IParams = {
+// Definition of the params interface
+interface IParams {
   id: string;
-};
+}
 
+// Exporting the function responsible for the DELETE method
 export const deleteSale = async (
   req: Request<IParams>,
   res: Response
 ): Promise<any> => {
-  const idSale: string = req.params.id;
+  // Destructuring the id from the params
+  const { id } = req.params;
 
-  const deleteSale: Boolean | Error = await saleProvider.deleteSale(idSale);
+  // Calling the provider that deletes or returns an error
+  const deleteSale: Boolean | Error = await saleProvider.deleteSale(id);
 
+  // Validating if it's an error and returning the message
   if (deleteSale instanceof Error)
     return res
       .status(StatusCodes.BAD_REQUEST)
       .json({ error: deleteSale.message });
 
+  //  Returning if it was deleted
   return res.status(StatusCodes.OK).json({ saleDeleted: deleteSale });
 };
