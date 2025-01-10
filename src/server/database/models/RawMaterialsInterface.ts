@@ -1,10 +1,9 @@
-import { IRawMaterialProductRelations } from './RawMaterialProductRelationsInterface';
 
 export interface IRawMaterials {
   id: string;
   name: string;
   price: number;
-  quantity: number;
+  unitWeight: number;
   createdAt?: Date;
   updatedAt?: Date;
 }

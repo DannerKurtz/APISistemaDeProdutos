@@ -5,8 +5,8 @@ import { IRawMaterials } from './RawMaterialsInterface';
 export interface IProducts {
   id: string;
   name: string;
-  percentage: number;
-  price?: number;
+  percentage?: number;
+  price: number;
   quantity: number;
   rawMaterialProductRelation?: IRawMaterialProductRelations[];
   rawMaterials?: IRawMaterials[];

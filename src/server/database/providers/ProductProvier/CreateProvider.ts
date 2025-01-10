@@ -1,4 +1,5 @@
 import { calculateProductPrice } from '../../../shared/services/Calculations/CalculateProductPrice';
+import { FinalProductPriceCalculator } from '../../../shared/services/Calculations/FinalProductPriceCalculator';
 import { crudService } from '../../../shared/services/CRUD';
 import {
   errorsCrudService,
@@ -61,8 +62,9 @@ export const create = async (
     };
 
     if (createdNewProduct.rawMaterialProductRelation) {
-      const calcPrice = await calculateProductPrice(
-        createdNewProduct.rawMaterialProductRelation
+      const calcPrice = await FinalProductPriceCalculator(
+        createdNewProduct.rawMaterialProductRelation,
+        createdNewProduct.percentage
       );
 
       if (calcPrice instanceof Error) return new Error(calcPrice.message);
