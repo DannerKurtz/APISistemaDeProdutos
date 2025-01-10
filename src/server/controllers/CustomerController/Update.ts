@@ -1,7 +1,7 @@
 // Necessary imports
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { clientsProvider } from '../../database/providers/CustomerProvider';
+import { customerProvider } from '../../database/providers/CustomerProvider';
 import {
   ICustomers,
   ICustomersWithoutId,
@@ -22,7 +22,7 @@ export const update = async (
   const { body } = req;
 
   // Calls the provider to update the customer, returning the updated customer or an error
-  const updatedCustomer: ICustomers | Error = await clientsProvider.update(
+  const updatedCustomer: ICustomers | Error = await customerProvider.update(
     id,
     body
   );

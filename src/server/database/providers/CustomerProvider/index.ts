@@ -1,11 +1,11 @@
 import * as create from "./CreateProvider";
 import * as get from "./GetProvider";
 import * as update from "./UpdateProvider";
-import * as deleteClient from "./DeleteProvider";
+import * as deleteCustomer from "./DeleteProvider";
 
-export const clientsProvider = {
+export const customerProvider = {
   ...create,
   ...get,
   ...update,
-  ...deleteClient,
+  ...deleteCustomer,
 };

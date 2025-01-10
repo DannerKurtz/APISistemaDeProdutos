@@ -1,7 +1,7 @@
 // Importing Request and Response from express, as well as StatusCodes, functions, and interfaces
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { clientsProvider } from '../../database/providers/CustomerProvider';
+import { customerProvider } from '../../database/providers/CustomerProvider';
 import { ICustomers } from '../../database/models/CustomersInterface';
 
 // Declaring the query interface
@@ -19,7 +19,7 @@ export const get = async (
   const { query } = req;
 
   // Fetches customers, returning a list of ICustomers or an erro
-  const getCustomers: ICustomers | Error = await clientsProvider.get(query);
+  const getCustomers: ICustomers | Error = await customerProvider.get(query);
 
   // Validating if getCustomers is an instance of an error, and if so, returning an error immediately
   if (getCustomers instanceof Error) {

@@ -4,7 +4,7 @@ import {
   errorsProvider,
 } from '../../../shared/services/messageErrors';
 
-export const deleteClient = async (id: string): Promise<Boolean | Error> => {
+export const deleteCustomer = async (id: string): Promise<Boolean | Error> => {
   try {
     const deletedCustomer: Boolean | Error = await crudService.deleteInDatabase(
       id,

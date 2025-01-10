@@ -1,6 +1,6 @@
 // Importing Request and Response from express, the provider, and the interfaces
 import { Request, Response } from 'express';
-import { clientsProvider } from '../../database/providers/CustomerProvider';
+import { customerProvider } from '../../database/providers/CustomerProvider';
 import { StatusCodes } from 'http-status-codes';
 import {
   ICustomers,
@@ -13,7 +13,7 @@ export const create = async (
   res: Response
 ): Promise<any> => {
   // Calls the provider to create a new customer, returning a customer object or an error
-  const newCustomer: ICustomers | Error = await clientsProvider.create(
+  const newCustomer: ICustomers | Error = await customerProvider.create(
     req.body
   );
 
