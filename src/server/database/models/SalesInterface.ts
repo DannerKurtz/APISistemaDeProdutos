@@ -1,8 +1,10 @@
+// Importing interfaces
 import { ICustomers } from './CustomersInterface';
 import { IProductSaleRelations } from './ProductSaleRelationsInterface';
 import { IProducts } from './ProductsInterface';
 import { IUsers } from './UsersInterface';
 
+// Export the sales interface
 export interface ISales {
   id: string;
   saleNumber?: string;
@@ -18,4 +20,5 @@ export interface ISales {
   updatedAt?: Date;
 }
 
+// Export the sales interface, but without the ID
 export interface ISalesWithoutId extends Omit<ISales, 'id'> {}

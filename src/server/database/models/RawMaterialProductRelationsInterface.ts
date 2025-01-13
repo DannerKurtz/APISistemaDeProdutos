@@ -1,3 +1,4 @@
+// Export the raw material and product relation interface
 export interface IRawMaterialProductRelations {
   id: string;
   productId: string;
@@ -7,5 +8,6 @@ export interface IRawMaterialProductRelations {
   updatedAt?: Date;
 }
 
+// Export the raw material and product relation interface, but without the ID
 export interface IRawMaterialProductRelationsWithoutId
   extends Omit<IRawMaterialProductRelations, 'id'> {}

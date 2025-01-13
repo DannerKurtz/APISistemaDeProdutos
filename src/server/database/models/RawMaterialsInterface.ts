@@ -1,4 +1,4 @@
-
+// Export the raw material interface
 export interface IRawMaterials {
   id: string;
   name: string;
@@ -8,4 +8,5 @@ export interface IRawMaterials {
   updatedAt?: Date;
 }
 
+// Export the raw material interface, but without the ID
 export interface IRawMaterialsWithoutId extends Omit<IRawMaterials, 'id'> {}

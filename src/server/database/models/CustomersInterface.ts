@@ -1,3 +1,4 @@
+// Export the client interface
 export interface ICustomers {
   id?: string;
   name: string;
@@ -16,4 +17,5 @@ export interface ICustomers {
   updatedAt?: Date;
 }
 
+// Export the client interface, but without the ID
 export interface ICustomersWithoutId extends Omit<ICustomers, 'id'> {}
