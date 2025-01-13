@@ -1,3 +1,4 @@
+// Necessary import
 import { crudService } from '../../../shared/services/CRUD';
 import {
   errorsCrudService,
@@ -8,11 +9,13 @@ import {
   ICustomersWithoutId,
 } from '../../models/CustomersInterface';
 
+// Exporting the function responsible for updating
 export const update = async (
   id: string,
   data: ICustomersWithoutId
 ): Promise<ICustomers | Error> => {
   try {
+    // Calling the CrudService function that updates the customer in the database
     const updateCustomers: ICustomers | Error =
       await crudService.updateInDatabase(
         id,
@@ -21,8 +24,10 @@ export const update = async (
         errorsCrudService.updateMessage('Customers')
       );
 
+    // Returning the response from updateCustomers
     return updateCustomers;
   } catch (error) {
+    // Returning if an exception occurs
     return new Error(errorsProvider.updateMessage('Customers'));
   }
 };
