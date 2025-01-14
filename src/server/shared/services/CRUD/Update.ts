@@ -41,6 +41,7 @@ export const updateInDatabase = async <T>(
       },
     });
   } catch (error) {
+    console.error('Erro', error);
     return new Error(message);
   }
 };
