@@ -17,16 +17,20 @@ export const update = async (id: string, data: ISalesWithoutId) => {
       errorsCrudService.updateMessage('Sales')
     );
 
+    const updatedProductSaleRelations = (
+      productSaleRelations as IProductSaleRelations[]
+    ).map((relation) => ({ ...relation, saleId: id }));
+
     const relationUpdated = await updateRelations(
       'ProductSaleRelations',
       {
         saleId: updateSale.id,
       },
-      productSaleRelations as IProductSaleRelations[]
+      updatedProductSaleRelations
     );
 
     data = updateSale;
-    data.productSaleRelations = relationUpdated;
+    data.productSaleRelations = relationUpdated as IProductSaleRelations[];
 
     return data;
   } catch (error) {

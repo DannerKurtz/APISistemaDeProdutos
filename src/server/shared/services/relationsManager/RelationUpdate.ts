@@ -3,7 +3,7 @@ import { prisma } from '../../../database/prisma';
 export const updateRelations = async <T>(
   modelName: string,
   whereCondition: object,
-  updateData: T[]
+  updateDataRelations: object[]
 ): Promise<T[]> => {
   // Buscar as relações existentes
   const relations = await (prisma as any)[modelName].findMany({
@@ -12,14 +12,18 @@ export const updateRelations = async <T>(
 
   const updatedRelations: T[] = [];
 
-  // Atualizar cada relação encontrada
+  // deleta cada relação encontrada
   for (let i = 0; i < relations.length; i++) {
-    const updatedRelation = await (prisma as any)[modelName].update({
+    const deletedRelation = await (prisma as any)[modelName].delete({
       where: { id: relations[i].id },
-      data: updateData[i], // Supondo que `updateData` seja um array
     });
+  }
 
-    updatedRelations.push(updatedRelation);
+  for (let i = 0; i < updateDataRelations.length; i++) {
+    const newRelation = await (prisma as any)[modelName].create({
+      data: updateDataRelations[i],
+    });
+    updatedRelations.push(newRelation);
   }
 
   return updatedRelations; // Retorna a lista de relações atualizadas

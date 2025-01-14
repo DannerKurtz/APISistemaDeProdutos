@@ -13,72 +13,52 @@ export const update = async (
   body: IProductsWithoutId
 ): Promise<IProducts | Error> => {
   try {
-    console.log('Data recebido no Body: ', body);
-    const { rawMaterialProductRelation, ...data }: IProductsWithoutId = body;
+    const { rawMaterialProductRelation, ...data } = body;
 
-    const productUpdate: IProducts | Error = await crudService.updateInDatabase(
-      id,
-      data,
-      'Products',
-      errorsCrudService.updateMessage('Products')
-    );
-
-    console.log('Resultado de updateInDatabase: ', productUpdate);
-
-    if (productUpdate instanceof Error) {
-      console.log('Erro ao atualizar produto: ', productUpdate.message);
-      return new Error(productUpdate.message);
-    }
-    if (!rawMaterialProductRelation) {
-      console.log(
-        'Sem relação de matéria-prima, retornando produto atualizado.'
-      );
-      return productUpdate;
-    }
-
-    const rawMaterialProductRelationList: IRawMaterialProductRelations[] =
-      await updateRelations<IRawMaterialProductRelations>(
-        'rawMaterialProductRelations',
-        { productId: productUpdate.id },
-        rawMaterialProductRelation
+    const productUpdated: IProducts | Error =
+      await crudService.updateInDatabase(
+        id,
+        data,
+        'Products',
+        errorsCrudService.updateMessage('Products')
       );
 
-    console.log(
-      'Relações de matéria-prima atualizadas:',
-      rawMaterialProductRelationList
-    );
+    if (productUpdated instanceof Error)
+      return new Error(productUpdated.message);
 
-    productUpdate.rawMaterialProductRelation = rawMaterialProductRelationList;
+    const listRelationsWithProductId = (
+      rawMaterialProductRelation as IRawMaterialProductRelations[]
+    ).map((relations) => ({
+      ...relations,
+      productId: id,
+    }));
 
-    console.log(
-      'Relação de matéria-prima no produto atualizado:',
-      productUpdate.rawMaterialProductRelation
-    );
+    console.log(listRelationsWithProductId);
 
-    if (productUpdate.rawMaterialProductRelation) {
+    const rawMaterialProductRelationUpdate: IRawMaterialProductRelations[] =
+      await updateRelations(
+        'RawMaterialProductRelations',
+        { productId: id },
+        listRelationsWithProductId
+      );
+
+    if (rawMaterialProductRelationUpdate) {
       const calculateRawMaterialTotals = await FinalProductPriceCalculator(
-        productUpdate.rawMaterialProductRelation
+        rawMaterialProductRelationUpdate,
+        productUpdated.percentage
       );
 
-      console.log(
-        'Resultado do cálculo de preço e peso:',
-        calculateRawMaterialTotals
-      );
-
-      if (calculateRawMaterialTotals instanceof Error) {
-        console.error(
-          'Erro no cálculo do preço:',
-          calculateRawMaterialTotals.message
-        );
+      if (calculateRawMaterialTotals instanceof Error)
         return new Error(calculateRawMaterialTotals.message);
-      }
 
-      productUpdate.price = calculateRawMaterialTotals.finalPrice;
-      productUpdate.weight = calculateRawMaterialTotals.finalWeight;
+      productUpdated.price = calculateRawMaterialTotals.finalPrice;
+      productUpdated.weight = calculateRawMaterialTotals.finalWeight;
     }
 
-    console.log('Produto final atualizado:', productUpdate);
-    return productUpdate;
+    productUpdated.rawMaterialProductRelation =
+      rawMaterialProductRelationUpdate;
+
+    return productUpdated;
   } catch (error) {
     console.error('Erro desconhecido no update:', error);
     return new Error(errorsProvider.updateMessage('Products'));
