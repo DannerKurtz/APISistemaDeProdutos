@@ -44,28 +44,6 @@ export const relationCreator = async <
 
   if (getItem instanceof Error) return new Error(getItem.message);
 
-  if (
-    getItem.quantity !== undefined &&
-    relations.rawMaterialQuantity !== undefined
-  ) {
-    (getItem.quantity as number) -= relations.rawMaterialQuantity as number;
-  }
-
-  if (getItem.quantity !== undefined && relations.quantity !== undefined) {
-    (getItem.quantity as number) -= relations.quantity as number;
-  }
-
-  const { id, ...data } = getItem;
-
-  const updateItem = await crudService.updateInDatabase(
-    id as string,
-    data,
-    itemName,
-    errorsCrudService.updateMessage(itemName)
-  );
-
-  if (updateItem instanceof Error) return new Error(updateItem.message);
-
   const createAllRelations: string = createInDatabaseRelations.id as string;
 
   return createAllRelations;
