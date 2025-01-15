@@ -2,8 +2,8 @@
 export interface IUsers {
   id?: string;
   name: string;
-  password: string;
-  permissionId?: string;
+  password?: string;
+  permissionId?: string | null;
   createdAt?: Date;
   updatedAt?: Date;
 }
