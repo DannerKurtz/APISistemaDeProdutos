@@ -4,57 +4,35 @@ import {
   errorsCrudService,
   errorsProvider,
 } from '../../../shared/services/messageErrors';
-import { relationCreator } from '../../../shared/services/relationsManager/RelationCreator';
+import { processProductMaterialRelations } from '../../../shared/services/ProcessProductMaterialRelations';
 import { IProducts, IProductsWithoutId } from '../../models/ProductsInterface';
 import { IRawMaterialProductRelations } from '../../models/RawMaterialProductRelationsInterface';
-import { prisma } from '../../prisma';
 
 export const create = async (
   data: IProductsWithoutId
 ): Promise<IProducts | Error> => {
   try {
     const { rawMaterialProductRelation, ...productWithoutRawMaterial } = data;
-    const listProductRawMaterialRelations: IRawMaterialProductRelations[] = [];
+    let listProductRawMaterialRelations: IRawMaterialProductRelations[] = [];
     const newProduct: IProducts | Error = await crudService.createInDatabase(
       productWithoutRawMaterial,
       'Products',
       errorsCrudService.createMessage('Products')
     );
     if (newProduct instanceof Error) return new Error(newProduct.message);
-    console.log(newProduct);
 
-    if (rawMaterialProductRelation instanceof Array) {
-      for (let i = 0; i < rawMaterialProductRelation.length; i++) {
-        console.log('entrou no loop', [i]);
+    const createProductRawMateriaRelations =
+      await processProductMaterialRelations(
+        rawMaterialProductRelation as IRawMaterialProductRelations[],
+        newProduct.id
+      );
 
-        const createProductRawMaterialRelation = await relationCreator(
-          rawMaterialProductRelation[i],
-          {
-            productId: newProduct.id as string,
-            rawMaterialId: rawMaterialProductRelation[i].rawMaterialId,
-            rawMaterialQuantity:
-              rawMaterialProductRelation[i].rawMaterialQuantity,
-          },
-          'RawMaterialProductRelations',
-          'RawMaterials'
-        );
-
-        if (createProductRawMaterialRelation instanceof Error)
-          return new Error(createProductRawMaterialRelation.message);
-
-        const getRawMaterialProductRelation =
-          await prisma.rawMaterialProductRelations.findFirst({
-            where: {
-              rawMaterialId: rawMaterialProductRelation[i].rawMaterialId,
-              productId: newProduct.id,
-            },
-          });
-
-        listProductRawMaterialRelations.push(
-          getRawMaterialProductRelation as IRawMaterialProductRelations
-        );
-      }
+    if (createProductRawMateriaRelations instanceof Error) {
+      return new Error(createProductRawMateriaRelations.message);
     }
+
+    listProductRawMaterialRelations = createProductRawMateriaRelations;
+
     const createdNewProduct: IProducts = {
       ...newProduct,
       rawMaterialProductRelation: listProductRawMaterialRelations,
@@ -78,3 +56,4 @@ export const create = async (
     return new Error(errorsProvider.createMessage('Products'));
   }
 };
+
