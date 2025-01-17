@@ -1,3 +1,4 @@
+// Necessary imports
 import { crudService } from '../../../shared/services/CRUD';
 import {
   errorsCrudService,
@@ -5,13 +6,16 @@ import {
 } from '../../../shared/services/messageErrors';
 import { IRawMaterials } from '../../models/RawMaterialsInterface';
 
-type IQuery = {
+// Definition of the query interface
+interface IQuery {
   id?: string;
   nome?: string | object;
-};
+}
 
+// Export of the function that fetches the raw materials
 export const get = async (query: IQuery): Promise<IRawMaterials | Error> => {
   try {
+    // Call to the crudService function responsible for querying the database
     const getRawMaterials: IRawMaterials | Error =
       await crudService.getInDatabase(
         query,
@@ -19,8 +23,10 @@ export const get = async (query: IQuery): Promise<IRawMaterials | Error> => {
         errorsCrudService.getMessage('RawMaterials')
       );
 
+    // Returns the raw materials or error
     return getRawMaterials;
   } catch (error) {
+    // Returns the error if there's an exception
     return new Error(errorsProvider.getMessage('RawMaterials'));
   }
 };
