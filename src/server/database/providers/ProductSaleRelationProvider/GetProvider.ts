@@ -1,3 +1,4 @@
+// Necessary imports
 import { crudService } from '../../../shared/services/CRUD';
 import {
   errorsCrudService,
@@ -5,10 +6,12 @@ import {
 } from '../../../shared/services/messageErrors';
 import { IProductSaleRelations } from '../../models/ProductSaleRelationsInterface';
 
+// Export of the function responsible for fetching the product and sales relationships
 export const get = async (
   id: string
 ): Promise<IProductSaleRelations | Error> => {
   try {
+    // Call to the crudService function that performs the database query
     const getProductSaleRelation: IProductSaleRelations | Error =
       await crudService.getInDatabase(
         { id },
@@ -16,8 +19,10 @@ export const get = async (
         errorsCrudService.getMessage('ProductSaleRelations')
       );
 
+    // Returns the relationship or the error
     return getProductSaleRelation;
   } catch (error) {
+    // Returns the error in case of an exception
     return new Error(errorsProvider.getMessage('ProductSaleRelations'));
   }
 };

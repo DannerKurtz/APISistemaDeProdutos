@@ -1,22 +1,31 @@
+// Necessary imports
 import { crudService } from '../../../shared/services/CRUD';
 import {
   errorsCrudService,
   errorsProvider,
 } from '../../../shared/services/messageErrors';
+import {
+  IProductSaleRelations,
+  IProductSaleRelationsWithoutId,
+} from '../../models/ProductSaleRelationsInterface';
 
-export const deleteProductSaleRelation = async (
-  id: string
-): Promise<Boolean | Error> => {
+// Export of the function responsible for creating the sales and products relationship
+export const create = async (
+  body: IProductSaleRelationsWithoutId
+): Promise<IProductSaleRelations | Error> => {
   try {
-    const productSaleRelationDeleted: Boolean | Error =
-      await crudService.deleteInDatabase(
-        id,
+    // Calling the crudService function responsible for creating in the database
+    const newProductSaleRelation: IProductSaleRelations | Error =
+      await crudService.createInDatabase(
+        body,
         'ProductSaleRelations',
-        errorsCrudService.deleteMessage('ProductSaleRelations')
+        errorsCrudService.createMessage('ProductSaleRelations')
       );
 
-    return productSaleRelationDeleted;
+    // Returns the new relationship between product and sales
+    return newProductSaleRelation;
   } catch (error) {
-    return new Error(errorsProvider.deleteMessage('ProductSaleRelations'));
+    // Returns the error if there's an exception
+    return new Error(errorsProvider.createMessage('ProductSaleRelations'));
   }
 };
