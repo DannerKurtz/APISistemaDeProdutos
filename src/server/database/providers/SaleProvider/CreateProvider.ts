@@ -17,33 +17,32 @@ export const create = async (
 
     // nova função
     let priceOfProducts: number = 0;
-    if (data.productSaleRelations) {
-      for (let i = 0; i < data.productSaleRelations.length; i++) {
+    if (productSaleRelations) {
+      for (let i = 0; i < productSaleRelations.length; i++) {
         const getProductPrice = await prisma.products.findUnique({
-          where: { id: data.productSaleRelations[i].productId },
+          where: { id: productSaleRelations[i].productId },
         });
         console.log('produtos: ', getProductPrice);
         priceOfProducts +=
-          (getProductPrice?.price as number) *
-          data.productSaleRelations[i].quantity;
+          (getProductPrice?.price as number) * productSaleRelations[i].quantity;
       }
-      if (data.discount && !data.totalPrice) {
+      if (newData.discount && !newData.totalPrice) {
         console.log('entrou aqui');
         const finalPrice =
-          priceOfProducts - priceOfProducts * (data.discount / 100);
+          priceOfProducts - priceOfProducts * (newData.discount / 100);
 
-        data.totalPrice = finalPrice;
-        console.log('preço total: ', data.totalPrice);
-      } else if (data.totalPrice && !data.discount) {
+        newData.totalPrice = parseFloat(finalPrice.toFixed(2));
+        console.log('preço total: ', newData.totalPrice);
+      } else if (newData.totalPrice && !newData.discount) {
         const finalDiscount =
-          ((priceOfProducts - data.totalPrice) / priceOfProducts) * 100;
+          ((priceOfProducts - newData.totalPrice) / priceOfProducts) * 100;
         if (finalDiscount < 0) {
-          data.discount = 0;
+          newData.discount = 0;
         }
-        data.discount = finalDiscount;
+        newData.discount = parseFloat(finalDiscount.toFixed(2));
       } else {
-        data.totalPrice = priceOfProducts;
-        data.discount = 0;
+        newData.totalPrice = parseFloat(priceOfProducts.toFixed(2));
+        newData.discount = 0;
       }
     }
 
