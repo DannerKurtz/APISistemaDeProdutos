@@ -6,17 +6,52 @@ import {
 import { updateRelations } from '../../../shared/services/relationsManager/RelationUpdate';
 import { IProductSaleRelations } from '../../models/ProductSaleRelationsInterface';
 import { ISales, ISalesWithoutId } from '../../models/SalesInterface';
+import { prisma } from '../../prisma';
 
 export const update = async (id: string, body: ISalesWithoutId) => {
   try {
-    console.log('Start update function');
-    console.log('Input ID:', id);
-    console.log('Input Body:', body);
-
     const { productSaleRelations, ...data } = body;
 
-    console.log('Extracted productSaleRelations:', productSaleRelations);
-    console.log('Extracted data for update:', data);
+    let priceOfProducts: number = 0;
+    if (productSaleRelations) {
+      for (let i = 0; i < productSaleRelations.length; i++) {
+        const getProductPrice = await prisma.products.findUnique({
+          where: { id: productSaleRelations[i].productId },
+        });
+        console.log('produtos: ', getProductPrice);
+        priceOfProducts +=
+          (getProductPrice?.price as number) * productSaleRelations[i].quantity;
+      }
+      if (data.discount && !data.totalPrice) {
+        console.log('entrou aqui');
+        const finalPrice =
+          priceOfProducts - priceOfProducts * (data.discount / 100);
+
+        data.totalPrice = parseFloat(finalPrice.toFixed(2));
+        console.log('preço total: ', data.totalPrice);
+      } else if (data.totalPrice && !data.discount) {
+        const finalDiscount =
+          ((priceOfProducts - data.totalPrice) / priceOfProducts) * 100;
+        if (finalDiscount < 0) {
+          data.discount = 0;
+        }
+        data.discount = parseFloat(finalDiscount.toFixed(2));
+      } else {
+        data.totalPrice = parseFloat(priceOfProducts.toFixed(2));
+        data.discount = 0;
+      }
+    }
+
+    const listRelationsWithSaleId = (
+      productSaleRelations as IProductSaleRelations[]
+    ).map((relation) => ({ ...relation, saleId: id }));
+
+    const productSaleRelationsUpdated: IProductSaleRelations[] =
+      await updateRelations(
+        'ProductSaleRelations',
+        { saleId: id },
+        listRelationsWithSaleId
+      );
 
     const saleUpdated: ISales | Error = await crudService.updateInDatabase(
       id,
@@ -26,30 +61,10 @@ export const update = async (id: string, body: ISalesWithoutId) => {
     );
 
     if (saleUpdated instanceof Error) {
-      console.error('Error updating Sales:', saleUpdated);
       return new Error(saleUpdated.message);
     }
 
-    console.log('Sale updated successfully:', saleUpdated);
-
-    const listRelationsWithSaleId = (
-      productSaleRelations as IProductSaleRelations[]
-    ).map((relation) => ({ ...relation, saleId: id }));
-
-    console.log('Mapped listRelationsWithSaleId:', listRelationsWithSaleId);
-
-    const productSaleRelationsUpdated: IProductSaleRelations[] =
-      await updateRelations(
-        'ProductSaleRelations',
-        { saleId: id },
-        listRelationsWithSaleId
-      );
-
-    console.log('Updated productSaleRelations:', productSaleRelationsUpdated);
-
     saleUpdated.productSaleRelations = productSaleRelationsUpdated;
-
-    console.log('Final updated sale:', saleUpdated);
 
     return saleUpdated;
   } catch (error) {
