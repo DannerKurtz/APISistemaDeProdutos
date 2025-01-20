@@ -1,3 +1,4 @@
+import { calculateTotalSalePrice } from '../../../shared/services/Calculations/CalculateTotalSalePrice';
 import { crudService } from '../../../shared/services/CRUD';
 import {
   errorsCrudService,
@@ -12,38 +13,11 @@ export const create = async (
 ): Promise<ISales | Error> => {
   try {
     const { userId, customerId } = data;
-    const { productSaleRelations, ...newData } = data;
+    let { productSaleRelations, ...newData } = data;
     const listSaleProductRelations: string[] = [];
 
-    // nova função
-    let priceOfProducts: number = 0;
     if (productSaleRelations) {
-      for (let i = 0; i < productSaleRelations.length; i++) {
-        const getProductPrice = await prisma.products.findUnique({
-          where: { id: productSaleRelations[i].productId },
-        });
-        console.log('produtos: ', getProductPrice);
-        priceOfProducts +=
-          (getProductPrice?.price as number) * productSaleRelations[i].quantity;
-      }
-      if (newData.discount && !newData.totalPrice) {
-        console.log('entrou aqui');
-        const finalPrice =
-          priceOfProducts - priceOfProducts * (newData.discount / 100);
-
-        newData.totalPrice = parseFloat(finalPrice.toFixed(2));
-        console.log('preço total: ', newData.totalPrice);
-      } else if (newData.totalPrice && !newData.discount) {
-        const finalDiscount =
-          ((priceOfProducts - newData.totalPrice) / priceOfProducts) * 100;
-        if (finalDiscount < 0) {
-          newData.discount = 0;
-        }
-        newData.discount = parseFloat(finalDiscount.toFixed(2));
-      } else {
-        newData.totalPrice = parseFloat(priceOfProducts.toFixed(2));
-        newData.discount = 0;
-      }
+      newData = await calculateTotalSalePrice(newData, productSaleRelations);
     }
 
     const validateUserIdExists = await crudService.getInDatabase(
