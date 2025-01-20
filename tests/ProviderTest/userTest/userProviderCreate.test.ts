@@ -1,6 +1,6 @@
 import { userModel } from '../../../src/server/database/models/UsersInterface';
 import { userProvider } from '../../../src/server/database/providers/UserProvider';
-import { crudService } from '../../../src/server/shared/services/CRUD';
+import { crudService } from '../../../src/server/shared/services/prismaHelpers/CRUD';
 
 jest.mock('../../../src/server/shared/services/CRUD', () => ({
   crudService: {

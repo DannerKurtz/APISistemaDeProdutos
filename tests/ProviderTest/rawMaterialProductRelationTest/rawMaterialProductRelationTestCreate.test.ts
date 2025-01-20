@@ -1,5 +1,5 @@
 import { rawMaterialProductRelationProvider } from '../../../src/server/database/providers/RawMaterialProductRelationProvider';
-import { crudService } from '../../../src/server/shared/services/CRUD';
+import { crudService } from '../../../src/server/shared/services/prismaHelpers/CRUD';
 
 jest.mock('../../../src/server/shared/services/CRUD', () => ({
   crudService: {

@@ -1,5 +1,5 @@
-import { ISales } from '../../database/models/SalesInterface';
-import { prisma } from '../../database/prisma';
+import { ISales } from '../../../database/models/SalesInterface';
+import { prisma } from '../../../database/prisma';
 
 interface IQuerySales {
   id: string;

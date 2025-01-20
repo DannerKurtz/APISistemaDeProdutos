@@ -1,7 +1,7 @@
 import { userModel } from '../../../src/server/database/models/UsersInterface';
 import { prisma } from '../../../src/server/database/prisma';
 import { bcryptPassword } from '../../../src/server/shared/services/bcrypt';
-import { crudService } from '../../../src/server/shared/services/CRUD';
+import { crudService } from '../../../src/server/shared/services/prismaHelpers/CRUD';
 
 jest.mock('../../../src/server/database/prisma', () => ({
   prisma: {

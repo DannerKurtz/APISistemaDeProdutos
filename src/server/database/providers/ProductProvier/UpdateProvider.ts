@@ -1,11 +1,11 @@
 // necessary imports
 import { FinalProductPriceCalculator } from '../../../shared/services/Calculations/FinalProductPriceCalculator';
-import { crudService } from '../../../shared/services/CRUD';
+import { crudService } from '../../../shared/services/prismaHelpers/CRUD';
 import {
   errorsCrudService,
   errorsProvider,
 } from '../../../shared/services/messageErrors';
-import { updateRelations } from '../../../shared/services/relationsManager/RelationUpdate';
+import { updateRelations } from '../../../shared/services/prismaHelpers/relationsManager/RelationUpdate'; 
 import { IProducts, IProductsWithoutId } from '../../models/ProductsInterface';
 import { IRawMaterialProductRelations } from '../../models/RawMaterialProductRelationsInterface';
 

@@ -1,6 +1,6 @@
 import { ProductModel } from '../../../src/server/database/models/ProductsInterface';
 import { productProvider } from '../../../src/server/database/providers/ProductProvier';
-import { crudService } from '../../../src/server/shared/services/CRUD';
+import { crudService } from '../../../src/server/shared/services/prismaHelpers/CRUD';
 
 jest.mock('../../../src/server/shared/services/CRUD', () => ({
   crudService: {

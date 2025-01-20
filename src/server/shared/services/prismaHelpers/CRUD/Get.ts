@@ -1,4 +1,4 @@
-import { prisma } from '../../../database/prisma';
+import { prisma } from '../../../../database/prisma';
 
 type Query = {
   id?: string;

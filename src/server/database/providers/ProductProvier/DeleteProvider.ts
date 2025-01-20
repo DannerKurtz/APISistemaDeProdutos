@@ -1,11 +1,11 @@
 // Necessary import
 import { prisma } from '../../prisma';
-import { crudService } from '../../../shared/services/CRUD';
+import { crudService } from '../../../shared/services/prismaHelpers/CRUD';
 import {
   errorsCrudService,
   errorsProvider,
 } from '../../../shared/services/messageErrors';
-import { relationDelete } from '../../../shared/services/relationsManager/RelationDelete';
+import { relationDelete } from '../../../shared/services/prismaHelpers/relationsManager/RelationDelete';
 
 // Exporting the function that deletes the product
 export const deleteProduct = async (id: string): Promise<Boolean | Error> => {

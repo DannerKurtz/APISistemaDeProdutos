@@ -1,13 +1,13 @@
 // Necessary imports
 import { IProducts, IProductsWithoutId } from '../../models/ProductsInterface';
 import { IRawMaterialProductRelations } from '../../models/RawMaterialProductRelationsInterface';
-import { crudService } from '../../../shared/services/CRUD';
+import { crudService } from '../../../shared/services/prismaHelpers/CRUD';
 import { FinalProductPriceCalculator } from '../../../shared/services/Calculations/FinalProductPriceCalculator';
 import {
   errorsCrudService,
   errorsProvider,
 } from '../../../shared/services/messageErrors';
-import { processProductMaterialRelations } from '../../../shared/services/ProcessProductMaterialRelations';
+import { processProductMaterialRelations } from '../../../shared/services/prismaHelpers/ProcessProductMaterialRelations';
 
 // Exporting the function responsible for creating the product
 export const create = async (

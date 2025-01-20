@@ -1,6 +1,6 @@
 import { RawMaterialModel } from '../../../src/server/database/models/RawMaterialsInterface';
 import { rawMaterialProvider } from '../../../src/server/database/providers/RawMaterialProvider';
-import { crudService } from '../../../src/server/shared/services/CRUD';
+import { crudService } from '../../../src/server/shared/services/prismaHelpers/CRUD';
 
 jest.mock('../../../src/server/shared/services/CRUD', () => ({
   crudService: {

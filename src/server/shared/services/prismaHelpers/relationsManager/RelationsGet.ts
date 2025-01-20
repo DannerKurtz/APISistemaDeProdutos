@@ -1,6 +1,6 @@
-import { IProducts } from '../../../database/models/ProductsInterface';
-import { IRawMaterials } from '../../../database/models/RawMaterialsInterface';
-import { prisma } from '../../../database/prisma';
+import { IProducts } from '../../../../database/models/ProductsInterface';
+import { IRawMaterials } from '../../../../database/models/RawMaterialsInterface';
+import { prisma } from '../../../../database/prisma';
 
 export const relationsGet = async (modelName: string, prismaArgs: object) => {
   const getRelations = await (prisma as any)[modelName].findMany(prismaArgs);

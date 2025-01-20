@@ -1,6 +1,6 @@
 import { create } from 'domain';
 import { crudService } from '../CRUD';
-import { errorsCrudService, errorsProvider } from '../messageErrors';
+import { errorsCrudService } from '../../messageErrors';
 import { error } from 'console';
 
 type TWithoutID<T> = Omit<T, 'id'> & {

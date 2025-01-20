@@ -1,7 +1,7 @@
 // Necessary import
-import { crudService } from '../../../shared/services/CRUD';
+import { crudService } from '../../../shared/services/prismaHelpers/CRUD';
 import { errorsCrudService } from '../../../shared/services/messageErrors';
-import { relationsGet } from '../../../shared/services/relationsManager/RelationsGet';
+import { relationsGet } from '../../../shared/services/prismaHelpers/relationsManager/RelationsGet';
 import { IProducts } from '../../models/ProductsInterface';
 
 // Declaration of the query interface

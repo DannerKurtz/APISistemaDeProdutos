@@ -1,11 +1,11 @@
 // Necessary imports
 import { prisma } from '../../prisma';
-import { crudService } from '../../../shared/services/CRUD';
+import { crudService } from '../../../shared/services/prismaHelpers/CRUD';
 import {
   errorsCrudService,
   errorsProvider,
 } from '../../../shared/services/messageErrors';
-import { relationDelete } from '../../../shared/services/relationsManager/RelationDelete';
+import { relationDelete } from '../../../shared/services/prismaHelpers/relationsManager/RelationDelete';
 import { IProductSaleRelations } from '../../models/ProductSaleRelationsInterface';
 
 // Export of the function responsible for deleting the sale

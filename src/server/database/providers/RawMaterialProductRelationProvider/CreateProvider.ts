@@ -1,5 +1,5 @@
 // Necessary imports
-import { crudService } from '../../../shared/services/CRUD';
+import { crudService } from '../../../shared/services/prismaHelpers/CRUD';
 import {
   errorsCrudService,
   errorsProvider,

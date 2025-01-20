@@ -1,6 +1,6 @@
-import { prisma } from '../../database/prisma';
+import { prisma } from '../../../database/prisma';
 import { relationCreator } from './relationsManager/RelationCreator';
-import { IRawMaterialProductRelations } from '../../database/models/RawMaterialProductRelationsInterface';
+import { IRawMaterialProductRelations } from '../../../database/models/RawMaterialProductRelationsInterface';
 
 export const processProductMaterialRelations = async (
   rawMaterialProductRelation: IRawMaterialProductRelations[],

@@ -1,5 +1,5 @@
-import { prisma } from '../../../database/prisma';
-import { bcryptPassword } from '../bcrypt';
+import { prisma } from '../../../../database/prisma';
+import { bcryptPassword } from '../../bcrypt';
 
 type TWithoutId<T> = Omit<T, 'id'> &
   Partial<{ name?: string; password?: string }>;

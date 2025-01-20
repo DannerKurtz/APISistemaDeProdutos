@@ -1,6 +1,6 @@
 // Necessary imports
 import { errorsProvider } from '../../../shared/services/messageErrors';
-import { searchSales } from '../../../shared/services/searchSales';
+import { searchSales } from '../../../shared/services/prismaHelpers/searchSales';
 import { ISales } from '../../models/SalesInterface';
 
 // Definition of a query interface

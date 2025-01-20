@@ -1,11 +1,11 @@
 // Necessary imports
 import { calculateTotalSalePrice } from '../../../shared/services/Calculations/CalculateTotalSalePrice';
-import { crudService } from '../../../shared/services/CRUD';
+import { crudService } from '../../../shared/services/prismaHelpers/CRUD';
 import {
   errorsCrudService,
   errorsProvider,
 } from '../../../shared/services/messageErrors';
-import { updateRelations } from '../../../shared/services/relationsManager/RelationUpdate';
+import { updateRelations } from '../../../shared/services/prismaHelpers/relationsManager/RelationUpdate';
 import { IProductSaleRelations } from '../../models/ProductSaleRelationsInterface';
 import { ISales, ISalesWithoutId } from '../../models/SalesInterface';
 

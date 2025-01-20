@@ -1,4 +1,4 @@
-import { prisma } from '../../../database/prisma';
+import { prisma } from '../../../../database/prisma';
 
 export const updateRelations = async <T>(
   modelName: string,

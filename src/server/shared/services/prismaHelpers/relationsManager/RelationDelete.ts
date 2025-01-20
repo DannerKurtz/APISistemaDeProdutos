@@ -1,5 +1,5 @@
 import { crudService } from '../CRUD';
-import { errorsCrudService } from '../messageErrors';
+import { errorsCrudService } from '../../messageErrors';
 
 export const relationDelete = async (id: string, modelName: string) => {
   const deletedRelations = await crudService.deleteInDatabase(

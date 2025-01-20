@@ -1,6 +1,6 @@
 import { IRawMaterialProductRelations } from '../../../database/models/RawMaterialProductRelationsInterface';
 import { IRawMaterials } from '../../../database/models/RawMaterialsInterface';
-import { crudService } from '../CRUD';
+import { crudService } from '../prismaHelpers/CRUD';
 import { errorsCrudService } from '../messageErrors';
 
 export const calculateProductPrice = async (

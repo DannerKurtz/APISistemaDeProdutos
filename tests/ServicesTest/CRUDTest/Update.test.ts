@@ -1,8 +1,8 @@
-import { prisma } from "../../../src/server/database/prisma";
-import { bcryptPassword } from "../../../src/server/shared/services/bcrypt";
-import { crudService } from "../../../src/server/shared/services/CRUD";
+import { prisma } from '../../../src/server/database/prisma';
+import { bcryptPassword } from '../../../src/server/shared/services/bcrypt';
+import { crudService } from '../../../src/server/shared/services/prismaHelpers/CRUD';
 
-jest.mock("../../../src/server/database/prisma", () => ({
+jest.mock('../../../src/server/database/prisma', () => ({
   prisma: {
     usuarios: {
       findFirst: jest.fn(),
@@ -11,9 +11,9 @@ jest.mock("../../../src/server/database/prisma", () => ({
   },
 }));
 
-jest.mock("../../../src/server/shared/services/bcrypt", () => ({
+jest.mock('../../../src/server/shared/services/bcrypt', () => ({
   bcryptPassword: {
-    passwordHashed: jest.fn().mockReturnValue("password_hashed"),
+    passwordHashed: jest.fn().mockReturnValue('password_hashed'),
     passwordVerify: jest.fn(),
   },
 }));
@@ -22,12 +22,12 @@ beforeEach(() => {
   jest.clearAllMocks();
 });
 
-describe("Get Test Service", () => {
-  test("Test 01 -> successful", async () => {
-    const params = "123";
+describe('Get Test Service', () => {
+  test('Test 01 -> successful', async () => {
+    const params = '123';
     const data = {
-      nome: "Teste",
-      senha: "123",
+      nome: 'Teste',
+      senha: '123',
     };
     (prisma.usuarios.findFirst as jest.Mock).mockReturnValue(true);
     (prisma.usuarios.update as jest.Mock).mockReturnValue(data);
@@ -35,8 +35,8 @@ describe("Get Test Service", () => {
     const result = await crudService.updateInDatabase(
       params,
       data,
-      "usuarios",
-      "Error"
+      'usuarios',
+      'Error'
     );
 
     expect(result).toEqual(data);
@@ -46,15 +46,15 @@ describe("Get Test Service", () => {
     expect(bcryptPassword.passwordHashed).toHaveBeenCalledTimes(0);
   });
 
-  test("Test 02 -> successful with novaSenha", async () => {
-    const params = "123";
+  test('Test 02 -> successful with novaSenha', async () => {
+    const params = '123';
     const data = {
-      nome: "Teste",
-      senha: "123",
-      novaSenha: "321",
+      nome: 'Teste',
+      senha: '123',
+      novaSenha: '321',
     };
     const { novaSenha, ...dateWithoutNewPassword } = data;
-    dateWithoutNewPassword.senha = "password_hashed";
+    dateWithoutNewPassword.senha = 'password_hashed';
     (prisma.usuarios.findFirst as jest.Mock).mockReturnValue(true);
     (prisma.usuarios.update as jest.Mock).mockReturnValue(
       dateWithoutNewPassword
@@ -63,8 +63,8 @@ describe("Get Test Service", () => {
     const result = await crudService.updateInDatabase(
       params,
       data,
-      "usuarios",
-      "Error"
+      'usuarios',
+      'Error'
     );
 
     expect(result).toEqual(dateWithoutNewPassword);
