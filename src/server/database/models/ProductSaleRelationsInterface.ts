@@ -5,7 +5,7 @@ export interface IProductSaleRelations {
   id: string;
   saleId: string;
   productId: string;
-  product: IProducts[];
+  product?: IProducts[];
   quantity: number;
   createdAt?: Date;
   updatedAt?: Date;
