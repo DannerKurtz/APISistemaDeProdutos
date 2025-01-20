@@ -8,8 +8,8 @@ import { IUsers } from './UsersInterface';
 export interface ISales {
   id: string;
   saleNumber?: string;
-  discount: number;
-  totalPrice: number;
+  discount?: number;
+  totalPrice?: number;
   userId: string;
   user?: IUsers;
   customerId: string;
