@@ -17,6 +17,29 @@ export const create = async (
     // Destructuring the body to separate rawMaterialProductRelation from product
     const { rawMaterialProductRelation, ...productWithoutRawMaterial } = body;
 
+    /**
+     * Checking if rawMaterialProductRelation; if so,
+     * calling FinalProductPriceCalculator to calculate the product's cost and weight.
+     * Verifying if there's no error; if an error exists, return the message. If everything is correct,
+     * add the price and weight to productWithoutRawMaterial.
+     */
+    if (rawMaterialProductRelation) {
+      const calculateRawMaterialTotals = await FinalProductPriceCalculator(
+        rawMaterialProductRelation,
+        productWithoutRawMaterial.percentage
+      );
+
+      if (calculateRawMaterialTotals instanceof Error)
+        return new Error(calculateRawMaterialTotals.message);
+
+      productWithoutRawMaterial.price = parseFloat(
+        calculateRawMaterialTotals.finalPrice.toFixed(2)
+      );
+      productWithoutRawMaterial.weight = parseFloat(
+        calculateRawMaterialTotals.finalWeight.toFixed(2)
+      );
+    }
+
     // Calling the crudService.createInDatabase function to create the new product
     const newProduct: IProducts | Error = await crudService.createInDatabase(
       productWithoutRawMaterial,
@@ -44,25 +67,6 @@ export const create = async (
       ...newProduct,
       rawMaterialProductRelation: createProductRawMateriaRelations,
     };
-
-    /**
-     * Checking if createdNewProduct has rawMaterialProductRelation; if so,
-     * calling FinalProductPriceCalculator to calculate the product's cost and weight.
-     * Verifying if there's no error; if an error exists, return the message. If everything is correct,
-     * add the price and weight to createdNewProduct.
-     */
-    if (createdNewProduct.rawMaterialProductRelation) {
-      const calculateRawMaterialTotals = await FinalProductPriceCalculator(
-        createdNewProduct.rawMaterialProductRelation,
-        createdNewProduct.percentage
-      );
-
-      if (calculateRawMaterialTotals instanceof Error)
-        return new Error(calculateRawMaterialTotals.message);
-
-      createdNewProduct.price = calculateRawMaterialTotals.finalPrice;
-      createdNewProduct.weight = calculateRawMaterialTotals.finalWeight;
-    }
 
     // Returning the newly created product
     return createdNewProduct;

@@ -9,8 +9,6 @@ export const processProductMaterialRelations = async (
   const listProductRawMaterialRelations: IRawMaterialProductRelations[] = [];
 
   for (let i = 0; i < rawMaterialProductRelation.length; i++) {
-    console.log('entrou no loop', [i]);
-
     const createProductRawMaterialRelation = await relationCreator(
       rawMaterialProductRelation[i],
       {

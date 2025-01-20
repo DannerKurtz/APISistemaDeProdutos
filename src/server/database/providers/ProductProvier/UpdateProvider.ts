@@ -18,6 +18,20 @@ export const update = async (
     // destructuring the body
     const { rawMaterialProductRelation, ...data } = body;
 
+    // validation if there is rawMaterialProductRelation to calculate the product's price
+    if (rawMaterialProductRelation) {
+      const calculateRawMaterialTotals = await FinalProductPriceCalculator(
+        rawMaterialProductRelation,
+        data.percentage
+      );
+
+      if (calculateRawMaterialTotals instanceof Error)
+        return new Error(calculateRawMaterialTotals.message);
+
+      data.price = calculateRawMaterialTotals.finalPrice;
+      data.weight = calculateRawMaterialTotals.finalWeight;
+    }
+
     // call to the crudService to update in the database
     const productUpdated: IProducts | Error =
       await crudService.updateInDatabase(
@@ -46,20 +60,6 @@ export const update = async (
         { productId: id },
         listRelationsWithProductId
       );
-
-    // validation if there is rawMaterialProductRelationUpdate to calculate the product's price
-    if (rawMaterialProductRelationUpdate) {
-      const calculateRawMaterialTotals = await FinalProductPriceCalculator(
-        rawMaterialProductRelationUpdate,
-        productUpdated.percentage
-      );
-
-      if (calculateRawMaterialTotals instanceof Error)
-        return new Error(calculateRawMaterialTotals.message);
-
-      productUpdated.price = calculateRawMaterialTotals.finalPrice;
-      productUpdated.weight = calculateRawMaterialTotals.finalWeight;
-    }
 
     // adds the updated raw materials to the product
     productUpdated.rawMaterialProductRelation =
