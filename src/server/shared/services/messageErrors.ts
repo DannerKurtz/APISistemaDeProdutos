@@ -1,3 +1,4 @@
+// Export the error message pattern for the provider
 export const errorsProvider = {
   createMessage: (itemError: string) =>
     `Unexpected error while accessing the CRUD service to create a new ${itemError}.`,
@@ -9,6 +10,7 @@ export const errorsProvider = {
     `Unexpected error while accessing the CRUD service to delete ${itemError}.`,
 };
 
+// Export the error message pattern for the crudService
 export const errorsCrudService = {
   createMessage: (itemError: string) =>
     `Failed to create a new ${itemError}: [Error details].`,
