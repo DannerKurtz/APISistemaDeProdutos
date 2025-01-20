@@ -1,24 +1,27 @@
+// Prisma import
 import { prisma } from '../../../../database/prisma';
 
+// Exports the function that updates relations by deleting the existing ones and creating new ones
 export const updateRelations = async <T>(
   modelName: string,
   whereCondition: object,
   updateDataRelations: object[]
 ): Promise<T[]> => {
-  // Buscar as relações existentes
+  // Fetch the existing relations
   const relations = await (prisma as any)[modelName].findMany({
     where: whereCondition,
   });
 
   const updatedRelations: T[] = [];
 
-  // deleta cada relação encontrada
+  // Deletes each found relation
   for (let i = 0; i < relations.length; i++) {
     const deletedRelation = await (prisma as any)[modelName].delete({
       where: { id: relations[i].id },
     });
   }
 
+  // Creates each new relation
   for (let i = 0; i < updateDataRelations.length; i++) {
     const newRelation = await (prisma as any)[modelName].create({
       data: updateDataRelations[i],
@@ -26,5 +29,6 @@ export const updateRelations = async <T>(
     updatedRelations.push(newRelation);
   }
 
-  return updatedRelations; // Retorna a lista de relações atualizadas
+  // Returns the list of updated relations
+  return updatedRelations;
 };
