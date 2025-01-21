@@ -1,7 +1,8 @@
-import { clientsProvider } from '../../../src/server/database/providers/ClientsProvider';
+import { customerProvider } from '../../../src/server/database/providers/CustomerProvider';
+import { errorsCrudService } from '../../../src/server/shared/services/messageErrors';
 import { crudService } from '../../../src/server/shared/services/prismaHelpers/CRUD';
 
-jest.mock('../../../src/server/shared/services/CRUD', () => ({
+jest.mock('../../../src/server/shared/services/prismaHelpers/CRUD', () => ({
   crudService: {
     deleteInDatabase: jest.fn(),
   },
@@ -17,21 +18,22 @@ describe('Delete Client Provider', () => {
 
     (crudService.deleteInDatabase as jest.Mock).mockReturnValue(true);
 
-    const result = await clientsProvider.deleteClient(id);
+    const result = await customerProvider.deleteCustomer(id);
 
     expect(result).toEqual(true);
     expect(crudService.deleteInDatabase).toHaveBeenCalledTimes(1);
   });
+
   test('Test 2 -> failed', async () => {
     const id: string = '321asd1f23a3df21';
 
     (crudService.deleteInDatabase as jest.Mock).mockReturnValue(
-      'Erro ao deletar o cliente'
+      errorsCrudService.deleteMessage('Customers')
     );
 
-    const result = await clientsProvider.deleteClient(id);
+    const result = await customerProvider.deleteCustomer(id);
 
-    expect(result).toEqual('Erro ao deletar o cliente');
+    expect(result).toEqual(errorsCrudService.deleteMessage('Customers'));
     expect(crudService.deleteInDatabase).toHaveBeenCalledTimes(1);
   });
 });

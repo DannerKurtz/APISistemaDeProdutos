@@ -1,22 +1,24 @@
-import { clientsProvider } from '../../../src/server/database/providers/ClientsProvider';
+import { customerProvider } from '../../../src/server/database/providers/CustomerProvider';
+import { errorsCrudService } from '../../../src/server/shared/services/messageErrors';
 import { crudService } from '../../../src/server/shared/services/prismaHelpers/CRUD';
 
 const dataExemple = {
-  nome: 'Example Name',
-  cep: '12345-678',
-  cidade: 'Example City',
-  cpf_cnpj: '123.456.789-00',
-  inscricao_estadual: '123456789',
-  endereco: '123 Example St',
-  bairro: 'Example Neighborhood',
-  numero: '123',
-  nome_do_contato: 'Contact Name',
-  telefone: '(12) 3456-7890',
-  celular: '(12) 98765-4321',
+  id: '123456',
+  name: 'Example Name',
+  postalCode: '12345-678',
+  city: 'Example City',
+  taxId: '123.456.789-00',
+  stateRegistration: '123456789',
+  address: '123 Example St',
+  neighborhood: 'Example Neighborhood',
+  addressNumber: '123',
+  contactName: 'Contact Name',
+  phone: '(12) 3456-7890',
+  mobile: '(12) 98765-4321',
   email: 'example@example.com',
 };
 
-jest.mock('../../../src/server/shared/services/CRUD', () => ({
+jest.mock('../../../src/server/shared/services/prismaHelpers/CRUD', () => ({
   crudService: {
     updateInDatabase: jest.fn(),
   },
@@ -33,7 +35,7 @@ describe('Update Client Provider', () => {
 
     (crudService.updateInDatabase as jest.Mock).mockReturnValue(data);
 
-    const result = await clientsProvider.update(id, data);
+    const result = await customerProvider.update(id, data);
     expect(result).toEqual(data);
     expect(crudService.updateInDatabase).toHaveBeenCalledTimes(1);
   });
@@ -43,12 +45,12 @@ describe('Update Client Provider', () => {
     const data = dataExemple;
 
     (crudService.updateInDatabase as jest.Mock).mockReturnValue(
-      'Erro ao atualizar o cliente'
+      errorsCrudService.updateMessage('Customers')
     );
 
-    const result = await clientsProvider.update(id, data);
+    const result = await customerProvider.update(id, data);
 
-    expect(result).toEqual('Erro ao atualizar o cliente');
+    expect(result).toEqual(errorsCrudService.updateMessage('Customers'));
     expect(crudService.updateInDatabase).toHaveBeenCalledTimes(1);
   });
 });
