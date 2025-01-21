@@ -1,15 +1,10 @@
 import { Request, Response } from 'express';
 import { rawMaterialProductRelationController } from '../../../src/server/controllers/RawMaterialProductRelationController';
 import { rawMaterialProductRelationProvider } from '../../../src/server/database/providers/RawMaterialProductRelationProvider';
-import { RawMaterialProductRelationModel } from '../../../src/server/database/models/RawMaterialProductRelationsInterface';
-
-type RawMaterialProductRelationWithoutId = Omit<
-  RawMaterialProductRelationModel,
-  'id'
->;
+import { IRawMaterialProductRelationsWithoutId } from '../../../src/server/database/models/RawMaterialProductRelationsInterface';
 
 jest.mock(
-  '../../../src/server/database/providers/RawMaterialProductRelation',
+  '../../../src/server/database/providers/RawMaterialProductRelationProvider',
   () => ({
     rawMaterialProductRelationProvider: {
       create: jest.fn(),
@@ -35,7 +30,7 @@ describe('Create RawMaterialProductRelation Test', () => {
 
     const req = {
       body: { ...data },
-    } as unknown as Request<{}, {}, RawMaterialProductRelationWithoutId>;
+    } as unknown as Request<{}, {}, IRawMaterialProductRelationsWithoutId>;
 
     const res = {
       status: jest.fn().mockReturnThis(),
@@ -47,8 +42,10 @@ describe('Create RawMaterialProductRelation Test', () => {
     expect(rawMaterialProductRelationProvider.create).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenLastCalledWith(201);
     expect(res.json).toHaveBeenLastCalledWith({
-      id: '321asd1f23a3df21',
-      ...data,
+      rawMaterialProductRelationCreated: {
+        id: '321asd1f23a3df21',
+        ...data,
+      },
     });
   });
 
@@ -59,12 +56,12 @@ describe('Create RawMaterialProductRelation Test', () => {
       quantidadeMateriaPrima: 10,
     };
     (rawMaterialProductRelationProvider.create as jest.Mock).mockReturnValue(
-      new Error('Error')
+      new Error('Error creating rawMaterialProductRelation')
     );
 
     const req = {
       body: { ...data },
-    } as unknown as Request<{}, {}, RawMaterialProductRelationWithoutId>;
+    } as unknown as Request<{}, {}, IRawMaterialProductRelationsWithoutId>;
 
     const res = {
       status: jest.fn().mockReturnThis(),
@@ -75,6 +72,8 @@ describe('Create RawMaterialProductRelation Test', () => {
 
     expect(rawMaterialProductRelationProvider.create).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenLastCalledWith(409);
-    expect(res.json).toHaveBeenLastCalledWith(new Error('Error'));
+    expect(res.json).toHaveBeenLastCalledWith({
+      error: 'Error creating rawMaterialProductRelation',
+    });
   });
 });

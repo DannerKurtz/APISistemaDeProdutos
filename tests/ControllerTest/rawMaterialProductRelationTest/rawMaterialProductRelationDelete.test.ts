@@ -3,7 +3,7 @@ import { rawMaterialProductRelationProvider } from '../../../src/server/database
 import { rawMaterialProductRelationController } from '../../../src/server/controllers/RawMaterialProductRelationController';
 
 jest.mock(
-  '../../../src/server/database/providers/RawMaterialProductRelation',
+  '../../../src/server/database/providers/RawMaterialProductRelationProvider',
   () => ({
     rawMaterialProductRelationProvider: {
       deleteRawMaterialProductRelation: jest.fn(),
@@ -43,16 +43,16 @@ describe('Delete RawMaterialProductRelation Test', () => {
       rawMaterialProductRelationProvider.deleteRawMaterialProductRelation
     ).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith(true);
+    expect(res.json).toHaveBeenCalledWith({
+      rawMaterialProductRelationDeleted: true,
+    });
   });
 
   test('Test 02 -> failed', async () => {
     (
       rawMaterialProductRelationProvider.deleteRawMaterialProductRelation as jest.Mock
     ).mockReturnValue(
-      Error(
-        'Erro ao acessar o crudService para deletar a relação de materia prima e produto!'
-      )
+      Error('Error accessing crudService to delete rawMaterialProductRelation')
     );
 
     const req = {
@@ -75,10 +75,8 @@ describe('Delete RawMaterialProductRelation Test', () => {
       rawMaterialProductRelationProvider.deleteRawMaterialProductRelation
     ).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith(
-      Error(
-        'Erro ao acessar o crudService para deletar a relação de materia prima e produto!'
-      )
-    );
+    expect(res.json).toHaveBeenCalledWith({
+      error: 'Error accessing crudService to delete rawMaterialProductRelation',
+    });
   });
 });

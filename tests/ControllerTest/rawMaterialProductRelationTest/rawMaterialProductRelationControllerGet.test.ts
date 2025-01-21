@@ -1,14 +1,14 @@
 import { Request, Response } from 'express';
 import { rawMaterialProductRelationProvider } from '../../../src/server/database/providers/RawMaterialProductRelationProvider';
 import { rawMaterialProductRelationController } from '../../../src/server/controllers/RawMaterialProductRelationController';
-import { RawMaterialProductRelationModel } from '../../../src/server/database/models/RawMaterialProductRelationsInterface';
+import { IRawMaterialProductRelations } from '../../../src/server/database/models/RawMaterialProductRelationsInterface';
 
 type IQuery = {
   id: string;
 };
 
 jest.mock(
-  '../../../src/server/database/providers/RawMaterialProductRelation',
+  '../../../src/server/database/providers/RawMaterialProductRelationProvider',
   () => ({
     rawMaterialProductRelationProvider: {
       get: jest.fn(),
@@ -20,25 +20,25 @@ beforeEach(() => {
   jest.clearAllMocks();
 });
 
-const data: RawMaterialProductRelationModel[] = [
+const dataExemple: IRawMaterialProductRelations[] = [
   {
     id: '123',
-    materiaPrimaId: '321asd1f23a3df21',
-    produtoId: '321asd1f23a3df21',
-    quantidadeMateriaPrima: 10,
+    productId: '123456',
+    rawMaterialId: '654321',
+    rawMaterialQuantity: 10,
   },
   {
     id: '124',
-    materiaPrimaId: '321asd1f23a3df21',
-    produtoId: '321asd1f23a3df21',
-    quantidadeMateriaPrima: 10,
+    productId: '123456',
+    rawMaterialId: '654321',
+    rawMaterialQuantity: 10,
   },
 ];
 
 describe('Get RawMaterialProductRelation Test', () => {
   test('Test 01 -> successful', async () => {
     (rawMaterialProductRelationProvider.get as jest.Mock).mockReturnValue(
-      data[0]
+      dataExemple[0]
     );
 
     const req = {
@@ -57,12 +57,14 @@ describe('Get RawMaterialProductRelation Test', () => {
     expect(rawMaterialProductRelationProvider.get).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenLastCalledWith(200);
     expect(res.json).toHaveBeenLastCalledWith({
-      rawMaterialProductRelation: data[0],
+      rawMaterialProductRelationListed: dataExemple[0],
     });
   });
 
   test('Test 02 -> successful', async () => {
-    (rawMaterialProductRelationProvider.get as jest.Mock).mockReturnValue(data);
+    (rawMaterialProductRelationProvider.get as jest.Mock).mockReturnValue(
+      dataExemple
+    );
 
     const req = {
       query: {
@@ -80,15 +82,13 @@ describe('Get RawMaterialProductRelation Test', () => {
     expect(rawMaterialProductRelationProvider.get).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenLastCalledWith(200);
     expect(res.json).toHaveBeenLastCalledWith({
-      rawMaterialProductRelation: data,
+      rawMaterialProductRelationListed: dataExemple,
     });
   });
 
   test('Test 03 -> failed', async () => {
     (rawMaterialProductRelationProvider.get as jest.Mock).mockReturnValue(
-      new Error(
-        'Erro ao acessar o crudService para buscar a relação de materia prima e produto!'
-      )
+      Error('Error accessing crudService to get rawMaterialProductRelation')
     );
 
     const req = {
@@ -107,9 +107,7 @@ describe('Get RawMaterialProductRelation Test', () => {
     expect(rawMaterialProductRelationProvider.get).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenLastCalledWith(404);
     expect(res.json).toHaveBeenLastCalledWith({
-      rawMaterialProductRelation: Error(
-        'Erro ao acessar o crudService para buscar a relação de materia prima e produto!'
-      ),
+      error: 'Error accessing crudService to get rawMaterialProductRelation',
     });
   });
 });
