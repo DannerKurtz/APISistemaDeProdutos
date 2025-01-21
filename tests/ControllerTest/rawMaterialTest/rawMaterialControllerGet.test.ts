@@ -1,9 +1,8 @@
-import { query, Request, Response } from "express";
-import { rawMaterialProvider } from "../../../src/server/database/providers/RawMaterialProvider";
-import { rawMaterialController } from "../../../src/server/controllers/RawMaterialController";
-import { json } from "stream/consumers";
+import { Request, Response } from 'express';
+import { rawMaterialProvider } from '../../../src/server/database/providers/RawMaterialProvider';
+import { rawMaterialController } from '../../../src/server/controllers/RawMaterialController';
 
-jest.mock("../../../src/server/database/providers/RawMaterialProvider", () => ({
+jest.mock('../../../src/server/database/providers/RawMaterialProvider', () => ({
   rawMaterialProvider: {
     get: jest.fn(),
   },
@@ -13,20 +12,21 @@ beforeEach(() => {
   jest.clearAllMocks();
 });
 
-const data = {
-  id: "321asd1f23a3df21",
-  name: "Teste",
+const dataExemple = {
+  id: '321asd1f23a3df21',
+  name: 'Teste',
   price: 10,
   quantity: 10,
+  unitWeight: 10,
 };
 
-describe("Get RawMaterial Test", () => {
-  test("Test 01 -> successful", async () => {
-    (rawMaterialProvider.get as jest.Mock).mockReturnValue(data);
+describe('Get RawMaterial Test', () => {
+  test('Test 01 -> successful', async () => {
+    (rawMaterialProvider.get as jest.Mock).mockReturnValue(dataExemple);
 
     const req = {
       query: {
-        id: "123",
+        id: '123',
         nome: null,
       },
     } as unknown as Request;
@@ -39,16 +39,16 @@ describe("Get RawMaterial Test", () => {
 
     expect(rawMaterialProvider.get).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith(data);
+    expect(res.json).toHaveBeenCalledWith({ rawMaterialListed: dataExemple });
   });
-  test("Test 02 -> failed", async () => {
+  test('Test 02 -> failed', async () => {
     (rawMaterialProvider.get as jest.Mock).mockReturnValue(
-      Error("Erro ao acessar o crudService para buscar a materia prima!")
+      Error('Error getting raw material')
     );
 
     const req = {
       query: {
-        id: "123",
+        id: '123',
         nome: null,
       },
     } as unknown as Request;
@@ -62,9 +62,7 @@ describe("Get RawMaterial Test", () => {
     expect(rawMaterialProvider.get).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith({
-      getRawMaterial: Error(
-        "Erro ao acessar o crudService para buscar a materia prima!"
-      ),
+      error: 'Error getting raw material',
     });
   });
 });

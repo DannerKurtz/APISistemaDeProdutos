@@ -1,7 +1,10 @@
 import { Request, Response } from 'express';
 import { rawMaterialController } from '../../../src/server/controllers/RawMaterialController';
-import { RawMaterialModel } from '../../../src/server/database/models/RawMaterialsInterface';
 import { rawMaterialProvider } from '../../../src/server/database/providers/RawMaterialProvider';
+import {
+  IRawMaterials,
+  IRawMaterialsWithoutId,
+} from '../../../src/server/database/models/RawMaterialsInterface';
 
 jest.mock('../../../src/server/database/providers/RawMaterialProvider', () => ({
   rawMaterialProvider: {
@@ -9,13 +12,12 @@ jest.mock('../../../src/server/database/providers/RawMaterialProvider', () => ({
   },
 }));
 
-type TWithoutID = Omit<RawMaterialModel, 'id'>;
-
-const data = {
+const dataExemple = {
   id: '321asd1f23a3df21',
   name: 'Teste',
   price: 10,
   quantity: 10,
+  unitWeight: 10,
 };
 
 beforeEach(() => {
@@ -24,13 +26,14 @@ beforeEach(() => {
 
 describe('Create RawMaterial Test', () => {
   test('Test 1 -> successful', async () => {
-    (rawMaterialProvider.create as jest.Mock).mockReturnValue(data);
+    (rawMaterialProvider.create as jest.Mock).mockReturnValue(dataExemple);
 
     const req = {
       name: 'Teste',
       price: 10,
       quantity: 10,
-    } as unknown as Request<{}, {}, TWithoutID>;
+      unitWeight: 10,
+    } as unknown as Request<{}, {}, IRawMaterialsWithoutId>;
     const res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
@@ -40,17 +43,18 @@ describe('Create RawMaterial Test', () => {
 
     expect(rawMaterialProvider.create).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(201);
-    expect(res.json).toHaveBeenCalledWith(data);
+    expect(res.json).toHaveBeenCalledWith({ rawMaterialCreated: dataExemple });
   });
   test('Test 2 -> failed', async () => {
     (rawMaterialProvider.create as jest.Mock).mockReturnValue(
-      Error('RawMaterial ja existe!')
+      Error('Error creating raw material')
     );
     const req = {
       name: 'Teste',
       price: 10,
       quantity: 10,
-    } as unknown as Request<{}, {}, TWithoutID>;
+      unitWeight: 10,
+    } as unknown as Request<{}, {}, IRawMaterials>;
     const res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
@@ -60,6 +64,8 @@ describe('Create RawMaterial Test', () => {
 
     expect(rawMaterialProvider.create).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith(Error('RawMaterial ja existe!'));
+    expect(res.json).toHaveBeenCalledWith({
+      error: 'Error creating raw material',
+    });
   });
 });
