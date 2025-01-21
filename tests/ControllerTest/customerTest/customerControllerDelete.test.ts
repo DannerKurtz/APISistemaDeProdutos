@@ -1,11 +1,10 @@
 import { Request, Response } from 'express';
-import { clientsController } from '../../../src/server/controllers/CustomerController';
-import { clientsProvider } from '../../../src/server/database/providers/ClientsProvider';
-import { deleteClient } from '../../../src/server/controllers/CustomerController/Delete';
+import { customerController } from '../../../src/server/controllers/CustomerController';
+import { customerProvider } from '../../../src/server/database/providers/CustomerProvider';
 
-jest.mock('../../../src/server/database/providers/ClientsProvider', () => ({
-  clientsProvider: {
-    deleteClient: jest.fn(),
+jest.mock('../../../src/server/database/providers/CustomerProvider', () => ({
+  customerProvider: {
+    deleteCustomer: jest.fn(),
   },
 }));
 
@@ -19,7 +18,7 @@ beforeEach(() => {
 
 describe('Delete Client Test', () => {
   test('Test 1 -> successful', async () => {
-    (clientsProvider.deleteClient as jest.Mock).mockReturnValue(true);
+    (customerProvider.deleteCustomer as jest.Mock).mockReturnValue(true);
 
     const req = {
       params: {
@@ -32,17 +31,17 @@ describe('Delete Client Test', () => {
       json: jest.fn(),
     } as unknown as Response;
 
-    await clientsController.deleteClient(req, res);
+    await customerController.deleteCustomer(req, res);
 
-    expect(clientsProvider.deleteClient).toHaveBeenCalledTimes(1);
+    expect(customerProvider.deleteCustomer).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({
-      deleteClient: true,
+      customerDeleted: true,
     });
   });
 
   test('Test 2 -> failed', async () => {
-    (clientsProvider.deleteClient as jest.Mock).mockReturnValue(
+    (customerProvider.deleteCustomer as jest.Mock).mockReturnValue(
       Error('Cliente não encontrado!')
     );
 
@@ -57,10 +56,10 @@ describe('Delete Client Test', () => {
       json: jest.fn(),
     } as unknown as Response;
 
-    await clientsController.deleteClient(req, res);
+    await customerController.deleteCustomer(req, res);
 
-    expect(clientsProvider.deleteClient).toHaveBeenCalledTimes(1);
+    expect(customerProvider.deleteCustomer).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(404);
-    expect(res.json).toHaveBeenCalledWith(Error('Cliente não encontrado!'));
+    expect(res.json).toHaveBeenCalledWith({ error: 'Cliente não encontrado!' });
   });
 });
