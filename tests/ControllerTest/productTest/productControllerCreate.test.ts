@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { productProvider } from '../../../src/server/database/providers/ProductProvier';
 import { productController } from '../../../src/server/controllers/ProductController';
-import { ProductModel } from '../../../src/server/database/models/ProductsInterface';
+import { IProductsWithoutId } from '../../../src/server/database/models/ProductsInterface';
 
 jest.mock('../../../src/server/database/providers/ProductProvier', () => ({
   productProvider: {
@@ -13,25 +13,40 @@ beforeEach(() => {
   jest.clearAllMocks();
 });
 
-type productWithoutID = Omit<ProductModel, 'id'>;
+const dataExemple = {
+  id: '654321',
+  name: 'Exemple',
+  percentage: 70,
+  price: 170,
+  quantity: 1,
+  weight: 10,
+  rawMaterialProductRelation: [
+    {
+      id: '123456',
+      productId: '654321',
+      rawMaterialId: '456123',
+      rawMaterialQuantity: 130,
+    },
+  ],
+};
 
 describe('Create Product Test', () => {
   test('Test 01 -> successful', async () => {
-    const data = {
-      id: '321asd1f23a3df21',
-      nome: 'Teste',
-      descricao: 'Teste',
-      valor: 10,
-    };
-    (productProvider.create as jest.Mock).mockReturnValue(data);
+    (productProvider.create as jest.Mock).mockReturnValue(dataExemple);
 
     const req = {
       body: {
-        nome: 'Teste',
-        descricao: 'Teste',
-        valor: 10,
+        name: 'Exemple',
+        percentage: 70,
+        quantity: 1,
+        rawMaterialProductRelation: [
+          {
+            rawMaterialId: '456123',
+            rawMaterialQuantity: 130,
+          },
+        ],
       },
-    } as unknown as Request<{}, {}, productWithoutID>;
+    } as unknown as Request<{}, {}, IProductsWithoutId>;
     const res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
@@ -41,7 +56,7 @@ describe('Create Product Test', () => {
 
     expect(productProvider.create).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(201);
-    expect(res.json).toHaveBeenCalledWith(data);
+    expect(res.json).toHaveBeenCalledWith({ productCreated: dataExemple });
   });
 
   test('Test 02 -> failed', async () => {
@@ -52,16 +67,22 @@ describe('Create Product Test', () => {
       valor: 10,
     };
     (productProvider.create as jest.Mock).mockReturnValue(
-      Error('Erro ao criar novo produto no banco de dados')
+      Error('Error creating product')
     );
 
     const req = {
       body: {
-        nome: 'Teste',
-        descricao: 'Teste',
-        valor: 10,
+        name: 'Exemple',
+        percentage: 70,
+        quantity: 1,
+        rawMaterialProductRelation: [
+          {
+            rawMaterialId: '456123',
+            rawMaterialQuantity: 130,
+          },
+        ],
       },
-    } as unknown as Request<{}, {}, productWithoutID>;
+    } as unknown as Request<{}, {}, IProductsWithoutId>;
     const res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
@@ -71,8 +92,6 @@ describe('Create Product Test', () => {
 
     expect(productProvider.create).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith(
-      'Erro ao criar novo produto no banco de dados'
-    );
+    expect(res.json).toHaveBeenCalledWith({ error: 'Error creating product' });
   });
 });

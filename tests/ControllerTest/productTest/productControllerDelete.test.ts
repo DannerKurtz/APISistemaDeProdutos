@@ -35,12 +35,12 @@ describe('Delete Product Test', () => {
 
     expect(productProvider.deleteProduct).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith(true);
+    expect(res.json).toHaveBeenCalledWith({ productDeleted: true });
   });
 
   test('Test 02 - failed', async () => {
     (productProvider.deleteProduct as jest.Mock).mockReturnValue(
-      Error('Erro ao acessar a base de dados para deletar o produto')
+      Error('Error deleting product')
     );
 
     const req = {
@@ -58,8 +58,6 @@ describe('Delete Product Test', () => {
 
     expect(productProvider.deleteProduct).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith(
-      'Erro ao acessar a base de dados para deletar o produto'
-    );
+    expect(res.json).toHaveBeenCalledWith({ error: 'Error deleting product' });
   });
 });

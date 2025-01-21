@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { productProvider } from '../../../src/server/database/providers/ProductProvier';
 import { productController } from '../../../src/server/controllers/ProductController';
-import { ProductModel } from '../../../src/server/database/models/ProductsInterface';
+import { IProductsWithoutId } from '../../../src/server/database/models/ProductsInterface';
 
 jest.mock('../../../src/server/database/providers/ProductProvier', () => ({
   productProvider: {
@@ -13,32 +13,47 @@ beforeEach(() => {
   jest.clearAllMocks();
 });
 
-type productWithoutID = Omit<ProductModel, 'id'>;
-
 type IParams = {
   id: string;
 };
 
+const dataExemple = {
+  id: '654321',
+  name: 'Exemple',
+  percentage: 70,
+  price: 170,
+  quantity: 1,
+  weight: 10,
+  rawMaterialProductRelation: [
+    {
+      id: '123456',
+      productId: '654321',
+      rawMaterialId: '456123',
+      rawMaterialQuantity: 130,
+    },
+  ],
+};
+
 describe('Create Product Test', () => {
   test('Test 01 -> successful', async () => {
-    const data = {
-      id: '321asd1f23a3df21',
-      nome: 'Teste',
-      descricao: 'Teste',
-      valor: 10,
-    };
-    (productProvider.update as jest.Mock).mockReturnValue(data);
+    (productProvider.update as jest.Mock).mockReturnValue(dataExemple);
 
     const req = {
       params: {
-        id: 'Te321asd1f23a3df21ste',
+        id: '654321',
       },
       body: {
-        nome: 'Teste',
-        descricao: 'Teste',
-        valor: 10,
+        name: 'Exemple',
+        percentage: 70,
+        quantity: 1,
+        rawMaterialProductRelation: [
+          {
+            rawMaterialId: '456123',
+            rawMaterialQuantity: 130,
+          },
+        ],
       },
-    } as unknown as Request<IParams, {}, productWithoutID>;
+    } as unknown as Request<IParams, {}, IProductsWithoutId>;
     const res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
@@ -48,18 +63,12 @@ describe('Create Product Test', () => {
 
     expect(productProvider.update).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith(data);
+    expect(res.json).toHaveBeenCalledWith({ productUpdated: dataExemple });
   });
 
   test('Test 02 -> failed', async () => {
-    const data = {
-      id: '321asd1f23a3df21',
-      nome: 'Teste',
-      descricao: 'Teste',
-      valor: 10,
-    };
     (productProvider.update as jest.Mock).mockReturnValue(
-      Error('Error ao tentar fazer as alterações na base de dados do Produto')
+      Error('Error updating product')
     );
 
     const req = {
@@ -71,7 +80,7 @@ describe('Create Product Test', () => {
         descricao: 'Teste',
         valor: 10,
       },
-    } as unknown as Request<IParams, {}, productWithoutID>;
+    } as unknown as Request<IParams, {}, IProductsWithoutId>;
     const res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
@@ -81,8 +90,6 @@ describe('Create Product Test', () => {
 
     expect(productProvider.update).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith(
-      Error('Error ao tentar fazer as alterações na base de dados do Produto')
-    );
+    expect(res.json).toHaveBeenCalledWith({ error: 'Error updating product' });
   });
 });

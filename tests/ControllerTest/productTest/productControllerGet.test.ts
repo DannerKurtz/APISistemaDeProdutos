@@ -1,7 +1,6 @@
-import { query, Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { productProvider } from '../../../src/server/database/providers/ProductProvier';
 import { productController } from '../../../src/server/controllers/ProductController';
-import { ProductModel } from '../../../src/server/database/models/ProductsInterface';
 
 jest.mock('../../../src/server/database/providers/ProductProvier', () => ({
   productProvider: {
@@ -18,15 +17,26 @@ type IQuery = {
   id?: string;
 };
 
+const dataExemple = {
+  id: '654321',
+  name: 'Exemple',
+  percentage: 70,
+  price: 170,
+  quantity: 1,
+  weight: 10,
+  rawMaterialProductRelation: [
+    {
+      id: '123456',
+      productId: '654321',
+      rawMaterialId: '456123',
+      rawMaterialQuantity: 130,
+    },
+  ],
+};
+
 describe('Create Product Test', () => {
   test('Test 01 -> successful', async () => {
-    const data = {
-      id: '321asd1f23a3df21',
-      nome: 'Teste',
-      descricao: 'Teste',
-      valor: 10,
-    };
-    (productProvider.get as jest.Mock).mockReturnValue(data);
+    (productProvider.get as jest.Mock).mockReturnValue(dataExemple);
 
     const req = {
       query: {
@@ -42,18 +52,12 @@ describe('Create Product Test', () => {
 
     expect(productProvider.get).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith(data);
+    expect(res.json).toHaveBeenCalledWith({ productListed: dataExemple });
   });
 
   test('Test 02 -> failed', async () => {
-    const data = {
-      id: '321asd1f23a3df21',
-      nome: 'Teste',
-      descricao: 'Teste',
-      valor: 10,
-    };
     (productProvider.get as jest.Mock).mockReturnValue(
-      Error('Erro ao consultar a base de dados de produtos')
+      Error('Error getting products')
     );
 
     const req = {
@@ -70,8 +74,6 @@ describe('Create Product Test', () => {
 
     expect(productProvider.get).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith(
-      Error('Erro ao consultar a base de dados de produtos')
-    );
+    expect(res.json).toHaveBeenCalledWith({ error: 'Error getting products' });
   });
 });
