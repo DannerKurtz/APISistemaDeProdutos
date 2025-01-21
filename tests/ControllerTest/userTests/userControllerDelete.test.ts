@@ -33,12 +33,12 @@ describe('Delete User Test', () => {
     expect(userProvider.deleteUser).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({
-      deleted: true,
+      userDeleted: true,
     });
   });
   test('Test 2 -> failed', async () => {
     (userProvider.deleteUser as jest.Mock).mockReturnValue(
-      Error('Usuário nao encontrado!')
+      Error('Error deleting user')
     );
 
     const req = {
@@ -57,7 +57,7 @@ describe('Delete User Test', () => {
     expect(userProvider.deleteUser).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(404);
     expect(res.json).toHaveBeenCalledWith({
-      userDelete: Error('Usuário nao encontrado!'),
+      error: 'Error deleting user',
     });
   });
 });

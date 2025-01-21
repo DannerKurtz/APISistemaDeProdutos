@@ -9,7 +9,7 @@ import { IUsers } from '../../models/UsersInterface';
 // Definition of the query interface
 interface IQuery {
   id: string;
-  nome: string;
+  name: string;
 }
 
 // Export of the function responsible for getting the user

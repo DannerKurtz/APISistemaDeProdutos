@@ -1,25 +1,25 @@
-import { Request, Response } from "express";
-import { userController } from "../../../src/server/controllers/UserController";
-import { userProvider } from "../../../src/server/database/providers/UserProvider";
+import { Request, Response } from 'express';
+import { userController } from '../../../src/server/controllers/UserController';
+import { userProvider } from '../../../src/server/database/providers/UserProvider';
 
 beforeEach(() => {
   jest.clearAllMocks();
 });
-jest.mock("../../../src/server/database/providers/UserProvider", () => ({
+jest.mock('../../../src/server/database/providers/UserProvider', () => ({
   userProvider: {
     create: jest.fn(),
   },
 }));
-describe("Create User Test", () => {
-  test("Test 1 -> successful", async () => {
+describe('Create User Test', () => {
+  test('Test 1 -> successful', async () => {
     (userProvider.create as jest.Mock).mockReturnValue({
-      id: "321asd1f23a3df21",
-      nome: "Teste",
+      id: '321asd1f23a3df21',
+      name: 'Teste',
     });
     const req = {
       body: {
-        nome: "Teste",
-        senha: "123456",
+        name: 'Teste',
+        password: '123456',
       },
     } as unknown as Request;
     const res = {
@@ -32,20 +32,22 @@ describe("Create User Test", () => {
     expect(userProvider.create).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(201);
     expect(res.json).toHaveBeenCalledWith({
-      id: "321asd1f23a3df21",
-      nome: "Teste",
+      userCreated: {
+        id: '321asd1f23a3df21',
+        name: 'Teste',
+      },
     });
   });
 
-  test("Test 2 -> failed", async () => {
+  test('Test 2 -> failed', async () => {
     (userProvider.create as jest.Mock).mockReturnValue(
-      Error("Usuário já existente!")
+      Error('Error creating user')
     );
 
     const req = {
       body: {
-        nome: "Teste",
-        senha: "123456",
+        name: 'Teste',
+        password: '123456',
       },
     } as unknown as Request;
     const res = {
@@ -57,6 +59,6 @@ describe("Create User Test", () => {
 
     expect(userProvider.create).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(409);
-    expect(res.json).toHaveBeenCalledWith("Usuário já existente!");
+    expect(res.json).toHaveBeenCalledWith({ error: 'Error creating user' });
   });
 });

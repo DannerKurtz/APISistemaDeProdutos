@@ -1,34 +1,34 @@
-import { Request, Response } from "express";
-import { userController } from "../../../src/server/controllers/UserController";
-import { userProvider } from "../../../src/server/database/providers/UserProvider";
+import { Request, Response } from 'express';
+import { userController } from '../../../src/server/controllers/UserController';
+import { userProvider } from '../../../src/server/database/providers/UserProvider';
 
-jest.mock("../../../src/server/database/providers/UserProvider", () => ({
+jest.mock('../../../src/server/database/providers/UserProvider', () => ({
   userProvider: {
     get: jest.fn(),
   },
 }));
 
-interface IFilter {
+interface IQuery {
   id: string;
-  nome: string;
+  name: string;
 }
 
 beforeEach(() => {
   jest.clearAllMocks();
 });
 
-describe("Get User Test", () => {
-  test("Test 1 -> get with id users successful", async () => {
+describe('Get User Test', () => {
+  test('Test 1 -> get with id users successful', async () => {
     (userProvider.get as jest.Mock).mockReturnValue({
-      id: "123",
-      nome: "Teste",
+      id: '123',
+      name: 'Teste',
     });
 
     const req = {
       query: {
-        id: "123",
+        id: '123',
       },
-    } as Request<{}, {}, {}, IFilter>;
+    } as Request<{}, {}, {}, IQuery>;
 
     const res = {
       status: jest.fn().mockReturnThis(),
@@ -40,23 +40,23 @@ describe("Get User Test", () => {
     expect(userProvider.get).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({
-      users: {
-        id: "123",
-        nome: "Teste",
+      userListed: {
+        id: '123',
+        name: 'Teste',
       },
     });
   });
-  test("Test 2 -> get with name users successful", async () => {
+  test('Test 2 -> get with name users successful', async () => {
     (userProvider.get as jest.Mock).mockReturnValue({
-      id: "123",
-      nome: "Teste",
+      id: '123',
+      name: 'Teste',
     });
 
     const req = {
       query: {
-        nome: "Teste",
+        name: 'Teste',
       },
-    } as Request<{}, {}, {}, IFilter>;
+    } as Request<{}, {}, {}, IQuery>;
 
     const res = {
       status: jest.fn().mockReturnThis(),
@@ -68,9 +68,9 @@ describe("Get User Test", () => {
     expect(userProvider.get).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({
-      users: {
-        id: "123",
-        nome: "Teste",
+      userListed: {
+        id: '123',
+        name: 'Teste',
       },
     });
   });
