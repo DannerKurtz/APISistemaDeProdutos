@@ -7,9 +7,9 @@ export interface IProducts {
   id: string;
   name: string;
   percentage?: number;
-  price: number;
+  price?: number;
   quantity: number;
-  weight: number;
+  weight?: number;
   rawMaterialProductRelation?: IRawMaterialProductRelations[];
   rawMaterials?: IRawMaterials[];
   createdAt?: Date;
