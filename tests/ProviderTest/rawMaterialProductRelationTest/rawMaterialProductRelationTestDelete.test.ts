@@ -1,7 +1,8 @@
 import { rawMaterialProductRelationProvider } from '../../../src/server/database/providers/RawMaterialProductRelationProvider';
+import { errorsCrudService } from '../../../src/server/shared/services/messageErrors';
 import { crudService } from '../../../src/server/shared/services/prismaHelpers/CRUD';
 
-jest.mock('../../../src/server/shared/services/CRUD', () => ({
+jest.mock('../../../src/server/shared/services/prismaHelpers/CRUD', () => ({
   crudService: {
     deleteInDatabase: jest.fn(),
   },
@@ -30,7 +31,7 @@ describe('Delete RawMaterialProductRelation Provider', () => {
     const id = '123';
 
     (crudService.deleteInDatabase as jest.Mock).mockResolvedValue(
-      Error('Erro ao deletar a relação de materia prima e produto')
+      Error(errorsCrudService.deleteMessage('RawMaterialProductRelations'))
     );
 
     const result =
@@ -39,7 +40,7 @@ describe('Delete RawMaterialProductRelation Provider', () => {
       );
 
     expect(result).toEqual(
-      Error('Erro ao deletar a relação de materia prima e produto')
+      Error(errorsCrudService.deleteMessage('RawMaterialProductRelations'))
     );
     expect(crudService.deleteInDatabase).toHaveBeenCalledTimes(1);
   });

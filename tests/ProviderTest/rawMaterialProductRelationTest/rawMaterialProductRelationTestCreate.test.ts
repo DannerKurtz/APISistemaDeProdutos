@@ -1,7 +1,8 @@
 import { rawMaterialProductRelationProvider } from '../../../src/server/database/providers/RawMaterialProductRelationProvider';
+import { errorsCrudService } from '../../../src/server/shared/services/messageErrors';
 import { crudService } from '../../../src/server/shared/services/prismaHelpers/CRUD';
 
-jest.mock('../../../src/server/shared/services/CRUD', () => ({
+jest.mock('../../../src/server/shared/services/prismaHelpers/CRUD', () => ({
   crudService: {
     createInDatabase: jest.fn(),
   },
@@ -14,9 +15,9 @@ beforeEach(() => {
 describe('Create RawMaterialProductRelation Provider', () => {
   test('Test 1 -> successful', async () => {
     const data = {
-      produtoId: 'abc123',
-      materiaPrimaId: 'abc123',
-      quantidadeMateriaPrima: 10,
+      productId: 'abc123',
+      rawMaterialId: 'abc321',
+      rawMaterialQuantity: 10,
     };
 
     (crudService.createInDatabase as jest.Mock).mockResolvedValue({
@@ -32,19 +33,19 @@ describe('Create RawMaterialProductRelation Provider', () => {
 
   test('Test 2 -> failed', async () => {
     const data = {
-      produtoId: 'abc123',
-      materiaPrimaId: 'abc123',
-      quantidadeMateriaPrima: 10,
+      productId: 'abc123',
+      rawMaterialId: 'abc321',
+      rawMaterialQuantity: 10,
     };
 
     (crudService.createInDatabase as jest.Mock).mockResolvedValue(
-      Error('Erro ao criar nova relação de materia prima e produto')
+      Error(errorsCrudService.createMessage('RawMaterialProductRelation'))
     );
 
     const result = await rawMaterialProductRelationProvider.create(data);
 
     expect(result).toEqual(
-      Error('Erro ao criar nova relação de materia prima e produto')
+      Error(errorsCrudService.createMessage('RawMaterialProductRelation'))
     );
     expect(crudService.createInDatabase).toHaveBeenCalledTimes(1);
   });

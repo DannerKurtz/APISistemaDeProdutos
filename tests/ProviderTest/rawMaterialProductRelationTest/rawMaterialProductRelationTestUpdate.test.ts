@@ -1,7 +1,7 @@
 import { rawMaterialProductRelationProvider } from '../../../src/server/database/providers/RawMaterialProductRelationProvider';
 import { crudService } from '../../../src/server/shared/services/prismaHelpers/CRUD';
 
-jest.mock('../../../src/server/shared/services/CRUD', () => ({
+jest.mock('../../../src/server/shared/services/prismaHelpers/CRUD', () => ({
   crudService: {
     updateInDatabase: jest.fn(),
   },
@@ -16,9 +16,9 @@ describe('Update RawMaterialProductRelation Test', () => {
     const id = '123';
 
     const data = {
-      produtoId: 'abc123',
-      materiaPrimaId: 'abc123',
-      quantidadeMateriaPrima: 10,
+      productId: 'abc123',
+      rawMaterialId: 'abc321',
+      rawMaterialQuantity: 10,
     };
 
     (crudService.updateInDatabase as jest.Mock).mockResolvedValue(data);
@@ -33,9 +33,9 @@ describe('Update RawMaterialProductRelation Test', () => {
     const id = '123';
 
     const data = {
-      produtoId: 'abc123',
-      materiaPrimaId: 'abc123',
-      quantidadeMateriaPrima: 10,
+      productId: 'abc123',
+      rawMaterialId: 'abc123',
+      rawMaterialQuantity: 10,
     };
 
     (crudService.updateInDatabase as jest.Mock).mockResolvedValue(
