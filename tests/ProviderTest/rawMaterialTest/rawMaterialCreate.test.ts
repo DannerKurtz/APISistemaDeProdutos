@@ -1,8 +1,8 @@
-import { RawMaterialModel } from '../../../src/server/database/models/RawMaterialsInterface';
 import { rawMaterialProvider } from '../../../src/server/database/providers/RawMaterialProvider';
+import { errorsCrudService } from '../../../src/server/shared/services/messageErrors';
 import { crudService } from '../../../src/server/shared/services/prismaHelpers/CRUD';
 
-jest.mock('../../../src/server/shared/services/CRUD', () => ({
+jest.mock('../../../src/server/shared/services/prismaHelpers/CRUD', () => ({
   crudService: {
     createInDatabase: jest.fn(),
   },
@@ -13,9 +13,9 @@ beforeEach(() => {
 });
 
 const data = {
-  nome: 'Teste',
-  preco: 10,
-  quantidade: 10,
+  name: 'Teste',
+  price: 10,
+  unitWeight: 10,
 };
 
 describe('Create RawMaterial Provider', () => {
@@ -28,11 +28,15 @@ describe('Create RawMaterial Provider', () => {
     expect(result).toEqual(data);
   });
   test('Test 01 -> failed', async () => {
-    (crudService.createInDatabase as jest.Mock).mockReturnValue(Error('Erro'));
+    (crudService.createInDatabase as jest.Mock).mockReturnValue(
+      Error(errorsCrudService.createMessage('RawMaterials'))
+    );
 
     const result = await rawMaterialProvider.create(data);
 
     expect(crudService.createInDatabase).toHaveBeenCalledTimes(1);
-    expect(result).toEqual(Error('Erro'));
+    expect(result).toEqual(
+      Error(errorsCrudService.createMessage('RawMaterials'))
+    );
   });
 });

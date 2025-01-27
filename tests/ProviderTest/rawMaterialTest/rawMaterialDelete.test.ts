@@ -1,7 +1,8 @@
 import { rawMaterialProvider } from '../../../src/server/database/providers/RawMaterialProvider';
+import { errorsCrudService } from '../../../src/server/shared/services/messageErrors';
 import { crudService } from '../../../src/server/shared/services/prismaHelpers/CRUD';
 
-jest.mock('../../../src/server/shared/services/CRUD', () => ({
+jest.mock('../../../src/server/shared/services/prismaHelpers/CRUD', () => ({
   crudService: {
     deleteInDatabase: jest.fn(),
   },
@@ -21,15 +22,15 @@ describe('Delete RawMaterial Provider', () => {
     expect(result).toEqual(true);
   });
   test('Test 02 -> failed', async () => {
-    (crudService.deleteInDatabase as jest.Mock).mockReturnValue(Error('Error'));
-
-    const result = await crudService.deleteInDatabase(
-      '123',
-      'MateriaPrima',
-      'Erro'
+    (crudService.deleteInDatabase as jest.Mock).mockReturnValue(
+      Error(errorsCrudService.deleteMessage('RawMaterials'))
     );
 
+    const result = await rawMaterialProvider.deleteRawMaterial('123');
+
     expect(crudService.deleteInDatabase).toHaveBeenCalledTimes(1);
-    expect(result).toEqual(Error('Error'));
+    expect(result).toEqual(
+      Error(errorsCrudService.deleteMessage('RawMaterials'))
+    );
   });
 });
