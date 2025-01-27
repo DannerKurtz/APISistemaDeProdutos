@@ -1,7 +1,8 @@
 import { userProvider } from '../../../src/server/database/providers/UserProvider';
+import { errorsCrudService } from '../../../src/server/shared/services/messageErrors';
 import { crudService } from '../../../src/server/shared/services/prismaHelpers/CRUD';
 
-jest.mock('../../../src/server/shared/services/CRUD', () => ({
+jest.mock('../../../src/server/shared/services/prismaHelpers/CRUD', () => ({
   crudService: {
     deleteInDatabase: jest.fn(),
   },
@@ -27,12 +28,12 @@ describe('Delete User Provider', () => {
     const id: string = '321asd1f23a3df21';
 
     (crudService.deleteInDatabase as jest.Mock).mockReturnValue(
-      'Erro ao deletar o usuário'
+      Error(errorsCrudService.deleteMessage('Users'))
     );
 
     const result = await userProvider.deleteUser(id);
 
-    expect(result).toEqual('Erro ao deletar o usuário');
+    expect(result).toEqual(Error(errorsCrudService.deleteMessage('Users')));
     expect(crudService.deleteInDatabase).toHaveBeenCalledTimes(1);
   });
 });
