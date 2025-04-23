@@ -9,6 +9,7 @@ import { productRoutes } from './product.routes';
 import { rawMaterialProductRelation } from './rawMaterialProductRelation.routes';
 import { saleRouter } from './sales.routes';
 import { productSaleRelationRouter } from './productSaleRelation.routes';
+import { companyRouter } from './company.routes';
 
 // Defining and exporting the router variable that will hold the Router from express
 export const router = Router();
@@ -26,3 +27,4 @@ productRoutes(router);
 rawMaterialProductRelation(router);
 saleRouter(router);
 productSaleRelationRouter(router);
+companyRouter(router);
