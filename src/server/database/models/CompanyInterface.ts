@@ -5,3 +5,5 @@ export interface ICompany {
   createdAt?: Date;
   updatedAt?: Date;
 }
+export interface ICompanyWithoutId extends Omit<ICompany, 'id'> {}
+
