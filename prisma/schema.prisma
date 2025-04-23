@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,6 +5,36 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+enum SaleStatus {
+  QUOTE
+  ORDER
+  FINALIZED
+}
+
+model Company {
+  id              String           @id @default(uuid())
+  name            String
+  taxId           String
+  paymentAccounts PaymentAccount[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+}
+
+model PaymentAccount {
+  id            String   @id @default(uuid())
+  bankName      String
+  branch        String
+  accountNumber String
+  accountHolder String
+  taxId         String
+  pixKey        String
+  companyId     String
+  company       Company  @relation(fields: [companyId], references: [id])
+  sales         Sales[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model Users {
@@ -97,6 +121,9 @@ model Sales {
   customerId           String
   customer             Customers              @relation(fields: [customerId], references: [id])
   ProductSaleRelations ProductSaleRelations[]
+  paymentAccountId     String? // <- agora opcional
+  paymentAccount       PaymentAccount?        @relation(fields: [paymentAccountId], references: [id])
+  status               SaleStatus             @default(QUOTE)
   createdAt            DateTime               @default(now())
   updatedAt            DateTime               @updatedAt
 }
