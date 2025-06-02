@@ -7,7 +7,7 @@ import { ICustomers } from '../../database/models/CustomersInterface';
 // Declaring the query interface
 interface IQuery {
   id?: string;
-  nome?: string;
+  name?: string;
 }
 
 // Exporting the function to fetch customers
