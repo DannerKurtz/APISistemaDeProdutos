@@ -18,6 +18,7 @@ export interface ISales {
   customer?: ICustomers;
   productSaleRelations?: IProductSaleRelations[];
   products?: IProducts[];
+  paymentAccountId?: string; 
   createdAt?: Date;
   updatedAt?: Date;
 }
