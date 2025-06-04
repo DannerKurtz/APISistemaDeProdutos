@@ -7,6 +7,7 @@ import {
 } from '../../../shared/services/messageErrors';
 import { relationCreator } from '../../../shared/services/prismaHelpers/relationsManager/RelationCreator';
 import { ISalesWithoutId, ISales } from '../../models/SalesInterface';
+import { generateSaleNumber } from '../../../shared/services/generateSaleNumber';
 
 // Export of the function responsible for creating the sale
 export const create = async (
@@ -16,6 +17,12 @@ export const create = async (
     // Destructuring the data separating userId, customerId, and productSaleRelations
     const { userId, customerId } = data;
     let { productSaleRelations, ...newData } = data;
+
+    const generateNumber = await generateSaleNumber('');
+
+    if (generateNumber instanceof Error) return generateNumber;
+
+    newData.saleNumber = generateNumber.toString();
 
     // Checks if userId and customerId exist, calling crudService to look for these details in the database
     const validateUserIdExists = await crudService.getInDatabase(

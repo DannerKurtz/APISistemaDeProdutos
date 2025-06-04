@@ -8,12 +8,15 @@ import {
 import { updateRelations } from '../../../shared/services/prismaHelpers/relationsManager/RelationUpdate';
 import { IProductSaleRelations } from '../../models/ProductSaleRelationsInterface';
 import { ISales, ISalesWithoutId } from '../../models/SalesInterface';
+import { updateSaleNumber } from '../../../shared/services/generateSaleNumber';
 
 // Export of the function responsible for updating the sale
 export const update = async (id: string, body: ISalesWithoutId) => {
   try {
     // Destructuring the body into productSaleRelations and the remaining as data
     let { productSaleRelations, ...data } = body;
+
+    data.saleNumber = (await updateSaleNumber(id)).toString();
 
     // Validates if there's a relation and calculates the final price
     if (productSaleRelations)
