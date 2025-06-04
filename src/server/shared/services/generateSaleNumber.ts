@@ -25,7 +25,7 @@ export const generateSaleNumber = async (
   }
 };
 
-export const updateSaleNumber = async (id: string) => {
+export const updateSaleNumber = async (id: string, status: string) => {
   console.log(id);
   const getSale: ISales | Error = await crudService.getInDatabase(
     { id },
@@ -39,15 +39,14 @@ export const updateSaleNumber = async (id: string) => {
 
   const { saleNumber } = getSale;
 
-  const variavelTemporaria = 'Orçamento';
-
-  const status = variavelTemporaria;
   let updatedSaleNumber;
 
-  if (status === 'Orçamento') {
+  if (status === 'QUOTE') {
     updatedSaleNumber = 'ORÇ' + saleNumber?.toString().slice(3);
-  } else if (status === 'Pedido') {
+  } else if (status === 'ORDER') {
     updatedSaleNumber = 'PED' + saleNumber?.toString().slice(3);
+  } else if (status === 'FINALIZED') {
+    updatedSaleNumber = 'FIN' + saleNumber?.toString().slice(3);
   } else {
     updatedSaleNumber = 'N/A' + saleNumber?.toString().slice(3);
   }

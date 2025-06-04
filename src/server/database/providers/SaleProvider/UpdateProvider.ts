@@ -16,7 +16,7 @@ export const update = async (id: string, body: ISalesWithoutId) => {
     // Destructuring the body into productSaleRelations and the remaining as data
     let { productSaleRelations, ...data } = body;
 
-    data.saleNumber = (await updateSaleNumber(id)).toString();
+    data.saleNumber = (await updateSaleNumber(id, data.status)).toString();
 
     // Validates if there's a relation and calculates the final price
     if (productSaleRelations)
