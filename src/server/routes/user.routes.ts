@@ -8,4 +8,5 @@ export const userRouter = (router: Router) => {
   router.get('/api/user', userController.get); // GET route responsible for fetching users
   router.put('/api/user/:id', userController.update); // PUT route responsible for updating users
   router.delete('/api/user/:id', userController.deleteUser); // DELETE route responsible for deleting a user
+  router.post('/api/user/login', userController.Login);
 };

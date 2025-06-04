@@ -3,6 +3,7 @@ import * as update from './Update';
 import * as create from './Create';
 import * as get from './Get';
 import * as userDelete from './Delete';
+import * as Login from './Login';
 
 // Variable responsible for combining the functions
 export const userController = {
@@ -10,4 +11,5 @@ export const userController = {
   ...get,
   ...update,
   ...userDelete,
+  ...Login,
 };
