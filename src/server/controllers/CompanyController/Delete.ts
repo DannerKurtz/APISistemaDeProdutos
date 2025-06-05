@@ -29,5 +29,5 @@ export const deletedCompany = async (
   }
 
   // Returning if the customer is deleted
-  return res.status(StatusCodes.OK).json({ customerDeleted: deletedCompany });
+  return res.status(StatusCodes.OK).json({ companyDeleted: deletedCompany });
 };

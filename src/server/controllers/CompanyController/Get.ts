@@ -29,5 +29,5 @@ export const get = async (
   }
 
   // Returning company if everything is successful
-  return res.status(StatusCodes.OK).json({ customerListed: getCompany });
+  return res.status(StatusCodes.OK).json({ companyListed: getCompany });
 };
