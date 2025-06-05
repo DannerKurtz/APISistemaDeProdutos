@@ -39,5 +39,5 @@ export const Login = async (
     });
   }
 
-  return res.status(StatusCodes.OK).json({ token: accessToken });
+  return res.status(StatusCodes.OK).json({ userLoggedIn: accessToken });
 };
