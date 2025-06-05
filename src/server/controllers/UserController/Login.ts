@@ -5,7 +5,10 @@ import { bcryptPassword } from '../../shared/services/bcrypt';
 import { JWTService } from '../../shared/services/JWTService';
 import { Request, Response } from 'express';
 
-export const Login = async (req: Request<IUsersWithoutId>, res: Response) => {
+export const Login = async (
+  req: Request<IUsersWithoutId>,
+  res: Response
+): Promise<any> => {
   const { name, password } = req.body;
 
   // 1. Busca usuários (agora tratando como array)
