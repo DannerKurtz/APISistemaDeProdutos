@@ -7,7 +7,7 @@ import { IProducts } from '../../database/models/ProductsInterface';
 // Declaration of the query interface
 interface IQuery {
   id?: string;
-  nome?: string | object;
+  name?: string;
 }
 // Exporting the function responsible for the GET method
 export const get = async (
@@ -18,7 +18,9 @@ export const get = async (
   const { query } = req;
 
   // Calling the provider responsible for fetching the products or returning an error
-  const product: IProducts[] | Error = await productProvider.get(query);
+  const product: IProducts | IProducts[] | Error = await productProvider.get(
+    query
+  );
 
   // Validates if product is an instance of an error, and if so, returns the error
   if (product instanceof Error)

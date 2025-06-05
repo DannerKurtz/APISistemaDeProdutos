@@ -7,18 +7,21 @@ import { IProducts } from '../../models/ProductsInterface';
 // Declaration of the query interface
 interface IQuery {
   id?: string;
-  nome?: string | object;
+  name?: string;
 }
 
 // Exporting the function that fetches the products
-export const get = async (query: IQuery): Promise<IProducts[] | Error> => {
+export const get = async (
+  query: IQuery
+): Promise<IProducts | IProducts[] | Error> => {
   try {
     // Calling the crudService function responsible for querying the database
-    const getProduct: IProducts[] | Error = await crudService.getInDatabase(
-      query,
-      'Products',
-      errorsCrudService.getMessage('Products')
-    );
+    const getProduct: IProducts | IProducts[] | Error =
+      await crudService.getInDatabase(
+        query,
+        'Products',
+        errorsCrudService.getMessage('Products')
+      );
 
     // Checks and returns if it's an error
     if (getProduct instanceof Error) {
@@ -26,16 +29,28 @@ export const get = async (query: IQuery): Promise<IProducts[] | Error> => {
     }
 
     // Iterates through the product array and adds the raw materials
-    for (let i = 0; i < getProduct.length; i++) {
-      getProduct[i].rawMaterials = await relationsGet(
+    if (getProduct instanceof Array) {
+      for (let i = 0; i < getProduct.length; i++) {
+        getProduct[i].rawMaterials = await relationsGet(
+          'rawMaterialProductRelations',
+          {
+            where: { productId: getProduct[i].id },
+            include: { rawMaterial: true },
+          }
+        );
+      }
+    } //(getProduct instanceof Object){
+    else {
+      getProduct.rawMaterials = await relationsGet(
         'rawMaterialProductRelations',
         {
-          where: { productId: getProduct[i].id },
+          where: { productId: getProduct.id },
           include: { rawMaterial: true },
         }
       );
     }
 
+    
     // Returns the fetched products
     return getProduct;
   } catch (error) {

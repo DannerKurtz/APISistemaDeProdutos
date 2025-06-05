@@ -11,7 +11,8 @@ type Query = {
 export const getInDatabase = async <T>(
   query: Query,
   modelName: string,
-  message: string
+  message: string,
+  clause?: object
 ): Promise<Error | T> => {
   try {
     // Definition of the where clause
@@ -22,7 +23,7 @@ export const getInDatabase = async <T>(
     if (query.id) {
       whereClause.id = query.id;
       return await (prisma as any)[modelName].findFirst({
-        where: whereClause,
+        where: clause || whereClause,
       });
     }
 
