@@ -11,11 +11,9 @@ export const create = async (
 ): Promise<any> => {
   // Destructuring the body from the request
   const { body } = req;
-  console.log(body);
   // Calling the provider that returns the created sale or an error
   const newSale: ISales | Error = await saleProvider.create(body);
 
-  console.log(newSale);
   // Checking if it's an error and returning the message
   if (newSale instanceof Error)
     return res.status(StatusCodes.BAD_REQUEST).json({ error: newSale.message });

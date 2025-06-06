@@ -19,7 +19,7 @@ export const create = async (
     const { userId, customerId } = data;
     let { productSaleRelations, ...newData } = data;
 
-    const generateNumber = await generateSaleNumber('');
+    const generateNumber = await generateSaleNumber(newData.status);
 
     if (generateNumber instanceof Error) return generateNumber;
 

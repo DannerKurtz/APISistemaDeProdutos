@@ -6,11 +6,13 @@ export const generateSaleNumber = async (
   status?: string
 ): Promise<String | Error> => {
   let order = '';
-
-  if (status === 'Orçamento') {
+  console.log(status);
+  if (status === 'QUOTE' || !status) {
     order = 'ORÇ';
-  } else if (status === 'Pedido') {
+  } else if (status === 'ORDER') {
     order = 'PED';
+  } else if (status === 'FINALIZED') {
+    order = 'FIN';
   } else {
     order = 'N/A';
   }
