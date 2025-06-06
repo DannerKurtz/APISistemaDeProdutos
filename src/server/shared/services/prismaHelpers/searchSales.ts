@@ -4,9 +4,9 @@ import { prisma } from '../../../database/prisma';
 
 // Definition of an interface for the sales query
 interface IQuerySales {
-  id: string;
-  saleNumber: string;
-  customerName: string;
+  id?: string;
+  saleNumber?: string;
+  customerName?: string;
 }
 
 // Export the function that performs the sales search
@@ -22,7 +22,19 @@ export const searchSales = async (
             name: { contains: query.customerName.trim(), mode: 'insensitive' },
           },
         },
-        include: { customer: true, user: { select: { name: true } } },
+        include: {
+          customer: true,
+          user: { select: { name: true } },
+          ProductSaleRelations: {
+            select: {
+              product: true,
+              color: true,
+              quantity: true,
+              productNote: true,
+              customEngraving: true,
+            },
+          },
+        },
       });
       return getSaleWithCustomerName;
     }
@@ -37,7 +49,15 @@ export const searchSales = async (
           include: {
             customer: true,
             user: { select: { name: true } },
-            ProductSaleRelations: { include: { product: true } },
+            ProductSaleRelations: {
+              select: {
+                product: true,
+                color: true,
+                quantity: true,
+                productNote: true,
+                customEngraving: true,
+              },
+            },
           },
         });
       if (getSaleWithNumberOfSale) {
@@ -56,7 +76,15 @@ export const searchSales = async (
           include: {
             customer: true,
             user: { select: { name: true } },
-            ProductSaleRelations: { select: { product: true } },
+            ProductSaleRelations: {
+              select: {
+                product: true,
+                color: true,
+                quantity: true,
+                productNote: true,
+                customEngraving: true,
+              },
+            },
           },
         });
       if (getSaleWithNumberOfSale) {
@@ -70,7 +98,15 @@ export const searchSales = async (
       include: {
         customer: true,
         user: { select: { name: true } },
-        ProductSaleRelations: { select: { product: true } },
+        ProductSaleRelations: {
+          select: {
+            product: true,
+            color: true,
+            quantity: true,
+            productNote: true,
+            customEngraving: true,
+          },
+        },
       },
     });
   } catch (error) {

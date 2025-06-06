@@ -34,6 +34,7 @@ export const createInDatabase = async <T>(
     // Returns the newly created record
     return createNewData;
   } catch (error) {
+    console.log('catch CRUD service', error);
     // Returns the error in case of an exception
     return new Error(message);
   }

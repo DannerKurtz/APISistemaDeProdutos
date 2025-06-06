@@ -8,6 +8,7 @@ import {
 import { relationCreator } from '../../../shared/services/prismaHelpers/relationsManager/RelationCreator';
 import { ISalesWithoutId, ISales } from '../../models/SalesInterface';
 import { generateSaleNumber } from '../../../shared/services/generateSaleNumber';
+import { searchSales } from '../../../shared/services/prismaHelpers/searchSales';
 
 // Export of the function responsible for creating the sale
 export const create = async (
@@ -65,6 +66,9 @@ export const create = async (
             saleId: newSale.id as string,
             productId: productSaleRelations[i].productId,
             quantity: productSaleRelations[i].quantity,
+            color: productSaleRelations[i].color,
+            customEngraving: productSaleRelations[i].customEngraving,
+            productNote: productSaleRelations[i].productNote,
           },
           'ProductSaleRelations',
           'Products'
@@ -76,7 +80,11 @@ export const create = async (
     }
 
     // Returns the new sale or error
-    return newSale;
+    const getNewSale = await searchSales({ id: newSale.id });
+    if (getNewSale instanceof Error)
+      return new Error(errorsCrudService.getMessage('GetNewSale'));
+
+    return getNewSale as ISales;
   } catch (error) {
     // Returns error if an exception occurs
     return new Error(errorsProvider.createMessage('Sales'));

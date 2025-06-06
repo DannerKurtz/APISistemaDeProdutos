@@ -7,9 +7,9 @@ export interface IProductSaleRelations {
   productId: string;
   product?: IProducts[];
   quantity: number;
-  color?: string | null;
-  customEngraving?: string | null;
-  productNote?: string | null;
+  color?: string;
+  customEngraving?: string;
+  productNote?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
