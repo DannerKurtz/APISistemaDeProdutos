@@ -94,6 +94,7 @@ model Products {
   price                       Float?
   quantity                    Int
   weight                      Float?
+  costPrice                   Float?
   RawMaterialProductRelations RawMaterialProductRelations[]
   ProductSaleRelations        ProductSaleRelations[]
   createdAt                   DateTime                      @default(now())

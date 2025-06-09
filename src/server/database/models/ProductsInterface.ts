@@ -10,6 +10,7 @@ export interface IProducts {
   price?: number;
   quantity: number;
   weight?: number;
+  costPrice?: number;
   rawMaterialProductRelation?: IRawMaterialProductRelations[];
   rawMaterials?: IRawMaterials[];
   createdAt?: Date;

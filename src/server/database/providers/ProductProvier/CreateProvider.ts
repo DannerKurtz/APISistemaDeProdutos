@@ -32,9 +32,14 @@ export const create = async (
       if (calculateRawMaterialTotals instanceof Error)
         return new Error(calculateRawMaterialTotals.message);
 
+      productWithoutRawMaterial.costPrice = parseFloat(
+        calculateRawMaterialTotals.costPrice.toFixed(2)
+      );
+
       productWithoutRawMaterial.price = parseFloat(
         calculateRawMaterialTotals.finalPrice.toFixed(2)
       );
+
       productWithoutRawMaterial.weight = parseFloat(
         calculateRawMaterialTotals.finalWeight.toFixed(2)
       );

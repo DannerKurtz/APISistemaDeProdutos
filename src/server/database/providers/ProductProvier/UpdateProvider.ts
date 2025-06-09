@@ -5,7 +5,7 @@ import {
   errorsCrudService,
   errorsProvider,
 } from '../../../shared/services/messageErrors';
-import { updateRelations } from '../../../shared/services/prismaHelpers/relationsManager/RelationUpdate'; 
+import { updateRelations } from '../../../shared/services/prismaHelpers/relationsManager/RelationUpdate';
 import { IProducts, IProductsWithoutId } from '../../models/ProductsInterface';
 import { IRawMaterialProductRelations } from '../../models/RawMaterialProductRelationsInterface';
 
@@ -27,7 +27,7 @@ export const update = async (
 
       if (calculateRawMaterialTotals instanceof Error)
         return new Error(calculateRawMaterialTotals.message);
-
+      data.costPrice = calculateRawMaterialTotals.costPrice;
       data.price = calculateRawMaterialTotals.finalPrice;
       data.weight = calculateRawMaterialTotals.finalWeight;
     }

@@ -6,7 +6,9 @@ import { calculateProductPrice } from './CalculateProductPrice';
 export const FinalProductPriceCalculator = async (
   rawMaterialProductRelation: IRawMaterialProductRelations[],
   profitMargin?: number
-): Promise<{ finalPrice: number; finalWeight: number } | Error> => {
+): Promise<
+  { finalPrice: number; finalWeight: number; costPrice: number } | Error
+> => {
   // Calls the function that calculates the total price and weight of the products
   const sumRawMaterialMetrics = await calculateProductPrice(
     rawMaterialProductRelation
@@ -16,10 +18,12 @@ export const FinalProductPriceCalculator = async (
   if (sumRawMaterialMetrics instanceof Error)
     return new Error(sumRawMaterialMetrics.message);
 
+  const costPrice = sumRawMaterialMetrics.sumRawMaterialsValue;
   // If no profit margin is provided, sets it to 70% by default and returns the result
   if (profitMargin === undefined) {
     const finalPrice = sumRawMaterialMetrics.sumRawMaterialsValue * 1.7;
     const result = {
+      costPrice,
       finalPrice,
       finalWeight: sumRawMaterialMetrics.finalWeight,
     };
@@ -32,6 +36,7 @@ export const FinalProductPriceCalculator = async (
 
   // Combines the final weight and the calculated final price with the profit margin, then returns the result
   const result = {
+    costPrice,
     finalPrice,
     finalWeight: sumRawMaterialMetrics.finalWeight,
   };
