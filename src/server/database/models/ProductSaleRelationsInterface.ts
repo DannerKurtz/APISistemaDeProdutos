@@ -10,6 +10,7 @@ export interface IProductSaleRelations {
   color?: string;
   customEngraving?: string;
   productNote?: string;
+  productPrice?: number;
   createdAt?: Date;
   updatedAt?: Date;
 }

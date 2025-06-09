@@ -12,10 +12,9 @@ import { IProductSaleRelations } from '../../models/ProductSaleRelationsInterfac
 export const deleteSale = async (id: string): Promise<Boolean | Error> => {
   try {
     // Calls prisma to find all relations that have the saleId
-    const getSaleProductRelations: IProductSaleRelations[] =
-      await prisma.productSaleRelations.findMany({
-        where: { saleId: id },
-      });
+    const getSaleProductRelations = await prisma.productSaleRelations.findMany({
+      where: { saleId: id },
+    });
 
     // Loops through the relations array and deletes each relation linked to the sale
     for (let i = 0; i < getSaleProductRelations.length; i++) {

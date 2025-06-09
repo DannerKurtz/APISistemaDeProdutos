@@ -12,6 +12,7 @@ import { updateSaleNumber } from '../../../shared/services/generateSaleNumber';
 
 // Export of the function responsible for updating the sale
 export const update = async (id: string, body: ISalesWithoutId) => {
+  let productPrice: number[] = [];
   try {
     // Destructuring the body into productSaleRelations and the remaining as data
     let { productSaleRelations, ...data } = body;
@@ -20,12 +21,19 @@ export const update = async (id: string, body: ISalesWithoutId) => {
 
     // Validates if there's a relation and calculates the final price
     if (productSaleRelations)
-      data = await calculateTotalSalePrice(data, productSaleRelations);
+      ({ data, productPrice } = await calculateTotalSalePrice(
+        data,
+        productSaleRelations
+      ));
 
     // Loops through the relations array and adds the saleId to each
     const listRelationsWithSaleId = (
       productSaleRelations as IProductSaleRelations[]
-    ).map((relation) => ({ ...relation, saleId: id }));
+    ).map((relation, index) => ({
+      ...relation,
+      saleId: id,
+      productPrice: productPrice[index],
+    }));
 
     // Calls the function responsible for updating all relations and updating the sale
     const productSaleRelationsUpdated: IProductSaleRelations[] =
@@ -53,6 +61,7 @@ export const update = async (id: string, body: ISalesWithoutId) => {
     return saleUpdated;
   } catch (error) {
     // Returns error in case of exception
+    console.log(error);
     return new Error(errorsProvider.updateMessage('Sales'));
   }
 };

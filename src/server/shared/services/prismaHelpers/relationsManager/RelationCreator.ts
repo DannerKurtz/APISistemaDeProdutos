@@ -10,6 +10,7 @@ type TWithoutID<T> = Omit<T, 'id'> & {
   color?: string;
   customEngraving?: string;
   productNote?: string;
+  productPrice?: number;
 };
 type Relations<T> = Partial<{
   rawMaterialQuantity?: number;

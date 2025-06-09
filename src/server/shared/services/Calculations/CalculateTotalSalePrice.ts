@@ -2,6 +2,7 @@
 import { prisma } from '../../../database/prisma';
 import { IProductSaleRelations } from '../../../database/models/ProductSaleRelationsInterface';
 import { ISalesWithoutId } from '../../../database/models/SalesInterface';
+import { get } from 'http';
 
 // Exporting the function that calculates the total sale price
 export const calculateTotalSalePrice = async (
@@ -10,7 +11,7 @@ export const calculateTotalSalePrice = async (
 ) => {
   // Definition of the variable that will store the products' prices
   let priceOfProducts: number = 0;
-
+  let productPrice: number[] = [];
   // Iterates through the productSaleRelations array
   for (let i = 0; i < productSaleRelations.length; i++) {
     // Calls prisma to find the product based on the current index in the array
@@ -19,8 +20,10 @@ export const calculateTotalSalePrice = async (
     });
 
     // Multiplies the product's price by its quantity and adds it to the variable
+
     priceOfProducts +=
       (getProductPrice?.price as number) * productSaleRelations[i].quantity;
+    productPrice.push(priceOfProducts);
   }
 
   // Checks if data.discount exists and data.totalPrice does not
@@ -49,5 +52,5 @@ export const calculateTotalSalePrice = async (
   }
 
   // Returns data with the total price and discount
-  return data;
+  return { data, productPrice };
 };

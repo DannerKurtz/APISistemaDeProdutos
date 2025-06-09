@@ -18,7 +18,7 @@ export const create = async (
     // Destructuring the data separating userId, customerId, and productSaleRelations
     const { userId, customerId } = data;
     let { productSaleRelations, ...newData } = data;
-
+    let productPrice: number[] = [];
     const generateNumber = await generateSaleNumber(newData.status);
 
     if (generateNumber instanceof Error) return generateNumber;
@@ -44,7 +44,10 @@ export const create = async (
 
     // If productSaleRelations exists, it calls the function responsible for calculating the total sale price.
     if (productSaleRelations) {
-      newData = await calculateTotalSalePrice(newData, productSaleRelations);
+      ({ data: newData, productPrice } = await calculateTotalSalePrice(
+        newData,
+        productSaleRelations
+      ));
     }
 
     // Calls the crudService to create the sale in the database
@@ -69,6 +72,7 @@ export const create = async (
             color: productSaleRelations[i].color,
             customEngraving: productSaleRelations[i].customEngraving,
             productNote: productSaleRelations[i].productNote,
+            productPrice: productPrice[i],
           },
           'ProductSaleRelations',
           'Products'

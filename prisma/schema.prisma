@@ -139,6 +139,7 @@ model ProductSaleRelations {
   color           String   @default("N/A")
   customEngraving String   @default("N/A")
   productNote     String   @default("N/A")
+  productPrice    Float?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }
