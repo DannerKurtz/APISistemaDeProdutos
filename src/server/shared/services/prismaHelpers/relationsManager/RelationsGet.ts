@@ -9,8 +9,7 @@ export const relationsGet = async (modelName: string, prismaArgs: object) => {
 
   // Loops through the fetched relations, adding raw materials or products to the items array
   for (let i = 0; i < getRelations.length; i++) {
-    if (getRelations[i].rawMaterial)
-      arrayItems.push(getRelations[i].rawMaterial);
+    if (getRelations[i].rawMaterial) arrayItems.push(getRelations[i]);
     else if (getRelations[i].products)
       arrayItems.push(getRelations[i].products);
   }

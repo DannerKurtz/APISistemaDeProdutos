@@ -31,11 +31,11 @@ export const get = async (
     // Iterates through the product array and adds the raw materials
     if (getProduct instanceof Array) {
       for (let i = 0; i < getProduct.length; i++) {
-        getProduct[i].rawMaterials = await relationsGet(
+        getProduct[i].rawMaterialProductRelation = await relationsGet(
           'rawMaterialProductRelations',
           {
             where: { productId: getProduct[i].id },
-            include: { rawMaterial: true },
+            select: { rawMaterialQuantity: true, rawMaterial: true },
           }
         );
       }
@@ -45,12 +45,11 @@ export const get = async (
         'rawMaterialProductRelations',
         {
           where: { productId: getProduct.id },
-          include: { rawMaterial: true },
+          select: { rawMaterialQuantity: true, rawMaterial: true },
         }
       );
     }
 
-    
     // Returns the fetched products
     return getProduct;
   } catch (error) {

@@ -27,9 +27,13 @@ export const update = async (
 
       if (calculateRawMaterialTotals instanceof Error)
         return new Error(calculateRawMaterialTotals.message);
-      data.costPrice = calculateRawMaterialTotals.costPrice;
-      data.price = calculateRawMaterialTotals.finalPrice;
-      data.weight = calculateRawMaterialTotals.finalWeight;
+      data.costPrice = parseFloat(
+        calculateRawMaterialTotals.costPrice.toFixed(2)
+      );
+      data.price = parseFloat(calculateRawMaterialTotals.finalPrice.toFixed(2));
+      data.weight = parseFloat(
+        calculateRawMaterialTotals.finalWeight.toFixed(2)
+      );
     }
 
     // call to the crudService to update in the database
